@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Slider">
+        <attr name="decimalPlaces" format="integer" />
+        <attr name="min" format="float" />
+        <attr name="max" format="float" />
+        <attr name="step" format="float" />
+    </declare-styleable>
+</resources>
