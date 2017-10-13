@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.adsamcik.slider.ScaleFunctions.LinearScale;
 
+import java.security.InvalidParameterException;
+
 @SuppressLint("AppCompatCustomView")
 //AppCompatSeekBar does not show up in app
 public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
@@ -65,6 +67,8 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 	}
 
 	public void setStep(float step) {
+		if(step == 0)
+			throw new InvalidParameterException("Step cannot be equal to 0");
 		this.m_Step = step;
 		this.m_DecimalPlaces = decimalPlaces(step);
 		setMax();
