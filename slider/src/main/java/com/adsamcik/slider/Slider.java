@@ -32,18 +32,21 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 	public Slider(Context context) {
 		super(context);
 		init();
+		updateText();
 	}
 
 	public Slider(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		setAttrs(context, attrs);
 		init();
+		updateText();
 	}
 
 	public Slider(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		setAttrs(context, attrs);
 		init();
+		updateText();
 	}
 
 	private void init() {
@@ -64,20 +67,24 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 	public void setStep(float step) {
 		this.m_Step = step;
 		setMax();
+		updateText();
 	}
 
 	public void setScale(IScale scale) {
 		this.m_Scale = scale;
+		updateText();
 	}
 
 	public void setTextView(TextView textView, IStringify stringify) {
 		this.m_TextView = textView;
 		this.m_Stringify = stringify;
+		updateText();
 	}
 
 	public void setMax(int max) {
 		m_Max = max;
 		setMax();
+		updateText();
 	}
 
 	private void setMax() {
@@ -89,6 +96,7 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 	public void setDecimalPlaces(int decimalPlaces) {
 		this.m_DecimalPlaces = decimalPlaces;
 		setMax();
+		updateText();
 	}
 
 	public float getValue() {
@@ -127,15 +135,18 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {
 		seekBar.setProgress(step(getProgress(), m_ScaledStep));
-		float value = getValue();
-		if (m_TextView != null)
-			m_TextView.setText(m_Stringify.toString(value));
+		updateText();
 
 		if (onSeekBarChangeListener != null)
 			onSeekBarChangeListener.onStopTrackingTouch(seekBar);
 
 		if (onValueChangeListener != null)
-			onValueChangeListener.onValueChanged(value, true);
+			onValueChangeListener.onValueChanged(getValue(), true);
+	}
+
+	private void updateText() {
+		if (m_TextView != null)
+			m_TextView.setText(m_Stringify.toString(getValue()));
 	}
 
 	public interface OnValueChangeListener {
