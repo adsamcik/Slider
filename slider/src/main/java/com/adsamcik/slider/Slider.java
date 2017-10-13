@@ -68,11 +68,13 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 		this.m_Step = step;
 		this.m_DecimalPlaces = decimalPlaces(step);
 		setMax();
+		updateProgress();
 		updateText();
 	}
 
 	public void setScale(IScale scale) {
 		this.m_Scale = scale;
+		updateProgress();
 		updateText();
 	}
 
@@ -84,11 +86,15 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 
 	public void setMin(float min) {
 		this.m_Min = min;
+		setMax();
+		updateProgress();
+		updateText();
 	}
 
 	public void setMax(float max) {
 		m_Max = max;
 		setMax();
+		updateProgress();
 		updateText();
 	}
 
@@ -109,6 +115,10 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 
 	private int getPercentPower() {
 		return 100 * (int) Math.pow(10, m_DecimalPlaces);
+	}
+
+	private void updateProgress() {
+		setProgress(step(getProgress(), m_ScaledStep));
 	}
 
 	@Override
@@ -134,7 +144,7 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {
-		seekBar.setProgress(step(getProgress(), m_ScaledStep));
+		updateProgress();
 		updateText();
 
 		if (onSeekBarChangeListener != null)
