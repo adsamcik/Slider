@@ -209,7 +209,7 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 	private static int step(final int value, final int step) {
 		int left = value % step;
 		int roundDown = value - left;
-		return left >= step * 0.5 ? roundDown + step : roundDown;
+		return Math.abs(left) >= Math.abs(step) * 0.5 ? roundDown + step : roundDown;
 	}
 
 	private static int sign(float value) {
