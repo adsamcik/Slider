@@ -12,6 +12,10 @@ import com.adsamcik.slider.ScaleFunctions.LinearScale;
 
 import java.security.InvalidParameterException;
 
+import static com.adsamcik.slider.EMath.decimalPlaces;
+import static com.adsamcik.slider.EMath.round;
+import static com.adsamcik.slider.EMath.step;
+
 @SuppressLint("AppCompatCustomView")
 //AppCompatSeekBar does not show up in app
 public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
@@ -173,52 +177,5 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 
 	public interface IScale {
 		float scale(float value, float min, float max);
-	}
-
-	//Static math functions
-	private static int decimalPlaces(float value) {
-		String text = Float.toString(value);
-		int integerPlaces = text.indexOf('.');
-		return text.length() - integerPlaces - 1;
-	}
-
-	private static float round(float value, int precision) {
-		int scale = (int) Math.pow(10, precision);
-		return Math.round(value * scale) / ((float) scale);
-	}
-
-	private static float limit(final float min, final float max, final float value) {
-		if (value < min)
-			return min;
-		else if (value > max)
-			return max;
-		else
-			return value;
-	}
-
-	private static int step(final int value, final int direction, final int step) {
-		int target = value + direction;
-
-		if (target % step != 0 && sign(direction) == sign(target))
-			target = target / step + sign(direction);
-		else
-			target /= step;
-		return target * step;
-	}
-
-	private static int step(final int value, final int step) {
-		int left = value % step;
-		int roundDown = value - left;
-		return Math.abs(left) >= Math.abs(step) * 0.5 ? roundDown + step : roundDown;
-	}
-
-	private static int sign(float value) {
-		if (value > 0)
-			return 1;
-		else if (value < 0)
-			return -1;
-		else
-			return 0;
-
 	}
 }
