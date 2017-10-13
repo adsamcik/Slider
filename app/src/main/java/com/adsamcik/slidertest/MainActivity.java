@@ -11,6 +11,8 @@ import com.adsamcik.slider.Slider;
 
 import org.w3c.dom.Text;
 
+import java.security.InvalidParameterException;
+
 public class MainActivity extends Activity {
 
 	@Override
@@ -29,7 +31,11 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				slider.setMin(Float.parseFloat(s.toString()));
+				try {
+					slider.setMin(parseFloat(s));
+				} catch (InvalidParameterException e) {
+					//no need to throw exception. This is proper behavior.
+				}
 			}
 
 			@Override
@@ -47,7 +53,11 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				slider.setMax(Float.parseFloat(s.toString()));
+				try {
+					slider.setMax(parseFloat(s));
+				} catch (InvalidParameterException e) {
+					//no need to throw exception. This is proper behavior.
+				}
 			}
 
 			@Override
@@ -65,7 +75,11 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				slider.setStep(Float.parseFloat(s.toString()));
+				try {
+					slider.setStep(parseFloat(s));
+				} catch (InvalidParameterException e) {
+					//no need to throw exception. This is proper behavior.
+				}
 			}
 
 			@Override
@@ -73,5 +87,13 @@ public class MainActivity extends Activity {
 
 			}
 		});
+	}
+
+	private float parseFloat(CharSequence charSequence) {
+		try {
+			return Float.parseFloat(charSequence.toString());
+		} catch (Exception e) {
+			return 1;
+		}
 	}
 }
