@@ -71,8 +71,9 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 	}
 
 	public void setStep(float step) {
-		if(step == 0)
-			throw new InvalidParameterException("Step cannot be equal to 0");
+		if (step <= 0)
+			throw new InvalidParameterException("Step must be larger than 0");
+
 		this.m_Step = step;
 		this.m_DecimalPlaces = decimalPlaces(step);
 		setMax();
@@ -93,6 +94,9 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 	}
 
 	public void setMin(float min) {
+		if (min >= m_Max)
+			throw new InvalidParameterException("Min must be smaller than max");
+
 		this.m_Min = min;
 		setMax();
 		updateProgress();
@@ -100,6 +104,9 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 	}
 
 	public void setMax(float max) {
+		if (max <= m_Min)
+			throw new InvalidParameterException("Max must be larger than min");
+
 		m_Max = max;
 		setMax();
 		updateProgress();
