@@ -118,15 +118,19 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 	}
 
 	private float getPercentProgress() {
-		return getProgress() / (float) getMax();
+		return getStepProgress() / (float) getMax();
 	}
 
 	private int getPercentPower() {
 		return 100 * (int) Math.pow(10, m_DecimalPlaces);
 	}
 
+	private int getStepProgress() {
+		return step(getProgress(), m_ScaledStep);
+	}
+
 	private void updateProgress() {
-		setProgress(step(getProgress(), m_ScaledStep));
+		setProgress(getStepProgress());
 	}
 
 	@Override
@@ -136,9 +140,8 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-		//if (fromUser)
-		//	lastRounded = limit(m_Min, m_Max, step(progress, progress - m_PrevProg, m_ScaledStep));
-		//title.setText(textGenerationFuncton.m_Stringify(minValue + lastRounded));
+		if (fromUser)
+			updateText();
 
 		if (onSeekBarChangeListener != null)
 			onSeekBarChangeListener.onProgressChanged(seekBar, progress, fromUser);
