@@ -19,6 +19,7 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 
 	private float m_Step = 1;
 	private int m_ScaledStep;
+
 	private float m_Min = 0;
 	private float m_Max = getMax();
 
@@ -81,7 +82,11 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 		updateText();
 	}
 
-	public void setMax(int max) {
+	public void setMin(float min) {
+		this.m_Min = min;
+	}
+
+	public void setMax(float max) {
 		m_Max = max;
 		setMax();
 		updateText();
