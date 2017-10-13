@@ -12,13 +12,17 @@ class EMath {
 		return Math.round(value * scale) / ((float) scale);
 	}
 
-	static float limit(final float min, final float max, final float value) {
+	static float limit(final float value, final float min, final float max) {
 		if (value < min)
 			return min;
 		else if (value > max)
 			return max;
 		else
 			return value;
+	}
+
+	static float limitMax(final float value, final float max) {
+		return value > max ? max : value;
 	}
 
 	static int step(final int value, final int direction, final int step) {
