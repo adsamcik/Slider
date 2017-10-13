@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -17,6 +16,7 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 	private IScale m_Scale = new LinearScale();
 
 	private int m_DecimalPlaces = 0;
+
 	private float m_Step = 1;
 	private int m_ScaledStep;
 	private float m_Min = 0;
@@ -57,8 +57,7 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 		TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.Slider);
 		m_Min = ta.getFloat(R.styleable.Slider_min, Build.VERSION.SDK_INT >= 26 ? getMin() : 0);
 		m_Max = ta.getFloat(R.styleable.Slider_max, getMax());
-		m_DecimalPlaces = ta.getInteger(R.styleable.Slider_decimalPlaces, 0);
-		m_Step = ta.getFloat(R.styleable.Slider_step, 1);
+		setStep(ta.getFloat(R.styleable.Slider_step, 1));
 		ta.recycle();
 
 		setMax();
@@ -66,6 +65,7 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 
 	public void setStep(float step) {
 		this.m_Step = step;
+		this.m_DecimalPlaces = decimalPlaces(step);
 		setMax();
 		updateText();
 	}
@@ -88,19 +88,14 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 	}
 
 	private void setMax() {
-		int max = (int) ((m_Max - m_Min) * getPercentPower());
+		float diff = round(m_Max - m_Min, 5);
+		int max = (int) (diff * getPercentPower());
 		super.setMax(max);
-		m_ScaledStep = Math.round(m_Step / (m_Max - m_Min) * max);
-	}
-
-	public void setDecimalPlaces(int decimalPlaces) {
-		this.m_DecimalPlaces = decimalPlaces;
-		setMax();
-		updateText();
+		m_ScaledStep = Math.round(m_Step / diff * max);
 	}
 
 	public float getValue() {
-		return m_Scale.scale(getPercentProgress(), m_Min, m_Max);
+		return round(m_Scale.scale(getPercentProgress(), m_Min, m_Max), m_DecimalPlaces);
 	}
 
 	private float getPercentProgress() {
@@ -162,6 +157,17 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 	}
 
 	//Static math functions
+	private static int decimalPlaces(float value) {
+		String text = Float.toString(value);
+		int integerPlaces = text.indexOf('.');
+		return text.length() - integerPlaces - 1;
+	}
+
+	private static float round(float value, int precision) {
+		int scale = (int) Math.pow(10, precision);
+		return Math.round(value * scale) / ((float) scale);
+	}
+
 	private static float limit(final float min, final float max, final float value) {
 		if (value < min)
 			return min;
