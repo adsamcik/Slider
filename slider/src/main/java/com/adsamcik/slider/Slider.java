@@ -77,13 +77,13 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 		this.m_Step = step;
 		this.m_DecimalPlaces = decimalPlaces(step);
 		setMax();
-		updateProgress();
+		refreshProgress();
 		updateText();
 	}
 
 	public void setScale(IScale scale) {
 		this.m_Scale = scale;
-		updateProgress();
+		refreshProgress();
 		updateText();
 	}
 
@@ -91,6 +91,20 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 		this.m_TextView = textView;
 		this.m_Stringify = stringify;
 		updateText();
+	}
+
+	@Override
+	public void setProgress(int progress) {
+		setProgress((float) progress);
+	}
+
+	public void setProgress(float progress) {
+		float progressValue = progress / (m_Max - m_Min);
+
+		if (progressValue > 1 || progressValue < 0)
+			throw new IllegalArgumentException("Progress must be larger than " + m_Min + " and smaller than " + m_Max + " was " + progress);
+
+		super.setProgress(Math.round(progressValue * super.getMax()));
 	}
 
 	@Override
@@ -104,7 +118,7 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 
 		this.m_Min = min;
 		setMax();
-		updateProgress();
+		refreshProgress();
 		updateText();
 	}
 
@@ -119,7 +133,7 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 
 		m_Max = max;
 		setMax();
-		updateProgress();
+		refreshProgress();
 		updateText();
 	}
 
@@ -146,7 +160,7 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 		return step(getProgress(), m_ScaledStep);
 	}
 
-	private void updateProgress() {
+	private void refreshProgress() {
 		setProgress(getStepProgress());
 	}
 
@@ -176,7 +190,7 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {
-		updateProgress();
+		refreshProgress();
 		updateText();
 
 		if (onSeekBarChangeListener != null)
