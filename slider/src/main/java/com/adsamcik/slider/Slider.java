@@ -138,14 +138,35 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 
 
 	public interface OnValueChangeListener<N extends Number> {
+		/**
+		 * On value changed listener
+		 *
+		 * @param value    value
+		 * @param fromUser whether it is from a user
+		 */
 		void onValueChanged(N value, boolean fromUser);
 	}
 
 	public interface IStringify<N extends Number> {
+		/**
+		 * Convert desired number to string
+		 *
+		 * @param value number
+		 * @return desired output
+		 */
 		String toString(N value);
 	}
 
 	public interface IScale<N extends Number> {
+		/**
+		 * Scale SeekBar progress to desired value.
+		 *
+		 * @param progress    SeekBar progress
+		 * @param maxProgress SeekBar max
+		 * @param min         desired minimum
+		 * @param max         desired maximum
+		 * @return scaled value
+		 */
 		N scale(int progress, int maxProgress, N min, N max);
 	}
 }
