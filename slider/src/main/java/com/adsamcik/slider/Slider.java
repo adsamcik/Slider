@@ -1,219 +1,151 @@
 package com.adsamcik.slider;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.widget.AbsSeekBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.adsamcik.slider.ScaleFunctions.LinearScale;
 
-import java.security.InvalidParameterException;
-
-import static com.adsamcik.slider.EMath.decimalPlaces;
-import static com.adsamcik.slider.EMath.round;
 import static com.adsamcik.slider.EMath.step;
 
-@SuppressLint("AppCompatCustomView")
-//AppCompatSeekBar does not show up in app
-public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
-	private IScale m_Scale = new LinearScale();
+public abstract class Slider<N extends Number> extends SeekBar implements SeekBar.OnSeekBarChangeListener {
+	private int mSliderStep = 1;
 
-	private int m_DecimalPlaces = 0;
+	protected IScale<N> mScale = null;
+	protected TextView mTextView = null;
+	protected IStringify<N> mStringify = null;
 
-	private float m_Step = 1;
-	private int m_ScaledStep;
-
-	private float m_Min = 0;
-	private float m_Max = getMax();
-
-	private TextView m_TextView;
-
-	private IStringify m_Stringify;
-
-	private OnSeekBarChangeListener onSeekBarChangeListener = null;
-	private OnValueChangeListener onValueChangeListener = null;
+	protected SeekBar.OnSeekBarChangeListener mOnSeekBarChangeListener = null;
+	protected OnValueChangeListener<N> mOnValueChangeListener = null;
 
 	public Slider(Context context) {
-		super(context);
+		super(context, null);
 		init();
-		updateText();
 	}
 
 	public Slider(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		setAttrs(context, attrs);
+		super(context, attrs, android.R.attr.seekBarStyle);
 		init();
-		updateText();
 	}
 
 	public Slider(Context context, AttributeSet attrs, int defStyleAttr) {
-		super(context, attrs, defStyleAttr);
-		setAttrs(context, attrs);
+		super(context, attrs, defStyleAttr, 0);
 		init();
-		updateText();
+	}
+
+	public Slider(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+		super(context, attrs, defStyleAttr, defStyleRes);
+		init();
 	}
 
 	private void init() {
 		super.setOnSeekBarChangeListener(this);
 	}
 
-	private void setAttrs(Context context, AttributeSet attrs) {
-		TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.Slider);
-		m_Min = ta.getFloat(R.styleable.Slider_min, Build.VERSION.SDK_INT >= 26 ? getMin() : 0);
-		m_Max = ta.getFloat(R.styleable.Slider_max, getMax());
-		setStep(ta.getFloat(R.styleable.Slider_step, 1));
-		ta.recycle();
-
-		setMax();
+	private int roundToStep(int value) {
+		return step(value, mSliderStep);
 	}
 
-	public void setStep(float step) {
-		if (step <= 0)
-			throw new InvalidParameterException("Step must be larger than 0");
-
-		this.m_Step = step;
-		this.m_DecimalPlaces = decimalPlaces(step);
-		setMax();
-		refreshProgress();
-		updateText();
-	}
 
 	public void setScale(IScale scale) {
-		this.m_Scale = scale;
-		refreshProgress();
+		mScale = scale;
 		updateText();
 	}
 
-	public void setTextView(TextView textView, IStringify stringify) {
-		this.m_TextView = textView;
-		this.m_Stringify = stringify;
+	public void setTextView(TextView textView, IStringify<N> stringify) {
+		mTextView = textView;
+		mStringify = stringify;
 		updateText();
 	}
 
-	@Override
-	public void setProgress(int progress) {
-		setProgress((float) progress);
+	public abstract void setStep(N step);
+
+	public abstract void setProgressValue(N progress);
+
+	@RequiresApi(24)
+	public abstract void setProgressValue(N progress, boolean animate);
+
+	public abstract void setMinValue(N min);
+
+	public abstract void setMaxValue(N max);
+
+	public abstract N getMinValue();
+
+	public abstract N getMaxValue();
+
+	public abstract N getStep();
+
+	public abstract N getValue();
+
+	public IScale getScale() {
+		return mScale;
 	}
 
-	public void setProgress(float progress) {
-		float progressValue = progress / (m_Max - m_Min);
-
-		if (progressValue > 1 || progressValue < 0)
-			throw new IllegalArgumentException("Progress must be larger than " + m_Min + " and smaller than " + m_Max + " was " + progress);
-
-		super.setProgress(Math.round(progressValue * super.getMax()));
+	public int getSliderStep() {
+		return mSliderStep;
 	}
 
-	@Override
-	public void setMin(int min) {
-		setMin((float) min);
+	protected void setSliderStep(int sliderStep) {
+		if (sliderStep <= 0)
+			throw new RuntimeException("Slider step must be larger than 0");
+
+		this.mSliderStep = sliderStep;
 	}
 
-	public void setMin(float min) {
-		if (min >= m_Max)
-			throw new InvalidParameterException("Min must be smaller than max");
-
-		this.m_Min = min;
-		setMax();
-		refreshProgress();
-		updateText();
+	public void setOnSeekBarChangeListener(SeekBar.OnSeekBarChangeListener l) {
+		mOnSeekBarChangeListener = l;
 	}
 
-	@Override
-	public void setMax(int max) {
-		setMax((float) max);
-	}
-
-	public void setMax(float max) {
-		if (max <= m_Min)
-			throw new InvalidParameterException("Max must be larger than min");
-
-		m_Max = max;
-		setMax();
-		refreshProgress();
-		updateText();
-	}
-
-	private void setMax() {
-		float diff = round(m_Max - m_Min, 5);
-		int max = (int) (diff * getPercentPower());
-		super.setMax(max);
-		m_ScaledStep = Math.round(m_Step / diff * max);
-	}
-
-	public float getValue() {
-		return round(m_Scale.scale(getPercentProgress(), m_Min, m_Max), m_DecimalPlaces);
-	}
-
-	private float getPercentProgress() {
-		return getStepProgress() / (float) getMax();
-	}
-
-	private int getPercentPower() {
-		return 100 * (int) Math.pow(10, m_DecimalPlaces);
-	}
-
-	private int getStepProgress() {
-		return step(getProgress(), m_ScaledStep);
-	}
-
-	private void refreshProgress() {
-		setProgress(getStepProgress());
-	}
-
-	@Override
-	public void setOnSeekBarChangeListener(OnSeekBarChangeListener l) {
-		onSeekBarChangeListener = l;
-	}
-
-	public void setOnValueChangeListener(OnValueChangeListener l) {
-		onValueChangeListener = l;
+	public void setOnValueChangeListener(OnValueChangeListener<N> l) {
+		mOnValueChangeListener = l;
 	}
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+		setProgress(roundToStep(getProgress()));
 		if (fromUser)
 			updateText();
 
-		if (onSeekBarChangeListener != null)
-			onSeekBarChangeListener.onProgressChanged(seekBar, progress, fromUser);
+		if (mOnSeekBarChangeListener != null)
+			mOnSeekBarChangeListener.onProgressChanged(seekBar, progress, fromUser);
 	}
 
 	@Override
 	public void onStartTrackingTouch(SeekBar seekBar) {
-		if (onSeekBarChangeListener != null)
-			onSeekBarChangeListener.onStartTrackingTouch(seekBar);
+		if (mOnSeekBarChangeListener != null)
+			mOnSeekBarChangeListener.onStartTrackingTouch(seekBar);
 	}
 
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {
-		refreshProgress();
 		updateText();
 
-		if (onSeekBarChangeListener != null)
-			onSeekBarChangeListener.onStopTrackingTouch(seekBar);
+		if (mOnSeekBarChangeListener != null)
+			mOnSeekBarChangeListener.onStopTrackingTouch(seekBar);
 
-		if (onValueChangeListener != null)
-			onValueChangeListener.onValueChanged(getValue(), true);
+		if (mOnValueChangeListener != null)
+			mOnValueChangeListener.onValueChanged(getValue(), true);
 	}
 
-	private void updateText() {
-		if (m_TextView != null)
-			m_TextView.setText(m_Stringify.toString(getValue()));
+	protected void updateText() {
+		if (mTextView != null)
+			mTextView.setText(mStringify.toString(getValue()));
 	}
 
-	public interface OnValueChangeListener {
-		void onValueChanged(float value, boolean fromUser);
+
+	public interface OnValueChangeListener<N extends Number> {
+		void onValueChanged(N value, boolean fromUser);
 	}
 
-	public interface IStringify {
-		String toString(float value);
+	public interface IStringify<N extends Number> {
+		String toString(N value);
 	}
 
-	public interface IScale {
-		float scale(float value, float min, float max);
+	public interface IScale<N extends Number> {
+		N scale(int progress, int maxProgress, N min, N max);
 	}
 }
