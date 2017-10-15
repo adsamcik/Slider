@@ -93,6 +93,11 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 		updateText();
 	}
 
+	@Override
+	public void setMin(int min) {
+		setMin((float) min);
+	}
+
 	public void setMin(float min) {
 		if (min >= m_Max)
 			throw new InvalidParameterException("Min must be smaller than max");
@@ -101,6 +106,11 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 		setMax();
 		updateProgress();
 		updateText();
+	}
+
+	@Override
+	public void setMax(int max) {
+		setMax((float) max);
 	}
 
 	public void setMax(float max) {
@@ -143,6 +153,10 @@ public class Slider extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 	@Override
 	public void setOnSeekBarChangeListener(OnSeekBarChangeListener l) {
 		onSeekBarChangeListener = l;
+	}
+
+	public void setOnValueChangeListener(OnValueChangeListener l) {
+		onValueChangeListener = l;
 	}
 
 	@Override
