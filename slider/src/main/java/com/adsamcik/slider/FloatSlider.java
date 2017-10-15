@@ -75,7 +75,10 @@ public class FloatSlider extends Slider<Float> {
 	@Override
 	@RequiresApi(24)
 	public void setProgressValue(Float progress, boolean animate) {
+		if (progress > mMax || progress < mMin)
+			throw new IllegalArgumentException("Progress must be larger than " + mMin + " and smaller than " + mMax + " was " + progress);
 
+		setProgress((int) ((progress - mMin) * getPercentPower()), animate);
 	}
 
 	private int getPercentPower() {
