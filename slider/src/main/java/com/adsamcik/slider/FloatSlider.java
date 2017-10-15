@@ -10,6 +10,7 @@ import com.adsamcik.slider.ScaleFunctions.LinearScale;
 
 import java.security.InvalidParameterException;
 
+import static com.adsamcik.slider.EMath.decimalPlaces;
 import static com.adsamcik.slider.EMath.round;
 import static com.adsamcik.slider.EMath.step;
 
@@ -60,6 +61,7 @@ public class FloatSlider extends Slider<Float> {
 	public void setStep(Float step) {
 		mStep = step;
 		setSliderStep((int)(step * getPercentPower()));
+		updateDecimalPlaces();
 	}
 
 	@Override
@@ -86,6 +88,7 @@ public class FloatSlider extends Slider<Float> {
 			throw new InvalidParameterException("Min must be smaller than max");
 
 		mMin = min;
+		updateDecimalPlaces();
 	}
 
 	@Override
@@ -98,6 +101,7 @@ public class FloatSlider extends Slider<Float> {
 		int m = (int) (diff * getPercentPower());
 		setMax(m);
 		setSliderStep(Math.round(mStep / diff * max));
+		updateDecimalPlaces();
 	}
 
 	@Override
@@ -122,6 +126,18 @@ public class FloatSlider extends Slider<Float> {
 
 	private int getStepProgress() {
 		return step(getProgress(), getSliderStep());
+	}
+
+	private void updateDecimalPlaces() {
+		mDecimalPlaces = decimalPlaces(mMax);
+		int temp = decimalPlaces(mMin);
+		if(temp > mDecimalPlaces)
+			mDecimalPlaces = temp;
+
+		temp = decimalPlaces(mStep);
+		if(temp > mDecimalPlaces)
+			mDecimalPlaces = temp;
+
 	}
 
 }

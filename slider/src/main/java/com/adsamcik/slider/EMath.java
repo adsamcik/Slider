@@ -3,8 +3,7 @@ package com.adsamcik.slider;
 class EMath {
 	static int decimalPlaces(float value) {
 		String text = Float.toString(value);
-		int integerPlaces = text.indexOf('.');
-		return text.length() - integerPlaces - 1;
+		return text.length() - text.indexOf('.') - 1;
 	}
 
 	static float round(float value, int precision) {
