@@ -64,7 +64,7 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	 *
 	 * @param scale Scale
 	 */
-	public void setScale(IScale scale) {
+	public void setScale(IScale<N> scale) {
 		mScale = scale;
 		updateText();
 	}
