@@ -25,15 +25,15 @@ public class FloatSliderInstrumentationTest {
 
 		assertEquals("com.adsamcik.slider.test", appContext.getPackageName());
 
-		final int MAX = 9;
-		final int MIN = 1;
-		final int PLACES = 0;
+		final float MAX = 9;
+		final float MIN = 1;
+		final int PLACES = 1;
 		final int POW = (int) (100 * Math.pow(10, PLACES));
-		final int MAX_SLIDER = (MAX - MIN) * POW;
+		final float MAX_SLIDER = (MAX - MIN) * POW;
 
 		FloatSlider slider = new FloatSlider(appContext);
-		slider.setMinValue((float) MIN);
-		slider.setMaxValue((float) MAX);
+		slider.setMinValue(MIN);
+		slider.setMaxValue(MAX);
 		slider.setStep(2f);
 		slider.setProgressValue(5f);
 		assertEquals(MIN, slider.getMinValue(), DELTA);
@@ -73,7 +73,24 @@ public class FloatSliderInstrumentationTest {
 		slider.setStep(3f);
 		for (int i = -15; i <= 15; i++) {
 			slider.setProgressValue((float) i);
-			assertEquals(Math.round(i / 3.0) * 3, slider.getValue(), DELTA);
+			assertEquals(Math.round(i / 3f) * 3f, slider.getValue(), DELTA);
+		}
+	}
+
+	@Test
+	public void floatNumberTest() throws Exception {
+		// Context of the app under test.
+		Context appContext = InstrumentationRegistry.getTargetContext();
+
+		assertEquals("com.adsamcik.slider.test", appContext.getPackageName());
+
+		FloatSlider slider = new FloatSlider(appContext);
+		slider.setMinValue(-1.5f);
+		slider.setMaxValue(1.5f);
+		slider.setStep(0.3f);
+		for (float i = -1.5f; i <= 1.5f; i += 0.3f) {
+			slider.setProgressValue(i);
+			assertEquals(Math.round(i / 0.3f) * 0.3f, slider.getValue(), DELTA);
 		}
 	}
 }
