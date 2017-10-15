@@ -41,6 +41,15 @@ class EMath {
 		return Math.abs(left) >= Math.abs(step) * 0.5 ? roundDown + step : roundDown;
 	}
 
+	static int sign(int value) {
+		if (value > 0)
+			return 1;
+		else if (value < 0)
+			return -1;
+		else
+			return 0;
+	}
+
 	static int sign(float value) {
 		if (value > 0)
 			return 1;
@@ -48,6 +57,5 @@ class EMath {
 			return -1;
 		else
 			return 0;
-
 	}
 }
