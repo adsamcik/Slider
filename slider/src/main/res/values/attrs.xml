@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="Slider">
-        <attr name="min" format="float" />
-        <attr name="max" format="float" />
-        <attr name="step" format="float" />
+    <declare-styleable name="IntSlider">
+        <attr name="minInt" format="integer" />
+        <attr name="maxInt" format="integer" />
+        <attr name="stepInt" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="FloatSlider">
+        <attr name="minFloat" format="float" />
+        <attr name="maxFloat" format="float" />
+        <attr name="stepFloat" format="float" />
     </declare-styleable>
 </resources>
