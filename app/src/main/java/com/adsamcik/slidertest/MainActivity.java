@@ -6,7 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
-import com.adsamcik.slider.Slider;
+import com.adsamcik.slider.IntSlider;
 
 import java.security.InvalidParameterException;
 
@@ -16,7 +16,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		Slider slider = findViewById(R.id.slider);
+		IntSlider slider = findViewById(R.id.slider);
 		slider.setTextView(findViewById(R.id.slider_title), String::valueOf);
 
 		EditText minEditText = findViewById(R.id.minEditText);
@@ -29,7 +29,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				try {
-					slider.setMin(parseFloat(s));
+					slider.setMinValue(parseInt(s));
 				} catch (InvalidParameterException e) {
 					//no need to throw exception. This is proper behavior.
 				}
@@ -51,7 +51,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				try {
-					slider.setMax(parseFloat(s));
+					slider.setMaxValue(parseInt(s));
 				} catch (InvalidParameterException e) {
 					//no need to throw exception. This is proper behavior.
 				}
@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				try {
-					slider.setStep(parseFloat(s));
+					slider.setStep(parseInt(s));
 				} catch (InvalidParameterException e) {
 					//no need to throw exception. This is proper behavior.
 				}
@@ -89,6 +89,14 @@ public class MainActivity extends Activity {
 	private float parseFloat(CharSequence charSequence) {
 		try {
 			return Float.parseFloat(charSequence.toString());
+		} catch (Exception e) {
+			return 1;
+		}
+	}
+
+	private int parseInt(CharSequence charSequence) {
+		try {
+			return Integer.parseInt(charSequence.toString());
 		} catch (Exception e) {
 			return 1;
 		}

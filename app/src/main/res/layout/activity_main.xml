@@ -18,7 +18,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <com.adsamcik.slider.Slider
+    <com.adsamcik.slider.IntSlider
         android:id="@+id/slider"
         android:layout_width="381dp"
         android:layout_height="wrap_content"
@@ -30,9 +30,9 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/slider_title"
-        app:max="1.3"
-        app:min="1.2"
-        app:step="0.005"/>
+        app:max="10"
+        app:min="2"
+        app:step="2"/>
 
     <EditText
         android:id="@+id/minEditText"
