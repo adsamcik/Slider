@@ -6,7 +6,7 @@ public class LinearScale {
 	private LinearScale() {}
 
 	public static Slider.IScale<Float> getFloatScale() {
-		return (int progress, int maxProgress, Float min, Float max) -> min + (progress / maxProgress) * (max - min);
+		return (int progress, int maxProgress, Float min, Float max) -> min + (progress / (float)maxProgress) * (max - min);
 	}
 
 	public static Slider.IScale<Integer> getIntegerScale() {
