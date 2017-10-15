@@ -1,14 +1,10 @@
 package com.adsamcik.slider;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
-import android.widget.AbsSeekBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
-import com.adsamcik.slider.ScaleFunctions.LinearScale;
 
 import static com.adsamcik.slider.EMath.step;
 
