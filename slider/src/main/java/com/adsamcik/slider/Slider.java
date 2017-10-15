@@ -42,53 +42,133 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 		init();
 	}
 
+	/**
+	 * Initialization function
+	 */
 	private void init() {
 		super.setOnSeekBarChangeListener(this);
 	}
 
+	/**
+	 * Round desired value to step. Primarily used for SeekBar progress.
+	 *
+	 * @param value Value
+	 * @return Value after rounding to nearest step
+	 */
 	private int roundToStep(int value) {
 		return step(value, mSliderStep);
 	}
 
-
+	/**
+	 * Set slider's scale.
+	 *
+	 * @param scale Scale
+	 */
 	public void setScale(IScale scale) {
 		mScale = scale;
 		updateText();
 	}
 
+	/**
+	 * Set slider's TextView and String function. This TextView will be automatically updated when slider's progress changes and formatted using String function.
+	 *
+	 * @param textView  TextView
+	 * @param stringify String function
+	 */
 	public void setTextView(TextView textView, IStringify<N> stringify) {
 		mTextView = textView;
 		mStringify = stringify;
 		updateText();
 	}
 
+	/**
+	 * Set slider's step value.
+	 *
+	 * @param step Step value
+	 */
 	public abstract void setStep(N step);
 
+	/**
+	 * Set slider's current progress value. This value needs to be between Min value and Max value not min and max from SeekBar.
+	 *
+	 * @param progress Desired progress
+	 */
 	public abstract void setProgressValue(N progress);
 
+	/**
+	 * Set slider's current progress value. This value needs to be between Min value and Max value not min and max from SeekBar.
+	 *
+	 * @param progress Desired progress
+	 * @param animate  Animate
+	 */
 	@RequiresApi(24)
 	public abstract void setProgressValue(N progress, boolean animate);
 
+	/**
+	 * Set slider's min value.
+	 *
+	 * @param min Min value
+	 */
 	public abstract void setMinValue(N min);
 
+	/**
+	 * Set slider's max value.
+	 *
+	 * @param max Max value
+	 */
 	public abstract void setMaxValue(N max);
 
+	/**
+	 * Get slider's min value.
+	 *
+	 * @return Min value
+	 */
 	public abstract N getMinValue();
 
+	/**
+	 * Get slider's max value.
+	 *
+	 * @return Max value
+	 */
 	public abstract N getMaxValue();
 
+	/**
+	 * Get slider's step value.
+	 *
+	 * @return Step value
+	 */
 	public abstract N getStep();
 
+	/**
+	 * Get slider's current value after scaling.
+	 *
+	 * @return Current value
+	 */
 	public abstract N getValue();
 
+	/**
+	 * Returns current scale function
+	 *
+	 * @return Scale function
+	 */
 	public IScale getScale() {
 		return mScale;
 	}
 
+	/**
+	 * Returns step used by SeekBar
+	 *
+	 * @return Slider step
+	 */
 	public int getSliderStep() {
 		return mSliderStep;
 	}
 
+	/**
+	 * Sets step used by SeekBar
+	 *
+	 * @param sliderStep slider step
+	 */
 	protected void setSliderStep(int sliderStep) {
 		if (sliderStep <= 0)
 			throw new RuntimeException("Slider step must be larger than 0");
@@ -96,10 +176,20 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 		this.mSliderStep = sliderStep;
 	}
 
+	/**
+	 * Sets on seek bar changes listener
+	 *
+	 * @param l On SeekBar changes listener
+	 */
 	public void setOnSeekBarChangeListener(SeekBar.OnSeekBarChangeListener l) {
 		mOnSeekBarChangeListener = l;
 	}
 
+	/**
+	 * Sets on value changed listener
+	 *
+	 * @param l On value changed listener
+	 */
 	public void setOnValueChangeListener(OnValueChangeListener<N> l) {
 		mOnValueChangeListener = l;
 	}
@@ -131,6 +221,9 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 			mOnValueChangeListener.onValueChanged(getValue(), true);
 	}
 
+	/**
+	 * Updates TextView if it is not null using stringify function
+	 */
 	protected void updateText() {
 		if (mTextView != null)
 			mTextView.setText(mStringify.toString(getValue()));
