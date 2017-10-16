@@ -30,9 +30,9 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/slider_title"
-        app:max="10"
-        app:min="2"
-        app:step="2"/>
+        app:maxInt="10"
+        app:minInt="2"
+        app:stepInt="2"/>
 
     <EditText
         android:id="@+id/minEditText"
