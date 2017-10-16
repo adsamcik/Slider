@@ -4,6 +4,7 @@
 Slider built on top of Android's SeekBar with support for floating point, steps and min value. It was created to solve some issues that are present in SeekBar. Min value support is added because min value is only available since Nougat on SeekBar.
 
 ## Usage
+Example shows IntSlider but FloatSlider works the same way just uses floats. You can even implement your own by extending Slider class.
 
     IntSlider slider = findViewById(R.id.slider); //or just create new IntSlider(...)
     slider.setTextView(findViewById(R.id.slider_title), String::valueOf);
