@@ -60,6 +60,8 @@ public class IntSlider extends Slider<Integer> {
 	public void setStep(Integer step) {
 		if (step <= 0)
 			throw new InvalidParameterException("Step must be larger than 0");
+		else if(items != null)
+			throw new RuntimeException("Step cannot be set while custom slider values are set");
 
 		setSliderStep(step);
 	}
@@ -79,6 +81,8 @@ public class IntSlider extends Slider<Integer> {
 	public void setMinValue(Integer min) {
 		if (min >= mMax)
 			throw new InvalidParameterException("Min must be smaller than max");
+		else if(items != null)
+			throw new RuntimeException("Min cannot be set while custom slider values are set");
 
 		mMin = min;
 		updateSeekBarMax();
@@ -89,6 +93,8 @@ public class IntSlider extends Slider<Integer> {
 	public void setMaxValue(Integer max) {
 		if (max <= mMin)
 			throw new InvalidParameterException("Max must be larger than min");
+		else if(items != null)
+			throw new RuntimeException("Max cannot be set while custom slider values are set");
 
 		mMax = max;
 		updateSeekBarMax();
@@ -123,9 +129,9 @@ public class IntSlider extends Slider<Integer> {
 	public void setItems(@Nullable Integer[] items) {
 		this.items = items;
 		if (items != null) {
-			setMinValue(0);
-			setMaxValue(items.length - 1);
-			setStep(1);
+			mMin = 0;
+			mMax = items.length - 1;
+			setSliderStep(1);
 		}
 	}
 
