@@ -82,5 +82,9 @@ public class IntSliderInstrumentationTest {
 			slider.setProgress(i);
 			assertEquals((long)integers[i], (long) slider.getValue());
 		}
+
+		EAssert.assertException(() -> slider.setMinValue(-15), RuntimeException.class);
+		EAssert.assertException(() -> slider.setMaxValue(15), RuntimeException.class);
+		EAssert.assertException(() -> slider.setStep(3), RuntimeException.class);
 	}
 }

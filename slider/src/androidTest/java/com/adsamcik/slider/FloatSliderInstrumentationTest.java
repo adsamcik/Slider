@@ -113,5 +113,9 @@ public class FloatSliderInstrumentationTest {
 			slider.setProgress(i);
 			assertEquals(floats[i], slider.getValue());
 		}
+
+		EAssert.assertException(() -> slider.setMinValue(-15f), RuntimeException.class);
+		EAssert.assertException(() -> slider.setMaxValue(15f), RuntimeException.class);
+		EAssert.assertException(() -> slider.setStep(3f), RuntimeException.class);
 	}
 }
