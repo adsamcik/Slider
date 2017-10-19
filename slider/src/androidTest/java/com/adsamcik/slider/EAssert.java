@@ -19,8 +19,8 @@ public class EAssert {
 			callback.run();
 			throw new AssertionError("Exception of type " + exceptionClass.getName() + " expected.");
 		} catch (Exception e) {
-			//Tests for assertion exceptions
-			assertNotEquals(AssertionError.class, e.getClass());
+			if(e.getClass().equals(AssertionError.class))
+				throw e;
 			assertEquals(exceptionClass, e.getClass());
 		}
 	}
