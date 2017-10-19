@@ -93,4 +93,25 @@ public class FloatSliderInstrumentationTest {
 			assertEquals(Math.round(i / 0.3f) * 0.3f, slider.getValue(), DELTA);
 		}
 	}
+
+	@Test
+	public void valueTest() throws Exception {
+		Context appContext = InstrumentationRegistry.getTargetContext();
+
+		Slider<Float> slider = new FloatSlider(appContext);
+		slider.setMinValue(-15f);
+		slider.setMaxValue(15f);
+		slider.setStep(3f);
+		Float[] floats = new Float[]{0f, 3f, 4f, 20f, 35f};
+		slider.setItems(floats);
+		for (int i = 0; i < floats.length; i++) {
+			slider.setProgressValue(floats[i]);
+			assertEquals(floats[i], slider.getValue());
+		}
+
+		for (int i = 0; i < floats.length; i++) {
+			slider.setProgress(i);
+			assertEquals(floats[i], slider.getValue());
+		}
+	}
 }

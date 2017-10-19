@@ -21,8 +21,6 @@ public class IntSliderInstrumentationTest {
 		// Context of the app under test.
 		Context appContext = InstrumentationRegistry.getTargetContext();
 
-		assertEquals("com.adsamcik.slider.test", appContext.getPackageName());
-
 		IntSlider slider = new IntSlider(appContext);
 		slider.setMinValue(1);
 		slider.setMaxValue(9);
@@ -40,8 +38,6 @@ public class IntSliderInstrumentationTest {
 		// Context of the app under test.
 		Context appContext = InstrumentationRegistry.getTargetContext();
 
-		assertEquals("com.adsamcik.slider.test", appContext.getPackageName());
-
 		IntSlider slider = new IntSlider(appContext);
 		slider.setMinValue(0);
 		slider.setMaxValue(12);
@@ -57,8 +53,6 @@ public class IntSliderInstrumentationTest {
 		// Context of the app under test.
 		Context appContext = InstrumentationRegistry.getTargetContext();
 
-		assertEquals("com.adsamcik.slider.test", appContext.getPackageName());
-
 		IntSlider slider = new IntSlider(appContext);
 		slider.setMinValue(-15);
 		slider.setMaxValue(15);
@@ -66,6 +60,27 @@ public class IntSliderInstrumentationTest {
 		for (int i = -15; i <= 15; i++) {
 			slider.setProgressValue(i);
 			assertEquals(Math.round(i / 3.0) * 3, (long) slider.getValue());
+		}
+	}
+
+	@Test
+	public void valueTest() throws Exception {
+		Context appContext = InstrumentationRegistry.getTargetContext();
+
+		IntSlider slider = new IntSlider(appContext);
+		slider.setMinValue(-15);
+		slider.setMaxValue(15);
+		slider.setStep(3);
+		Integer[] integers = new Integer[]{0, 3, 4, 20, 35};
+		slider.setItems(integers);
+		for (int i = 0; i < integers.length; i++) {
+			slider.setProgressValue(integers[i]);
+			assertEquals((long)integers[i], (long) slider.getValue());
+		}
+
+		for (int i = 0; i < integers.length; i++) {
+			slider.setProgress(i);
+			assertEquals((long)integers[i], (long) slider.getValue());
 		}
 	}
 }
