@@ -3,12 +3,14 @@ package com.adsamcik.slider;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 
 import com.adsamcik.slider.ScaleFunctions.LinearScale;
 
 import java.security.InvalidParameterException;
+import java.util.Arrays;
 
 import static com.adsamcik.slider.EMath.step;
 
@@ -114,14 +116,25 @@ public class IntSlider extends Slider<Integer> {
 
 	@Override
 	public Integer getValue() {
-		return mScale.scale(getProgress(), getMax(), mMin, mMax);
+		return items != null ? items[getProgress()] : mScale.scale(getProgress(), getMax(), mMin, mMax);
+	}
+
+	@Override
+	public void setItems(@Nullable Integer[] items) {
+		this.items = items;
+		if (items != null) {
+			setMinValue(0);
+			setMaxValue(items.length - 1);
+			setStep(1);
+		}
 	}
 
 	private int toSliderProgress(int progress) {
-		return progress - mMin;
+		Integer itemIndex = getItemIndex(progress);
+		return itemIndex != null ? itemIndex : progress - mMin;
 	}
 
 	private int fromSliderProgress(int progress) {
-		return progress + mMin;
+		return items != null ? items[progress] : progress + mMin;
 	}
 }
