@@ -3,6 +3,7 @@ package com.adsamcik.slider;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 
@@ -59,26 +60,36 @@ public class FloatSlider extends Slider<Float> {
 
 	@Override
 	public void setStep(Float step) {
+		if (items != null)
+			throw new RuntimeException("Step cannot be set while custom slider values are set");
+
 		mStep = step;
-		setSliderStep((int)(step * getPercentPower()));
+		setSliderStep((int) (step * getPercentPower()));
 		updateDecimalPlaces();
 	}
 
 	@Override
 	public void setProgressValue(Float progress) {
-		if (progress > mMax || progress < mMin)
-			throw new IllegalArgumentException("Progress must be larger than " + mMin + " and smaller than " + mMax + " was " + progress);
+		if (items != null) {
+			setProgress(getItemIndex(progress));
+		} else {
+			if (progress > mMax || progress < mMin)
+				throw new IllegalArgumentException("Progress must be larger than " + mMin + " and smaller than " + mMax + " was " + progress);
 
-		setProgress((int) ((progress - mMin) * getPercentPower()));
+			setProgress((int) ((progress - mMin) * getPercentPower()));
+		}
 	}
 
 	@Override
 	@RequiresApi(24)
 	public void setProgressValue(Float progress, boolean animate) {
-		if (progress > mMax || progress < mMin)
-			throw new IllegalArgumentException("Progress must be larger than " + mMin + " and smaller than " + mMax + " was " + progress);
-
-		setProgress((int) ((progress - mMin) * getPercentPower()), animate);
+		if (items != null) {
+			setProgress(getItemIndex(progress));
+		} else {
+			if (progress > mMax || progress < mMin)
+				throw new IllegalArgumentException("Progress must be larger than " + mMin + " and smaller than " + mMax + " was " + progress);
+			setProgress((int) ((progress - mMin) * getPercentPower()), animate);
+		}
 	}
 
 	private int getPercentPower() {
@@ -89,15 +100,20 @@ public class FloatSlider extends Slider<Float> {
 	public void setMinValue(Float min) {
 		if (min >= mMax)
 			throw new InvalidParameterException("Min must be smaller than max");
+		else if (items != null)
+			throw new RuntimeException("Min cannot be set while custom slider values are set");
 
 		mMin = min;
 		updateDecimalPlaces();
 	}
 
+
 	@Override
 	public void setMaxValue(Float max) {
 		if (max <= mMin)
 			throw new InvalidParameterException("Max must be larger than min");
+		else if (items != null)
+			throw new RuntimeException("Max cannot be set while custom slider values are set");
 
 		mMax = max;
 		float diff = round(mMax - mMin, 5);
@@ -124,7 +140,20 @@ public class FloatSlider extends Slider<Float> {
 
 	@Override
 	public Float getValue() {
-		return round(mScale.scale(getStepProgress(), getMax(), mMin, mMax), mDecimalPlaces);
+		return items != null ? items[getProgress()] : round(mScale.scale(getStepProgress(), getMax(), mMin, mMax), mDecimalPlaces);
+	}
+
+	@Override
+	public void setItems(@Nullable Float[] items) {
+		this.items = items;
+		if (items != null) {
+			mMin = 0f;
+			mDecimalPlaces = 0;
+			mMax = (float) (items.length - 1);
+			setMax(items.length - 1);
+			mStep = 1f;
+			setSliderStep(1);
+		}
 	}
 
 	private int getStepProgress() {
@@ -134,11 +163,11 @@ public class FloatSlider extends Slider<Float> {
 	private void updateDecimalPlaces() {
 		mDecimalPlaces = decimalPlaces(mMax);
 		int temp = decimalPlaces(mMin);
-		if(temp > mDecimalPlaces)
+		if (temp > mDecimalPlaces)
 			mDecimalPlaces = temp;
 
 		temp = decimalPlaces(mStep);
-		if(temp > mDecimalPlaces)
+		if (temp > mDecimalPlaces)
 			mDecimalPlaces = temp;
 
 	}
