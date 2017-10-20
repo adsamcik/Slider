@@ -11,7 +11,7 @@ ext {
     siteUrl = 'https://github.com/adsamcik/ISlider'
     gitUrl = 'https://github.com/adsamcik/ISlider.git'
 
-    libraryVersion = '0.2.0'
+    libraryVersion = '0.3.0'
 
     developerId = 'adsamcik'
     developerName = ''
@@ -21,6 +21,8 @@ ext {
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
     allLicenses = ["Apache-2.0"]
 }
+
+//gradlew bintrayUpload
 
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
 apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
