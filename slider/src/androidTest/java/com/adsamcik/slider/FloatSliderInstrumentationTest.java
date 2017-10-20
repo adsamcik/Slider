@@ -1,8 +1,12 @@
 package com.adsamcik.slider;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+
+import junit.framework.Assert;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -117,5 +121,23 @@ public class FloatSliderInstrumentationTest {
 		EAssert.assertException(() -> slider.setMinValue(-15f), RuntimeException.class);
 		EAssert.assertException(() -> slider.setMaxValue(15f), RuntimeException.class);
 		EAssert.assertException(() -> slider.setStep(3f), RuntimeException.class);
+	}
+
+	@Test
+	public void sharedPreferences() throws Exception {
+		final Context appContext = InstrumentationRegistry.getTargetContext();
+		final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(appContext);
+		final String prefName = "TESTING PREFERENCE";
+
+		FloatSlider slider = new FloatSlider(appContext);
+		slider.setMinValue(-1.5f);
+		slider.setMaxValue(1.5f);
+		slider.setStep(0.3f);
+		slider.setPreferences(preferences, prefName);
+		slider.setProgressValue(0.1f);
+
+		Assert.assertEquals(slider.getValue(), preferences.getFloat(prefName, Float.MIN_VALUE));
+
+		preferences.edit().remove(prefName).apply();
 	}
 }

@@ -1,8 +1,10 @@
 package com.adsamcik.slider;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
@@ -60,7 +62,7 @@ public class FloatSlider extends Slider<Float> {
 
 	@Override
 	public void setStep(Float step) {
-		if (items != null)
+		if (mItems != null)
 			throw new RuntimeException("Step cannot be set while custom slider values are set");
 
 		mStep = step;
@@ -70,7 +72,7 @@ public class FloatSlider extends Slider<Float> {
 
 	@Override
 	public void setProgressValue(Float progress) {
-		if (items != null) {
+		if (mItems != null) {
 			setProgress(getItemIndex(progress));
 		} else {
 			if (progress > mMax || progress < mMin)
@@ -83,7 +85,7 @@ public class FloatSlider extends Slider<Float> {
 	@Override
 	@RequiresApi(24)
 	public void setProgressValue(Float progress, boolean animate) {
-		if (items != null) {
+		if (mItems != null) {
 			setProgress(getItemIndex(progress));
 		} else {
 			if (progress > mMax || progress < mMin)
@@ -100,7 +102,7 @@ public class FloatSlider extends Slider<Float> {
 	public void setMinValue(Float min) {
 		if (min >= mMax)
 			throw new InvalidParameterException("Min must be smaller than max");
-		else if (items != null)
+		else if (mItems != null)
 			throw new RuntimeException("Min cannot be set while custom slider values are set");
 
 		mMin = min;
@@ -112,7 +114,7 @@ public class FloatSlider extends Slider<Float> {
 	public void setMaxValue(Float max) {
 		if (max <= mMin)
 			throw new InvalidParameterException("Max must be larger than min");
-		else if (items != null)
+		else if (mItems != null)
 			throw new RuntimeException("Max cannot be set while custom slider values are set");
 
 		mMax = max;
@@ -121,6 +123,21 @@ public class FloatSlider extends Slider<Float> {
 		setMax(m);
 		setSliderStep(Math.round(mStep / diff * max));
 		updateDecimalPlaces();
+	}
+
+	@Override
+	public void setPreferencesAndLoad(@Nullable SharedPreferences sharedPreferences, @Nullable String preferenceString, Float defaultValue) {
+		if (sharedPreferences == null || preferenceString == null)
+			setPreferences(null, null);
+		else {
+			setProgressValue(sharedPreferences.getFloat(preferenceString, defaultValue));
+			setPreferences(sharedPreferences, preferenceString);
+		}
+	}
+
+	@Override
+	public void updatePreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull Float value) {
+		sharedPreferences.edit().putFloat(preferenceString, value).apply();
 	}
 
 	@Override
@@ -140,12 +157,12 @@ public class FloatSlider extends Slider<Float> {
 
 	@Override
 	public Float getValue() {
-		return items != null ? items[getProgress()] : round(mScale.scale(getStepProgress(), getMax(), mMin, mMax), mDecimalPlaces);
+		return mItems != null ? mItems[getProgress()] : round(mScale.scale(getStepProgress(), getMax(), mMin, mMax), mDecimalPlaces);
 	}
 
 	@Override
 	public void setItems(@Nullable Float[] items) {
-		this.items = items;
+		this.mItems = items;
 		if (items != null) {
 			mMin = 0f;
 			mDecimalPlaces = 0;

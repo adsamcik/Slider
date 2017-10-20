@@ -1,8 +1,10 @@
 package com.adsamcik.slider;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
@@ -10,7 +12,6 @@ import android.util.AttributeSet;
 import com.adsamcik.slider.ScaleFunctions.LinearScale;
 
 import java.security.InvalidParameterException;
-import java.util.Arrays;
 
 import static com.adsamcik.slider.EMath.step;
 
@@ -60,7 +61,7 @@ public class IntSlider extends Slider<Integer> {
 	public void setStep(Integer step) {
 		if (step <= 0)
 			throw new InvalidParameterException("Step must be larger than 0");
-		else if(items != null)
+		else if(mItems != null)
 			throw new RuntimeException("Step cannot be set while custom slider values are set");
 
 		setSliderStep(step);
@@ -81,7 +82,7 @@ public class IntSlider extends Slider<Integer> {
 	public void setMinValue(Integer min) {
 		if (min >= mMax)
 			throw new InvalidParameterException("Min must be smaller than max");
-		else if(items != null)
+		else if(mItems != null)
 			throw new RuntimeException("Min cannot be set while custom slider values are set");
 
 		mMin = min;
@@ -93,12 +94,27 @@ public class IntSlider extends Slider<Integer> {
 	public void setMaxValue(Integer max) {
 		if (max <= mMin)
 			throw new InvalidParameterException("Max must be larger than min");
-		else if(items != null)
+		else if(mItems != null)
 			throw new RuntimeException("Max cannot be set while custom slider values are set");
 
 		mMax = max;
 		updateSeekBarMax();
 		updateText();
+	}
+
+	@Override
+	public void setPreferencesAndLoad(@Nullable SharedPreferences sharedPreferences, @Nullable String preferenceString, Integer defaultValue) {
+		if (sharedPreferences == null || preferenceString == null)
+			setPreferences(null, null);
+		else {
+			setProgressValue(sharedPreferences.getInt(preferenceString, defaultValue));
+			setPreferences(sharedPreferences, preferenceString);
+		}
+	}
+
+	@Override
+	public void updatePreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull Integer value) {
+		sharedPreferences.edit().putInt(preferenceString, value).apply();
 	}
 
 	private void updateSeekBarMax() {
@@ -122,12 +138,12 @@ public class IntSlider extends Slider<Integer> {
 
 	@Override
 	public Integer getValue() {
-		return items != null ? items[getProgress()] : mScale.scale(getProgress(), getMax(), mMin, mMax);
+		return mItems != null ? mItems[getProgress()] : mScale.scale(getProgress(), getMax(), mMin, mMax);
 	}
 
 	@Override
 	public void setItems(@Nullable Integer[] items) {
-		this.items = items;
+		this.mItems = items;
 		if (items != null) {
 			mMin = 0;
 			mMax = items.length - 1;
@@ -141,6 +157,6 @@ public class IntSlider extends Slider<Integer> {
 	}
 
 	private int fromSliderProgress(int progress) {
-		return items != null ? items[progress] : progress + mMin;
+		return mItems != null ? mItems[progress] : progress + mMin;
 	}
 }

@@ -1,6 +1,8 @@
 package com.adsamcik.slider;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -22,7 +24,10 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	protected SeekBar.OnSeekBarChangeListener mOnSeekBarChangeListener = null;
 	protected OnValueChangeListener<N> mOnValueChangeListener = null;
 
-	protected N[] items = null;
+	protected N[] mItems = null;
+
+	private SharedPreferences mPreferences = null;
+	private String mPreferenceString = null;
 
 	public Slider(Context context) {
 		super(context, null);
@@ -109,7 +114,7 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 
 	/**
 	 * Method used to set progress manually.
-	 * This method should only when you want to set {@link #items} by index
+	 * This method should only when you want to set {@link #mItems} by index
 	 * or by Slider implementation. Calling it in other cases might result in issues.
 	 *
 	 * @param progress progress
@@ -121,7 +126,7 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 
 	/**
 	 * Method used to set progress manually.
-	 * This method should only when you want to set {@link #items} by index
+	 * This method should only when you want to set {@link #mItems} by index
 	 * or by Slider implementation. Calling it in other cases might result in issues.
 	 *
 	 * @param progress progress
@@ -144,6 +149,43 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	 * @param max Max value
 	 */
 	public abstract void setMaxValue(N max);
+
+	/**
+	 * Set slider's preferences for automatic saving inside passed instance of {@link SharedPreferences}.
+	 * Saves only value not bounds or step.
+	 *
+	 * @param sharedPreferences Instance of shared preferences
+	 * @param preferenceString  String name of desired preference
+	 */
+	public void setPreferences(@Nullable SharedPreferences sharedPreferences, @Nullable String preferenceString) {
+		if (sharedPreferences == null || preferenceString == null) {
+			this.mPreferences = null;
+			this.mPreferenceString = null;
+		} else {
+			this.mPreferences = sharedPreferences;
+			this.mPreferenceString = preferenceString;
+		}
+	}
+
+	/**
+	 * Set slider's preferences for automatic saving inside passed instance of {@link SharedPreferences} and loads currently saved values.
+	 * Saves only value not bounds or step.
+	 * It is important NOT to call this function before setting min, max and step.
+	 *
+	 * @param sharedPreferences Instance of shared preferences
+	 * @param preferenceString  String name of desired preference
+	 */
+	public abstract void setPreferencesAndLoad(@Nullable SharedPreferences sharedPreferences, @Nullable String preferenceString, N defaultValue);
+
+	/**
+	 * Function called when updating preferences is need.
+	 * Function is guranteed to be called only when SharedPreferences are not null
+	 *
+	 * @param sharedPreferences Shared Preferences instance
+	 * @param preferenceString  Preference String
+	 * @param value             Value
+	 */
+	public abstract void updatePreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull N value);
 
 	/**
 	 * Get slider's min value.
@@ -197,7 +239,7 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	 * @return Returns items or null if no items were set
 	 */
 	public N[] getItems() {
-		return items;
+		return mItems;
 	}
 
 	/**
@@ -246,6 +288,12 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 
 		if (mOnSeekBarChangeListener != null)
 			mOnSeekBarChangeListener.onProgressChanged(seekBar, progress, fromUser);
+
+		if (mOnValueChangeListener != null)
+			mOnValueChangeListener.onValueChanged(getValue(), fromUser);
+
+		if (mPreferences != null)
+			updatePreferences(mPreferences, mPreferenceString, getValue());
 	}
 
 	@Override
@@ -260,9 +308,6 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 
 		if (mOnSeekBarChangeListener != null)
 			mOnSeekBarChangeListener.onStopTrackingTouch(seekBar);
-
-		if (mOnValueChangeListener != null)
-			mOnValueChangeListener.onValueChanged(getValue(), true);
 	}
 
 	/**
@@ -274,8 +319,8 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	}
 
 	protected Integer getItemIndex(N item) {
-		if (items != null) {
-			int index = Arrays.asList(items).indexOf(item);
+		if (mItems != null) {
+			int index = Arrays.asList(mItems).indexOf(item);
 			if (index == -1)
 				return null;
 			else
