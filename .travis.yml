@@ -43,6 +43,7 @@ android:
 
 
 before_script:
+    - android list target
     - echo no | android create avd --force -n test -t android-$EMULATOR_API --abi google_apis/$ANDROID_ABI
     - emulator -avd test -no-audio -no-window &
     - android-wait-for-emulator
