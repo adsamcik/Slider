@@ -1,3 +1,4 @@
+sudo: false
 language: android
 jdk: oraclejdk8
 
@@ -42,11 +43,10 @@ android:
 
 
 before_script:
-    #- android list sdk --no-ui --all --extended
-    #- echo no | android create avd --force -n test -t android-$EMULATOR_API --abi $ANDROID_ABI
-    #- emulator -avd test -no-audio -no-window &
-    #- android-wait-for-emulator
-    #- adb shell input keyevent 82 &
+    - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
+    - emulator -avd test -no-skin -no-audio -no-window &
+    - android-wait-for-emulator
+    - adb shell input keyevent 82 &
 
 before_install:
     - chmod +x gradlew
