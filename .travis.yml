@@ -5,7 +5,7 @@ sudo: false
 env:
   global:
     - ANDROID_API_LEVEL=27
-    - ANDROID_BUILD_TOOLS_VERSION=26.0.2
+    - ANDROID_BUILD_TOOLS_VERSION=27.0.0
     - ANDROID_ABI=armeabi-v7a
 
 before_cache:
@@ -24,7 +24,6 @@ android:
         - tools
         - platform-tools
         - tools
-        - build-tools-26.0.2
         - build-tools-$ANDROID_BUILD_TOOLS_VERSION
         - android-$ANDROID_API_LEVEL
         - android-25
