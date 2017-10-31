@@ -43,8 +43,7 @@ android:
 
 
 before_script:
-    - android list targets
-    #- android list sdk --no-ui --all --extended | grep -E '^id:' | awk -F '"' '{$1=""; print $2}'
+    #- android list targets
     - echo no | android create avd --force -n test -t android-$EMULATOR_API --abi $ANDROID_ABI
     - emulator -avd test -no-audio -no-window &
     - android-wait-for-emulator
@@ -52,7 +51,6 @@ before_script:
 
 before_install:
     - chmod +x gradlew
-    - pip install --user codecov    #Install codecov
 
 after_success:
-    - codecov                       #Run codecov
+    - ./gradlew jacocoTestReport coveralls
