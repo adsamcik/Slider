@@ -83,7 +83,7 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	 * @param stringify String function
 	 */
 	public void setTextView(@Nullable TextView textView, @Nullable IStringify<N> stringify) {
-		if(textView == null || stringify == null) {
+		if (textView == null || stringify == null) {
 			mTextView = null;
 			mStringify = null;
 		} else {
@@ -127,18 +127,6 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	@Override
 	public synchronized void setProgress(int progress) {
 		super.setProgress(progress);
-	}
-
-	/**
-	 * Method used to set progress manually.
-	 * This method should only when you want to set {@link #mItems} by index
-	 * or by Slider implementation. Calling it in other cases might result in issues.
-	 *
-	 * @param progress progress
-	 */
-	@Override
-	public synchronized void setProgress(int progress, boolean animate) {
-		super.setProgress(progress, animate);
 	}
 
 	/**
@@ -288,8 +276,7 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 		setProgress(roundToStep(getProgress()));
-		if (fromUser)
-			updateText();
+		updateText();
 
 		if (mOnSeekBarChangeListener != null)
 			mOnSeekBarChangeListener.onProgressChanged(seekBar, progress, fromUser);
