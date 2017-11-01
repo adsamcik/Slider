@@ -68,6 +68,24 @@ public class IntSliderInstrumentationTest {
 	}
 
 	@Test
+	public void progressTest() throws Exception {
+		IntSlider slider = new IntSlider(appContext);
+		slider.setMinValue(0);
+		slider.setMaxValue(10);
+		slider.setProgressValue(5);
+
+		assertEquals(5, slider.getProgress());
+
+		slider.setProgressValue(8, false);
+
+		assertEquals(8, slider.getProgress());
+
+		slider.setProgressValue(3, true);
+
+		assertEquals(3, slider.getProgress());
+	}
+
+	@Test
 	public void moveTest() throws Exception {
 		IntSlider slider = new IntSlider(appContext);
 		slider.setMinValue(0);
