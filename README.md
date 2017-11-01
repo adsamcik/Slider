@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/adsamcik/Slider.svg?branch=master)](https://travis-ci.org/adsamcik/Slider)
-[![Coverage Status](https://coveralls.io/repos/github/adsamcik/Slider/badge.svg?branch=master)](https://coveralls.io/github/adsamcik/Slider?branch=master)
+[![codecov](https://codecov.io/gh/adsamcik/Slider/branch/master/graph/badge.svg)](https://codecov.io/gh/adsamcik/Slider)
 [ ![Download](https://api.bintray.com/packages/adsamcik/android-component-extensions/slider/images/download.svg) ](https://bintray.com/adsamcik/android-component-extensions/slider/_latestVersion)
 
 # Slider
