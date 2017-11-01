@@ -7,10 +7,19 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.TextView;
 
+import com.adsamcik.slider.ScaleFunctions.LinearScale;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static org.junit.Assert.*;
 
@@ -31,11 +40,16 @@ public class IntSliderInstrumentationTest {
 		slider.setStep(2);
 		slider.setProgressValue(5);
 		slider.setTextView(null, null);
+
 		assertEquals(1, (long) slider.getMinValue());
 		assertEquals(9, (long) slider.getMaxValue());
 		assertEquals(8, (long) slider.getMax());
 		assertEquals(4, (long) slider.getProgress());
 		assertEquals(5, (long) slider.getValue());
+
+		Slider.IScale<Integer> scale = LinearScale.getIntegerScale();
+		slider.setScale(scale);
+		assertEquals(scale, slider.getScale());
 	}
 
 	@Test
@@ -119,6 +133,11 @@ public class IntSliderInstrumentationTest {
 		slider.setStep(3);
 		Integer[] integers = new Integer[]{0, 3, 4, 20, 35};
 		slider.setItems(integers);
+
+		Integer[] getInts = slider.getItems();
+		for (int i = 0; i < integers.length; i++)
+			assertEquals(integers[i], getInts[i]);
+
 		for (int i = 0; i < integers.length; i++) {
 			slider.setProgressValue(integers[i]);
 			assertEquals((long) integers[i], (long) slider.getValue());
@@ -136,7 +155,6 @@ public class IntSliderInstrumentationTest {
 
 	@Test
 	public void sharedPreferences() throws Exception {
-		final Context appContext = InstrumentationRegistry.getTargetContext();
 		final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(appContext);
 		final String prefName = "TESTING PREFERENCE";
 
@@ -150,5 +168,26 @@ public class IntSliderInstrumentationTest {
 		Assert.assertEquals((long) slider.getValue(), (long) preferences.getInt(prefName, Integer.MIN_VALUE));
 
 		preferences.edit().remove(prefName).apply();
+
+		slider.setPreferences(null, null);
+	}
+
+	AtomicInteger atomicInteger = new AtomicInteger(0);
+
+	@Test
+	public void callbackTests() throws Exception {
+		IntSlider slider = new IntSlider(appContext);
+
+		Slider.OnValueChangeListener<Integer> valueChangeListener = (value, fromUser) -> {
+			atomicInteger.incrementAndGet();
+		};
+
+		slider.setOnValueChangeListener(valueChangeListener);
+		slider.setProgressValue(5);
+		assertEquals(1, atomicInteger.get());
+
+		slider.setOnValueChangeListener(null);
+		slider.setProgressValue(3);
+		assertEquals(1, atomicInteger.get());
 	}
 }
