@@ -130,6 +130,19 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	}
 
 	/**
+	 * Method used to set progress manually.
+	 * This method should only when you want to set {@link #mItems} by index
+	 * or by Slider implementation. Calling it in other cases might result in issues.
+	 *
+	 * @param progress progress
+	 */
+	@Override
+	@RequiresApi(24)
+	public synchronized void setProgress(int progress, boolean animate) {
+		super.setProgress(progress, animate);
+	}
+
+	/**
 	 * Set slider's min value.
 	 *
 	 * @param min Min value

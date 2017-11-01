@@ -2,6 +2,7 @@ package com.adsamcik.slider;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
@@ -84,7 +85,7 @@ public class IntSliderInstrumentationTest {
 
 	@Test
 	public void progressTest() throws Exception {
-		if(Looper.myLooper() == null)
+		if (Looper.myLooper() == null)
 			Looper.prepare();
 
 		IntSlider slider = new IntSlider(appContext);
@@ -94,11 +95,17 @@ public class IntSliderInstrumentationTest {
 
 		assertEquals(5, slider.getProgress());
 
-		slider.setProgressValue(8, false);
+		if (Build.VERSION.SDK_INT >= 24)
+			slider.setProgressValue(8, false);
+		else
+			slider.setProgress(3);
 
 		assertEquals(8, slider.getProgress());
 
-		slider.setProgressValue(3, true);
+		if (Build.VERSION.SDK_INT >= 24)
+			slider.setProgressValue(3, true);
+		else
+			slider.setProgress(3);
 
 		assertEquals(3, slider.getProgress());
 	}
@@ -176,7 +183,7 @@ public class IntSliderInstrumentationTest {
 		slider.setPreferences(null, null);
 	}
 
-	AtomicInteger atomicInteger = new AtomicInteger(0);
+	private AtomicInteger atomicInteger = new AtomicInteger(0);
 
 	@Test
 	public void callbackTests() throws Exception {
