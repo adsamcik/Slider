@@ -2,6 +2,7 @@ package com.adsamcik.slider;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
@@ -72,17 +73,20 @@ public class IntSliderInstrumentationTest {
 		slider.setTextView(textView, value -> "Test " + value);
 		slider.setTextView(textView, null);
 		slider.setProgressValue(6);
-		assertEquals("Test 5", textView.getText());
+		assertEquals("Test 4", textView.getText());
 		assertEquals(6, (long) slider.getValue());
 
 		slider.setTextView(null, null);
 		slider.setProgressValue(8);
-		assertEquals("Test 5", textView.getText());
+		assertEquals("Test 4", textView.getText());
 		assertEquals(8, (long) slider.getValue());
 	}
 
 	@Test
 	public void progressTest() throws Exception {
+		if(Looper.myLooper() == null)
+			Looper.prepare();
+
 		IntSlider slider = new IntSlider(appContext);
 		slider.setMinValue(0);
 		slider.setMaxValue(10);
