@@ -98,7 +98,7 @@ public class IntSliderInstrumentationTest {
 		if (Build.VERSION.SDK_INT >= 24)
 			slider.setProgressValue(8, false);
 		else
-			slider.setProgress(3);
+			slider.setProgress(8);
 
 		assertEquals(8, slider.getProgress());
 
