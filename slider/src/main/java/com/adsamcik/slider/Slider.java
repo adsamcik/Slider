@@ -82,10 +82,15 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	 * @param textView  TextView
 	 * @param stringify String function
 	 */
-	public void setTextView(TextView textView, IStringify<N> stringify) {
-		mTextView = textView;
-		mStringify = stringify;
-		updateText();
+	public void setTextView(@Nullable TextView textView, @Nullable IStringify<N> stringify) {
+		if(textView == null || stringify == null) {
+			mTextView = null;
+			mStringify = null;
+		} else {
+			mTextView = textView;
+			mStringify = stringify;
+			updateText();
+		}
 	}
 
 	/**
