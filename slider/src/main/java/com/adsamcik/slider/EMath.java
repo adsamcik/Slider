@@ -26,34 +26,6 @@ class EMath {
 	}
 
 	/**
-	 * Limits value to min-max bounds.
-	 *
-	 * @param value Value
-	 * @param min   Minimum
-	 * @param max   Maximum
-	 * @return Limited value
-	 */
-	static float limit(final float value, final float min, final float max) {
-		if (value < min)
-			return min;
-		else if (value > max)
-			return max;
-		else
-			return value;
-	}
-
-	/**
-	 * Limits value to max bound.
-	 *
-	 * @param value Value
-	 * @param max   Maximum
-	 * @return Limited value
-	 */
-	static float limitMax(final float value, final float max) {
-		return value > max ? max : value;
-	}
-
-	/**
 	 * Rounds value to step in desired direction.
 	 * This direction is than added to target value.
 	 *
