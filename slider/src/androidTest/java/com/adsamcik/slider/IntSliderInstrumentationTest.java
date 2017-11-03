@@ -177,9 +177,10 @@ public class IntSliderInstrumentationTest {
 		slider.setMinValue(-5);
 		slider.setMaxValue(5);
 		slider.setStep(2);
-		slider.setPreferencesAndLoad(preferences, prefName, 0);
 
-		Assert.assertEquals(0, (long) slider.getValue());
+		slider.setPreferencesAndLoad(preferences, prefName, 1);
+
+		Assert.assertEquals(1, (long) slider.getValue());
 
 		slider.setProgressValue(4);
 
