@@ -216,6 +216,7 @@ public class IntSliderInstrumentationTest {
 		assertEquals(2, atomicInteger.get());
 
 		slider.setOnValueChangeListener(null);
+		slider.setOnSeekBarChangeListener(null);
 		slider.setProgressValue(3);
 		assertEquals(2, atomicInteger.get());
 	}
