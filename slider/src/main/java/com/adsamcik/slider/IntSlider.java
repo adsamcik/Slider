@@ -65,6 +65,7 @@ public class IntSlider extends Slider<Integer> {
 			throw new RuntimeException("Step cannot be set while custom slider values are set");
 
 		setSliderStep(step);
+		setValue(step(getValue(), step));
 	}
 
 	@Override
