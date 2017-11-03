@@ -163,7 +163,7 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	 * @param sharedPreferences Instance of shared preferences
 	 * @param preferenceString  String name of desired preference
 	 */
-	public void setPreferences(@Nullable SharedPreferences sharedPreferences, @Nullable String preferenceString) {
+	protected void setPreferences(@Nullable SharedPreferences sharedPreferences, @Nullable String preferenceString) {
 		if (sharedPreferences == null || preferenceString == null) {
 			this.mPreferences = null;
 			this.mPreferenceString = null;

@@ -17,6 +17,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.security.InvalidParameterException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -174,14 +175,23 @@ public class IntSliderInstrumentationTest {
 		slider.setMinValue(-5);
 		slider.setMaxValue(5);
 		slider.setStep(2);
-		slider.setPreferences(preferences, prefName);
+		slider.setPreferencesAndLoad(preferences, prefName, 0);
+
+		Assert.assertEquals(0, (long) slider.getValue());
+
 		slider.setProgressValue(4);
 
 		Assert.assertEquals((long) slider.getValue(), (long) preferences.getInt(prefName, Integer.MIN_VALUE));
 
-		preferences.edit().remove(prefName).apply();
-
 		slider.setPreferences(null, null);
+
+		slider.setProgressValue(6);
+
+		Assert.assertEquals(4L, preferences.getInt(prefName, Integer.MIN_VALUE));
+		Assert.assertEquals(6L, (long) slider.getValue());
+
+		//cleanup
+		preferences.edit().remove(prefName).apply();
 	}
 
 	private AtomicInteger atomicInteger = new AtomicInteger(0);
@@ -225,5 +235,8 @@ public class IntSliderInstrumentationTest {
 	public void exceptionTest() {
 		IntSlider slider = new IntSlider(appContext);
 		EAssert.assertException(() -> slider.setSliderStep(-5), RuntimeException.class);
+
+		EAssert.assertException(() -> slider.setMinValue(slider.getMaxValue()), InvalidParameterException.class);
+		EAssert.assertException(() -> slider.setMaxValue(slider.getMinValue()), InvalidParameterException.class);
 	}
 }
