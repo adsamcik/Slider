@@ -288,17 +288,21 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-		setProgress(roundToStep(getProgress()));
-		updateText();
+		int round = roundToStep(progress);
+		if (round != progress)
+			setProgress(round);
+		else {
+			updateText();
 
-		if (mOnSeekBarChangeListener != null)
-			mOnSeekBarChangeListener.onProgressChanged(seekBar, progress, fromUser);
+			if (mOnSeekBarChangeListener != null)
+				mOnSeekBarChangeListener.onProgressChanged(seekBar, progress, fromUser);
 
-		if (mOnValueChangeListener != null)
-			mOnValueChangeListener.onValueChanged(getValue(), fromUser);
+			if (mOnValueChangeListener != null)
+				mOnValueChangeListener.onValueChanged(getValue(), fromUser);
 
-		if (mPreferences != null)
-			updatePreferences(mPreferences, mPreferenceString, getValue());
+			if (mPreferences != null)
+				updatePreferences(mPreferences, mPreferenceString, getValue());
+		}
 	}
 
 	@Override
