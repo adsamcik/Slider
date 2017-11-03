@@ -171,6 +171,8 @@ public class IntSliderInstrumentationTest {
 		final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(appContext);
 		final String prefName = "TESTING PREFERENCE";
 
+		preferences.edit().remove(prefName).apply();
+
 		IntSlider slider = new IntSlider(appContext);
 		slider.setMinValue(-5);
 		slider.setMaxValue(5);
