@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.adsamcik.slider.ScaleFunctions.LinearScale;
@@ -193,12 +194,35 @@ public class IntSliderInstrumentationTest {
 			atomicInteger.incrementAndGet();
 		};
 
+		slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+				atomicInteger.incrementAndGet();
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+
+			}
+		});
+
 		slider.setOnValueChangeListener(valueChangeListener);
 		slider.setProgressValue(5);
-		assertEquals(1, atomicInteger.get());
+		assertEquals(2, atomicInteger.get());
 
 		slider.setOnValueChangeListener(null);
 		slider.setProgressValue(3);
-		assertEquals(1, atomicInteger.get());
+		assertEquals(2, atomicInteger.get());
+	}
+
+	@Test
+	public void exceptionTest() {
+		IntSlider slider = new IntSlider(appContext);
+		EAssert.assertException(() -> slider.setSliderStep(-5), RuntimeException.class);
 	}
 }
