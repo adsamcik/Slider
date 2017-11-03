@@ -39,7 +39,7 @@ public class FloatSliderInstrumentationTest {
 		slider.setMinValue(MIN);
 		slider.setMaxValue(MAX);
 		slider.setStep(2f);
-		slider.setProgressValue(5f);
+		slider.setValue(5f);
 		assertEquals(MIN, slider.getMinValue(), DELTA);
 		assertEquals(MAX, slider.getMaxValue(), DELTA);
 		assertEquals(MAX_SLIDER, slider.getMax(), DELTA);
@@ -59,7 +59,7 @@ public class FloatSliderInstrumentationTest {
 		slider.setMaxValue(12f);
 		slider.setStep(3f);
 		for (int i = 0; i < 12; i++) {
-			slider.setProgressValue((float) i);
+			slider.setValue((float) i);
 			assertEquals(Math.round(i / 3.0) * 3, slider.getValue(), DELTA);
 		}
 	}
@@ -76,7 +76,7 @@ public class FloatSliderInstrumentationTest {
 		slider.setMaxValue(15f);
 		slider.setStep(3f);
 		for (int i = -15; i <= 15; i++) {
-			slider.setProgressValue((float) i);
+			slider.setValue((float) i);
 			assertEquals(Math.round(i / 3f) * 3f, slider.getValue(), DELTA);
 		}
 	}
@@ -93,7 +93,7 @@ public class FloatSliderInstrumentationTest {
 		slider.setMaxValue(1.5f);
 		slider.setStep(0.3f);
 		for (float i = -1.5f; i <= 1.5f; i += 0.3f) {
-			slider.setProgressValue(i);
+			slider.setValue(i);
 			assertEquals(Math.round(i / 0.3f) * 0.3f, slider.getValue(), DELTA);
 		}
 	}
@@ -109,7 +109,7 @@ public class FloatSliderInstrumentationTest {
 		Float[] floats = new Float[]{0f, 3f, 4f, 20f, 35f};
 		slider.setItems(floats);
 		for (int i = 0; i < floats.length; i++) {
-			slider.setProgressValue(floats[i]);
+			slider.setValue(floats[i]);
 			assertEquals(floats[i], slider.getValue());
 		}
 
@@ -134,7 +134,7 @@ public class FloatSliderInstrumentationTest {
 		slider.setMaxValue(1.5f);
 		slider.setStep(0.3f);
 		slider.setPreferences(preferences, prefName);
-		slider.setProgressValue(0.1f);
+		slider.setValue(0.1f);
 
 		Assert.assertEquals(slider.getValue(), preferences.getFloat(prefName, Float.MIN_VALUE));
 

@@ -69,12 +69,12 @@ public class IntSlider extends Slider<Integer> {
 
 	@Override
 	@RequiresApi(24)
-	public void setProgressValue(Integer progress, boolean animate) {
+	public void setValue(Integer progress, boolean animate) {
 		setProgress(toSliderProgress(step(progress, getSliderStep())), animate);
 	}
 
 	@Override
-	public void setProgressValue(Integer progress) {
+	public void setValue(Integer progress) {
 		setProgress(toSliderProgress(progress));
 	}
 
@@ -107,7 +107,7 @@ public class IntSlider extends Slider<Integer> {
 		if (sharedPreferences == null || preferenceString == null)
 			setPreferences(null, null);
 		else {
-			setProgressValue(sharedPreferences.getInt(preferenceString, defaultValue));
+			setValue(sharedPreferences.getInt(preferenceString, defaultValue));
 			setPreferences(sharedPreferences, preferenceString);
 		}
 	}

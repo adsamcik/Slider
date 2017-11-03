@@ -105,7 +105,7 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	 *
 	 * @param progress Desired progress
 	 */
-	public abstract void setProgressValue(N progress);
+	public abstract void setValue(N progress);
 
 	/**
 	 * Set slider's current progress value. This value needs to be between Min value and Max value not min and max from SeekBar.
@@ -114,7 +114,7 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	 * @param animate  Animate
 	 */
 	@RequiresApi(24)
-	public abstract void setProgressValue(N progress, boolean animate);
+	public abstract void setValue(N progress, boolean animate);
 
 
 	/**

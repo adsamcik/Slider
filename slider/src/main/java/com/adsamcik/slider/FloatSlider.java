@@ -71,7 +71,7 @@ public class FloatSlider extends Slider<Float> {
 	}
 
 	@Override
-	public void setProgressValue(Float progress) {
+	public void setValue(Float progress) {
 		if (mItems != null) {
 			setProgress(getItemIndex(progress));
 		} else {
@@ -84,7 +84,7 @@ public class FloatSlider extends Slider<Float> {
 
 	@Override
 	@RequiresApi(24)
-	public void setProgressValue(Float progress, boolean animate) {
+	public void setValue(Float progress, boolean animate) {
 		if (mItems != null) {
 			setProgress(getItemIndex(progress));
 		} else {
@@ -130,7 +130,7 @@ public class FloatSlider extends Slider<Float> {
 		if (sharedPreferences == null || preferenceString == null)
 			setPreferences(null, null);
 		else {
-			setProgressValue(sharedPreferences.getFloat(preferenceString, defaultValue));
+			setValue(sharedPreferences.getFloat(preferenceString, defaultValue));
 			setPreferences(sharedPreferences, preferenceString);
 		}
 	}

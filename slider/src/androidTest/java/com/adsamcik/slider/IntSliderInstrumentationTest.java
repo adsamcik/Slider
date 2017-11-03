@@ -18,12 +18,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.security.InvalidParameterException;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import static org.junit.Assert.*;
 
@@ -42,7 +37,7 @@ public class IntSliderInstrumentationTest {
 		slider.setMinValue(1);
 		slider.setMaxValue(9);
 		slider.setStep(2);
-		slider.setProgressValue(5);
+		slider.setValue(5);
 		slider.setTextView(null, null);
 
 		assertEquals(1, (long) slider.getMinValue());
@@ -64,23 +59,23 @@ public class IntSliderInstrumentationTest {
 		slider.setTextView(textView, value -> "Test " + value);
 		slider.setMinValue(0);
 		slider.setMaxValue(10);
-		slider.setProgressValue(5);
+		slider.setValue(5);
 
 		assertEquals("Test 5", textView.getText());
 
 		slider.setTextView(null, value -> "Test " + value);
-		slider.setProgressValue(4);
+		slider.setValue(4);
 		assertEquals("Test 5", textView.getText());
 		assertEquals(4, (long) slider.getValue());
 
 		slider.setTextView(textView, value -> "Test " + value);
 		slider.setTextView(textView, null);
-		slider.setProgressValue(6);
+		slider.setValue(6);
 		assertEquals("Test 4", textView.getText());
 		assertEquals(6, (long) slider.getValue());
 
 		slider.setTextView(null, null);
-		slider.setProgressValue(8);
+		slider.setValue(8);
 		assertEquals("Test 4", textView.getText());
 		assertEquals(8, (long) slider.getValue());
 	}
@@ -93,19 +88,19 @@ public class IntSliderInstrumentationTest {
 		IntSlider slider = new IntSlider(appContext);
 		slider.setMinValue(0);
 		slider.setMaxValue(10);
-		slider.setProgressValue(5);
+		slider.setValue(5);
 
 		assertEquals(5, slider.getProgress());
 
 		if (Build.VERSION.SDK_INT >= 24)
-			slider.setProgressValue(8, false);
+			slider.setValue(8, false);
 		else
 			slider.setProgress(8);
 
 		assertEquals(8, slider.getProgress());
 
 		if (Build.VERSION.SDK_INT >= 24)
-			slider.setProgressValue(3, true);
+			slider.setValue(3, true);
 		else
 			slider.setProgress(3);
 
@@ -119,7 +114,7 @@ public class IntSliderInstrumentationTest {
 		slider.setMaxValue(12);
 		slider.setStep(3);
 		for (int i = 0; i < 12; i++) {
-			slider.setProgressValue(i);
+			slider.setValue(i);
 			assertEquals(Math.round(i / 3.0) * 3, (long) slider.getValue());
 		}
 	}
@@ -131,7 +126,7 @@ public class IntSliderInstrumentationTest {
 		slider.setMaxValue(15);
 		slider.setStep(3);
 		for (int i = -15; i <= 15; i++) {
-			slider.setProgressValue(i);
+			slider.setValue(i);
 			assertEquals(Math.round(i / 3.0) * 3, (long) slider.getValue());
 		}
 	}
@@ -142,7 +137,7 @@ public class IntSliderInstrumentationTest {
 		slider.setMinValue(0);
 		slider.setMaxValue(10);
 
-		slider.setProgressValue(5);
+		slider.setValue(5);
 
 		Assert.assertEquals(5, (int) slider.getValue());
 
@@ -152,7 +147,7 @@ public class IntSliderInstrumentationTest {
 		Assert.assertTrue(value == 4 || value == 6);
 
 		slider.setStep(3);
-		slider.setProgressValue(5);
+		slider.setValue(5);
 		Assert.assertEquals(6, (int) slider.getValue());
 	}
 
@@ -172,7 +167,7 @@ public class IntSliderInstrumentationTest {
 			assertEquals(integers[i], getInts[i]);
 
 		for (int i = 0; i < integers.length; i++) {
-			slider.setProgressValue(integers[i]);
+			slider.setValue(integers[i]);
 			assertEquals((long) integers[i], (long) slider.getValue());
 		}
 
@@ -202,13 +197,13 @@ public class IntSliderInstrumentationTest {
 
 		Assert.assertEquals(1, (long) slider.getValue());
 
-		slider.setProgressValue(4);
+		slider.setValue(4);
 
 		Assert.assertEquals((long) slider.getValue(), (long) preferences.getInt(prefName, Integer.MIN_VALUE));
 
 		slider.setPreferences(null, null);
 
-		slider.setProgressValue(6);
+		slider.setValue(6);
 
 		Assert.assertEquals(4L, preferences.getInt(prefName, Integer.MIN_VALUE));
 		Assert.assertEquals(6L, (long) slider.getValue());
@@ -245,12 +240,12 @@ public class IntSliderInstrumentationTest {
 		});
 
 		slider.setOnValueChangeListener(valueChangeListener);
-		slider.setProgressValue(5);
+		slider.setValue(5);
 		assertEquals(2, atomicInteger.get());
 
 		slider.setOnValueChangeListener(null);
 		slider.setOnSeekBarChangeListener(null);
-		slider.setProgressValue(3);
+		slider.setValue(3);
 		assertEquals(2, atomicInteger.get());
 	}
 
