@@ -137,6 +137,26 @@ public class IntSliderInstrumentationTest {
 	}
 
 	@Test
+	public void stepTest() throws Exception {
+		IntSlider slider = new IntSlider(appContext);
+		slider.setMinValue(0);
+		slider.setMaxValue(10);
+
+		slider.setProgressValue(5);
+
+		Assert.assertEquals(5, (int) slider.getValue());
+
+		slider.setStep(2);
+
+		int value = slider.getValue();
+		Assert.assertTrue(value == 4 || value == 6);
+
+		slider.setStep(3);
+		slider.setProgressValue(5);
+		Assert.assertEquals(6, (int) slider.getValue());
+	}
+
+	@Test
 	public void valueTest() throws Exception {
 		Context appContext = InstrumentationRegistry.getTargetContext();
 
