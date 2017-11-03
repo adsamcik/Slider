@@ -199,14 +199,15 @@ public class IntSliderInstrumentationTest {
 
 		slider.setValue(4);
 
-		Assert.assertEquals((long) slider.getValue(), (long) preferences.getInt(prefName, Integer.MIN_VALUE));
+		int value = slider.getValue();
+		Assert.assertEquals(value, preferences.getInt(prefName, Integer.MIN_VALUE));
 
 		slider.setPreferences(null, null);
 
-		slider.setValue(6);
+		slider.setValue(1);
 
-		Assert.assertEquals(4L, preferences.getInt(prefName, Integer.MIN_VALUE));
-		Assert.assertEquals(6L, (long) slider.getValue());
+		Assert.assertEquals(value, preferences.getInt(prefName, Integer.MIN_VALUE));
+		Assert.assertEquals(1, (int) slider.getValue());
 
 		//cleanup
 		preferences.edit().remove(prefName).apply();
