@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.TextView;
 
 import junit.framework.Assert;
 
@@ -106,8 +107,10 @@ public class FloatSliderInstrumentationTest {
 		slider.setMinValue(-15f);
 		slider.setMaxValue(15f);
 		slider.setStep(3f);
+		slider.setValue(15f);
 		Float[] floats = new Float[]{0f, 3f, 4f, 20f, 35f};
 		slider.setItems(floats);
+
 		for (int i = 0; i < floats.length; i++) {
 			slider.setValue(floats[i]);
 			assertEquals(floats[i], slider.getValue());
@@ -139,5 +142,22 @@ public class FloatSliderInstrumentationTest {
 		Assert.assertEquals(slider.getValue(), preferences.getFloat(prefName, Float.MIN_VALUE));
 
 		preferences.edit().remove(prefName).apply();
+	}
+
+	@Test
+	public void textViewTest() throws Exception {
+		Context appContext = InstrumentationRegistry.getTargetContext();
+
+		Slider<Float> slider = new FloatSlider(appContext);
+		slider.setMinValue(-15f);
+		slider.setMaxValue(15f);
+		slider.setStep(3f);
+		slider.setValue(15f);
+		Float[] floats = new Float[]{0f, 3f, 4f, 20f, 35f};
+		slider.setItems(floats);
+
+		slider.setTextView(new TextView(appContext), val -> Float.toString(val));
+
+		slider.onProgressChanged(slider, 14, true);
 	}
 }

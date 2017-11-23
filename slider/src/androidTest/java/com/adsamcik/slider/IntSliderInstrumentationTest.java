@@ -63,6 +63,10 @@ public class IntSliderInstrumentationTest {
 
 		assertEquals("Test 5", textView.getText());
 
+		Integer[] integers = new Integer[]{0, 3, 4, 20, 35};
+		slider.setItems(integers);
+		slider.onProgressChanged(slider, 7, true);
+
 		slider.setTextView(null, value -> "Test " + value);
 		slider.setValue(4);
 		assertEquals("Test 5", textView.getText());
@@ -159,9 +163,11 @@ public class IntSliderInstrumentationTest {
 		slider.setMinValue(-15);
 		slider.setMaxValue(15);
 		slider.setStep(3);
+		slider.setValue(15);
 		Integer[] integers = new Integer[]{0, 3, 4, 20, 35};
 		slider.setItems(integers);
 
+		slider.onProgressChanged(slider, 14, true);
 		Integer[] getInts = slider.getItems();
 		for (int i = 0; i < integers.length; i++)
 			assertEquals(integers[i], getInts[i]);
