@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 import java.security.InvalidParameterException;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -62,10 +62,6 @@ public class IntSliderInstrumentationTest {
 		slider.setValue(5);
 
 		assertEquals("Test 5", textView.getText());
-
-		Integer[] integers = new Integer[]{0, 3, 4, 20, 35};
-		slider.setItems(integers);
-		slider.onProgressChanged(slider, 7, true);
 
 		slider.setTextView(null, value -> "Test " + value);
 		slider.setValue(4);
@@ -164,6 +160,7 @@ public class IntSliderInstrumentationTest {
 		slider.setMaxValue(15);
 		slider.setStep(3);
 		slider.setValue(15);
+		slider.setTextView(new TextView(appContext), value -> Integer.toString(value));
 		Integer[] integers = new Integer[]{0, 3, 4, 20, 35};
 		slider.setItems(integers);
 

@@ -149,6 +149,7 @@ public class IntSlider extends Slider<Integer> {
 			mMin = 0;
 			mMax = items.length - 1;
 			setSliderStep(1);
+			setProgress(0);
 		}
 	}
 

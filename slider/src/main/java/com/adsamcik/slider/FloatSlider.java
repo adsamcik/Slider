@@ -170,6 +170,7 @@ public class FloatSlider extends Slider<Float> {
 			setMax(items.length - 1);
 			mStep = 1f;
 			setSliderStep(1);
+			setProgress(0);
 		}
 	}
 
