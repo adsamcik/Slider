@@ -100,33 +100,6 @@ public class FloatSliderInstrumentationTest {
 	}
 
 	@Test
-	public void valueTest() throws Exception {
-		Context appContext = InstrumentationRegistry.getTargetContext();
-
-		Slider<Float> slider = new FloatSlider(appContext);
-		slider.setMinValue(-15f);
-		slider.setMaxValue(15f);
-		slider.setStep(3f);
-		slider.setValue(15f);
-		Float[] floats = new Float[]{0f, 3f, 4f, 20f, 35f};
-		slider.setItems(floats);
-
-		for (int i = 0; i < floats.length; i++) {
-			slider.setValue(floats[i]);
-			assertEquals(floats[i], slider.getValue());
-		}
-
-		for (int i = 0; i < floats.length; i++) {
-			slider.setProgress(i);
-			assertEquals(floats[i], slider.getValue());
-		}
-
-		EAssert.assertException(() -> slider.setMinValue(-15f), RuntimeException.class);
-		EAssert.assertException(() -> slider.setMaxValue(15f), RuntimeException.class);
-		EAssert.assertException(() -> slider.setStep(3f), RuntimeException.class);
-	}
-
-	@Test
 	public void sharedPreferences() throws Exception {
 		final Context appContext = InstrumentationRegistry.getTargetContext();
 		final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(appContext);
@@ -148,13 +121,11 @@ public class FloatSliderInstrumentationTest {
 	public void textViewTest() throws Exception {
 		Context appContext = InstrumentationRegistry.getTargetContext();
 
-		Slider<Float> slider = new FloatSlider(appContext);
+		NumberSlider<Float> slider = new FloatSlider(appContext);
 		slider.setMinValue(-15f);
 		slider.setMaxValue(15f);
 		slider.setStep(3f);
 		slider.setValue(15f);
-		Float[] floats = new Float[]{0f, 3f, 4f, 20f, 35f};
-		slider.setItems(floats);
 
 		slider.setTextView(new TextView(appContext), val -> Float.toString(val));
 

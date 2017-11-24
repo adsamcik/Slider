@@ -150,40 +150,7 @@ public class IntSliderInstrumentationTest {
 		slider.setValue(5);
 		Assert.assertEquals(6, (int) slider.getValue());
 	}
-
-	@Test
-	public void valueTest() throws Exception {
-		Context appContext = InstrumentationRegistry.getTargetContext();
-
-		IntSlider slider = new IntSlider(appContext);
-		slider.setMinValue(-15);
-		slider.setMaxValue(15);
-		slider.setStep(3);
-		slider.setValue(15);
-		slider.setTextView(new TextView(appContext), value -> Integer.toString(value));
-		Integer[] integers = new Integer[]{0, 3, 4, 20, 35};
-		slider.setItems(integers);
-
-		slider.onProgressChanged(slider, 14, true);
-		Integer[] getInts = slider.getItems();
-		for (int i = 0; i < integers.length; i++)
-			assertEquals(integers[i], getInts[i]);
-
-		for (int i = 0; i < integers.length; i++) {
-			slider.setValue(integers[i]);
-			assertEquals((long) integers[i], (long) slider.getValue());
-		}
-
-		for (int i = 0; i < integers.length; i++) {
-			slider.setProgress(i);
-			assertEquals((long) integers[i], (long) slider.getValue());
-		}
-
-		EAssert.assertException(() -> slider.setMinValue(-15), RuntimeException.class);
-		EAssert.assertException(() -> slider.setMaxValue(15), RuntimeException.class);
-		EAssert.assertException(() -> slider.setStep(3), RuntimeException.class);
-	}
-
+	
 	@Test
 	public void sharedPreferences() throws Exception {
 		final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(appContext);
