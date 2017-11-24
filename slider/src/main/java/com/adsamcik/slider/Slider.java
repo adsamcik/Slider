@@ -14,15 +14,12 @@ import java.util.Arrays;
 
 import static com.adsamcik.slider.EMath.step;
 
-public abstract class Slider<N extends Number> extends SeekBar implements SeekBar.OnSeekBarChangeListener {
-	private int mSliderStep = 1;
-
-	protected IScale<N> mScale = null;
+public abstract class Slider<T> extends SeekBar implements SeekBar.OnSeekBarChangeListener {
 	protected TextView mTextView = null;
-	protected IStringify<N> mStringify = null;
+	protected IStringify<T> mStringify = null;
 
 	protected SeekBar.OnSeekBarChangeListener mOnSeekBarChangeListener = null;
-	protected OnValueChangeListener<N> mOnValueChangeListener = null;
+	protected OnValueChangeListener<T> mOnValueChangeListener = null;
 
 	private SharedPreferences mPreferences = null;
 	private String mPreferenceString = null;
@@ -55,32 +52,12 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	}
 
 	/**
-	 * Round desired value to step. Primarily used for SeekBar progress.
-	 *
-	 * @param value Value
-	 * @return Value after rounding to nearest step
-	 */
-	private int roundToStep(int value) {
-		return step(value, mSliderStep);
-	}
-
-	/**
-	 * Set slider's scale.
-	 *
-	 * @param scale Scale
-	 */
-	public void setScale(IScale<N> scale) {
-		mScale = scale;
-		updateText();
-	}
-
-	/**
 	 * Set slider's TextView and String function. This TextView will be automatically updated when slider's progress changes and formatted using String function.
 	 *
 	 * @param textView  TextView
 	 * @param stringify String function
 	 */
-	public void setTextView(@Nullable TextView textView, @Nullable IStringify<N> stringify) {
+	public void setTextView(@Nullable TextView textView, @Nullable IStringify<T> stringify) {
 		if (textView == null || stringify == null) {
 			mTextView = null;
 			mStringify = null;
@@ -92,18 +69,11 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	}
 
 	/**
-	 * Set slider's step value.
-	 *
-	 * @param step Step value
-	 */
-	public abstract void setStep(N step);
-
-	/**
 	 * Set slider's current progress value. This value needs to be between Min value and Max value not min and max from SeekBar.
 	 *
 	 * @param progress Desired progress
 	 */
-	public abstract void setValue(N progress);
+	public abstract void setValue(T progress);
 
 	/**
 	 * Set slider's current progress value. This value needs to be between Min value and Max value not min and max from SeekBar.
@@ -112,21 +82,7 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	 * @param animate  Animate
 	 */
 	@RequiresApi(24)
-	public abstract void setValue(N progress, boolean animate);
-
-	/**
-	 * Set slider's min value.
-	 *
-	 * @param min Min value
-	 */
-	public abstract void setMinValue(N min);
-
-	/**
-	 * Set slider's max value.
-	 *
-	 * @param max Max value
-	 */
-	public abstract void setMaxValue(N max);
+	public abstract void setValue(T progress, boolean animate);
 
 	/**
 	 * Set slider's preferences for automatic saving inside passed instance of {@link SharedPreferences}.
@@ -153,7 +109,7 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	 * @param sharedPreferences Instance of shared preferences
 	 * @param preferenceString  String name of desired preference
 	 */
-	public abstract void setPreferencesAndLoad(@Nullable SharedPreferences sharedPreferences, @Nullable String preferenceString, N defaultValue);
+	public abstract void setPreferencesAndLoad(@Nullable SharedPreferences sharedPreferences, @Nullable String preferenceString, T defaultValue);
 
 	/**
 	 * Function called when updating preferences is need.
@@ -163,65 +119,14 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	 * @param preferenceString  Preference String
 	 * @param value             Value
 	 */
-	public abstract void updatePreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull N value);
-
-	/**
-	 * Get slider's min value.
-	 *
-	 * @return Min value
-	 */
-	public abstract N getMinValue();
-
-	/**
-	 * Get slider's max value.
-	 *
-	 * @return Max value
-	 */
-	public abstract N getMaxValue();
-
-	/**
-	 * Get slider's step value.
-	 *
-	 * @return Step value
-	 */
-	public abstract N getStep();
+	public abstract void updatePreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull T value);
 
 	/**
 	 * Get slider's current value after scaling.
 	 *
 	 * @return Current value
 	 */
-	public abstract N getValue();
-
-	/**
-	 * Returns current scale function
-	 *
-	 * @return Scale function
-	 */
-	public IScale getScale() {
-		return mScale;
-	}
-
-	/**
-	 * Returns step used by SeekBar
-	 *
-	 * @return Slider step
-	 */
-	public int getSliderStep() {
-		return mSliderStep;
-	}
-
-	/**
-	 * Sets step used by SeekBar
-	 *
-	 * @param sliderStep slider step
-	 */
-	protected void setSliderStep(int sliderStep) {
-		if (sliderStep <= 0)
-			throw new RuntimeException("Slider step must be larger than 0");
-
-		this.mSliderStep = sliderStep;
-	}
+	public abstract T getValue();
 
 	/**
 	 * Sets on seek bar changes listener
@@ -237,28 +142,24 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	 *
 	 * @param l On value changed listener
 	 */
-	public void setOnValueChangeListener(OnValueChangeListener<N> l) {
+	public void setOnValueChangeListener(OnValueChangeListener<T> l) {
 		mOnValueChangeListener = l;
 	}
 
 
 	@Override
+	@CallSuper
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-		int round = roundToStep(progress);
-		if (round != progress)
-			setProgress(round);
-		else {
-			updateText();
+		updateText();
 
-			if (mOnSeekBarChangeListener != null)
-				mOnSeekBarChangeListener.onProgressChanged(seekBar, progress, fromUser);
+		if (mOnSeekBarChangeListener != null)
+			mOnSeekBarChangeListener.onProgressChanged(seekBar, progress, fromUser);
 
-			if (mOnValueChangeListener != null)
-				mOnValueChangeListener.onValueChanged(getValue(), fromUser);
+		if (mOnValueChangeListener != null)
+			mOnValueChangeListener.onValueChanged(getValue(), fromUser);
 
-			if (mPreferences != null)
-				updatePreferences(mPreferences, mPreferenceString, getValue());
-		}
+		if (mPreferences != null)
+			updatePreferences(mPreferences, mPreferenceString, getValue());
 	}
 
 	@Override
@@ -284,7 +185,7 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	}
 
 
-	public interface OnValueChangeListener<N extends Number> {
+	public interface OnValueChangeListener<N> {
 		/**
 		 * On value changed listener
 		 *
@@ -294,7 +195,7 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 		void onValueChanged(N value, boolean fromUser);
 	}
 
-	public interface IStringify<N extends Number> {
+	public interface IStringify<N> {
 		/**
 		 * Convert desired number to string
 		 *
