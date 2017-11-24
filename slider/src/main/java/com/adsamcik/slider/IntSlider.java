@@ -15,7 +15,7 @@ import java.security.InvalidParameterException;
 
 import static com.adsamcik.slider.EMath.step;
 
-public class IntSlider extends Slider<Integer> {
+public class IntSlider extends NumberSlider<Integer> {
 	private int mMin = 0;
 	private int mMax = 10;
 

@@ -17,7 +17,7 @@ import static com.adsamcik.slider.EMath.decimalPlaces;
 import static com.adsamcik.slider.EMath.round;
 import static com.adsamcik.slider.EMath.step;
 
-public class FloatSlider extends Slider<Float> {
+public class FloatSlider extends NumberSlider<Float> {
 	private float mStep = 1;
 	private float mMin = 0;
 	private float mMax = 10;
