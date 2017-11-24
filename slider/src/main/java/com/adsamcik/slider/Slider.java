@@ -91,7 +91,7 @@ public abstract class Slider<T> extends SeekBar implements SeekBar.OnSeekBarChan
 	public void setPreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull T defaultValue) {
 		this.mPreferences = sharedPreferences;
 		this.mPreferenceString = preferenceString;
-		loadPreferences(sharedPreferences, preferenceString, defaultValue);
+		loadProgress(sharedPreferences, preferenceString, defaultValue);
 	}
 
 	public void removePreferences() {
@@ -108,7 +108,7 @@ public abstract class Slider<T> extends SeekBar implements SeekBar.OnSeekBarChan
 	 * @param preferenceString  String name of desired preference
 	 * @param defaultValue      Default value to load if there are none saved
 	 */
-	public abstract void loadPreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull T defaultValue);
+	public abstract void loadProgress(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull T defaultValue);
 
 	/**
 	 * Function called when updating preferences is need.

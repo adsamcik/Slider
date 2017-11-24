@@ -72,7 +72,7 @@ public class IntSlider extends NumberSlider<Integer> {
 	}
 
 	@Override
-	public void loadPreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull Integer defaultValue) {
+	public void loadProgress(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull Integer defaultValue) {
 		setValue(sharedPreferences.getInt(preferenceString, defaultValue));
 	}
 

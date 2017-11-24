@@ -25,7 +25,7 @@ public class ValueSliderTest {
 
 	@Test
 	public void baseTest() throws Exception {
-		ValueSlider<String> slider = new ValueSlider<>(appContext);
+		ObjectValueSlider<String> slider = new ObjectValueSlider<>(appContext);
 
 		slider.setItems(strings);
 		slider.setValue("b");
@@ -37,7 +37,7 @@ public class ValueSliderTest {
 
 	@Test
 	public void textViewTest() throws Exception {
-		ValueSlider<String> slider = new ValueSlider<>(appContext);
+		ObjectValueSlider<String> slider = new ObjectValueSlider<>(appContext);
 		TextView textView = new TextView(appContext);
 
 		slider.setItems(strings);
@@ -68,7 +68,7 @@ public class ValueSliderTest {
 		if (Looper.myLooper() == null)
 			Looper.prepare();
 
-		ValueSlider<String> slider = new ValueSlider<>(appContext);
+		ObjectValueSlider<String> slider = new ObjectValueSlider<>(appContext);
 		slider.setItems(strings);
 		slider.setValue("a");
 
@@ -97,7 +97,7 @@ public class ValueSliderTest {
 	public void invalidCodeInputTest() throws Exception {
 		Context appContext = InstrumentationRegistry.getTargetContext();
 
-		ValueSlider<String> slider = new ValueSlider<>(appContext);
+		ObjectValueSlider<String> slider = new ObjectValueSlider<>(appContext);
 		EAssert.assertException(() -> slider.setItems(new String[0]), RuntimeException.class);
 
 		EAssert.assertException(() -> slider.setProgress(15), RuntimeException.class);
@@ -116,7 +116,7 @@ public class ValueSliderTest {
 
 		preferences.edit().remove(prefName).commit();
 
-		ValueSlider<String> slider = new ValueSlider<>(appContext);
+		ObjectValueSlider<String> slider = new ObjectValueSlider<>(appContext);
 		slider.setItems(strings);
 
 		slider.setPreferences(preferences, prefName, "d", value -> value);
@@ -143,7 +143,7 @@ public class ValueSliderTest {
 
 	@Test
 	public void callbackTests() throws Exception {
-		ValueSlider<String> slider = new ValueSlider<>(appContext);
+		ObjectValueSlider<String> slider = new ObjectValueSlider<>(appContext);
 		slider.setItems(strings);
 
 		Slider.OnValueChangeListener<String> valueChangeListener = (value, fromUser) -> atomicInteger.incrementAndGet();

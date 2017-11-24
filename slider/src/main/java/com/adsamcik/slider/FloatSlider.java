@@ -83,7 +83,7 @@ public class FloatSlider extends NumberSlider<Float> {
 	}
 
 	@Override
-	public void loadPreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull Float defaultValue) {
+	public void loadProgress(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull Float defaultValue) {
 		setValue(sharedPreferences.getFloat(preferenceString, defaultValue));
 	}
 
