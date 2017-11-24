@@ -24,8 +24,6 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	protected SeekBar.OnSeekBarChangeListener mOnSeekBarChangeListener = null;
 	protected OnValueChangeListener<N> mOnValueChangeListener = null;
 
-	protected N[] mItems = null;
-
 	private SharedPreferences mPreferences = null;
 	private String mPreferenceString = null;
 
@@ -115,32 +113,6 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	 */
 	@RequiresApi(24)
 	public abstract void setValue(N progress, boolean animate);
-
-
-	/**
-	 * Method used to set progress manually.
-	 * This method should only when you want to set {@link #mItems} by index
-	 * or by Slider implementation. Calling it in other cases might result in issues.
-	 *
-	 * @param progress progress
-	 */
-	@Override
-	public synchronized void setProgress(int progress) {
-		super.setProgress(progress);
-	}
-
-	/**
-	 * Method used to set progress manually.
-	 * This method should only when you want to set {@link #mItems} by index
-	 * or by Slider implementation. Calling it in other cases might result in issues.
-	 *
-	 * @param progress progress
-	 */
-	@Override
-	@RequiresApi(24)
-	public synchronized void setProgress(int progress, boolean animate) {
-		super.setProgress(progress, animate);
-	}
 
 	/**
 	 * Set slider's min value.
@@ -240,15 +212,6 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	}
 
 	/**
-	 * Returns items
-	 *
-	 * @return Returns items or null if no items were set
-	 */
-	public N[] getItems() {
-		return mItems;
-	}
-
-	/**
 	 * Sets step used by SeekBar
 	 *
 	 * @param sliderStep slider step
@@ -278,13 +241,6 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 		mOnValueChangeListener = l;
 	}
 
-	/**
-	 * Sets items.
-	 * This method overrides any previous min, max and step settings
-	 *
-	 * @param items Items
-	 */
-	public abstract void setItems(@Nullable N[] items);
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -325,17 +281,6 @@ public abstract class Slider<N extends Number> extends SeekBar implements SeekBa
 	protected void updateText() {
 		if (mTextView != null)
 			mTextView.setText(mStringify.toString(getValue()));
-	}
-
-	protected Integer getItemIndex(N item) {
-		if (mItems != null) {
-			int index = Arrays.asList(mItems).indexOf(item);
-			if (index == -1)
-				return null;
-			else
-				return index;
-		}
-		return null;
 	}
 
 

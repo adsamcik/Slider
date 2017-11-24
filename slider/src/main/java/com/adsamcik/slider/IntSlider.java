@@ -61,8 +61,6 @@ public class IntSlider extends Slider<Integer> {
 	public void setStep(Integer step) {
 		if (step <= 0)
 			throw new InvalidParameterException("Step must be larger than 0");
-		else if(mItems != null)
-			throw new RuntimeException("Step cannot be set while custom slider values are set");
 
 		setSliderStep(step);
 		setValue(step(getValue(), step));
@@ -83,8 +81,6 @@ public class IntSlider extends Slider<Integer> {
 	public void setMinValue(Integer min) {
 		if (min >= mMax)
 			throw new InvalidParameterException("Min must be smaller than max");
-		else if(mItems != null)
-			throw new RuntimeException("Min cannot be set while custom slider values are set");
 
 		mMin = min;
 		updateSeekBarMax();
@@ -95,8 +91,6 @@ public class IntSlider extends Slider<Integer> {
 	public void setMaxValue(Integer max) {
 		if (max <= mMin)
 			throw new InvalidParameterException("Max must be larger than min");
-		else if(mItems != null)
-			throw new RuntimeException("Max cannot be set while custom slider values are set");
 
 		mMax = max;
 		updateSeekBarMax();
@@ -139,26 +133,10 @@ public class IntSlider extends Slider<Integer> {
 
 	@Override
 	public Integer getValue() {
-		return mItems != null ? mItems[getProgress()] : mScale.scale(getProgress(), getMax(), mMin, mMax);
-	}
-
-	@Override
-	public void setItems(@Nullable Integer[] items) {
-		this.mItems = items;
-		if (items != null) {
-			mMin = 0;
-			mMax = items.length - 1;
-			setSliderStep(1);
-			setProgress(0);
-		}
+		return mScale.scale(getProgress(), getMax(), mMin, mMax);
 	}
 
 	private int toSliderProgress(int progress) {
-		Integer itemIndex = getItemIndex(progress);
-		return itemIndex != null ? itemIndex : progress - mMin;
-	}
-
-	private int fromSliderProgress(int progress) {
-		return mItems != null ? mItems[progress] : progress + mMin;
+		return progress - mMin;
 	}
 }
