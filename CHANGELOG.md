@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.0] - 24-11-2017
+
+- Reworked how shared preferences are used
+- Slider class no longer contains number specific functions and value support
+- Add ValueSlider which replaces value implementation in Slider and makes it even better with generic type support
+- Add abstract NumberSlider which implements Slider and serves as parent class for Int and Float Sliders
+- Bugfixes
+
 ## [0.3.0] - 20-10-2017
 
 - Support for better custom value handling (Previously could be somehow achieved with custom Scale function)
