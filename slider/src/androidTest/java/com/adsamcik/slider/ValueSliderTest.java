@@ -32,6 +32,7 @@ public class ValueSliderTest {
 		slider.setTextView(null, null);
 
 		assertEquals("b", slider.getValue());
+		assertEquals(strings.length - 1, slider.getMax());
 	}
 
 	@Test
@@ -98,6 +99,10 @@ public class ValueSliderTest {
 
 		ValueSlider<String> slider = new ValueSlider<>(appContext);
 		EAssert.assertException(() -> slider.setItems(new String[0]), RuntimeException.class);
+
+		EAssert.assertException(() -> slider.setProgress(15), RuntimeException.class);
+
+		slider.setItems(strings);
 
 		EAssert.assertException(() -> slider.setProgress(15), RuntimeException.class);
 		EAssert.assertException(() -> slider.setProgress(-1), RuntimeException.class);
