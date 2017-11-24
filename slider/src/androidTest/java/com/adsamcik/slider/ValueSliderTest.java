@@ -114,7 +114,7 @@ public class ValueSliderTest {
 		final String prefName = "TESTING PREFERENCE";
 		final String noPreference = "NO PREFERENCE";
 
-		preferences.edit().remove(prefName).apply();
+		preferences.edit().remove(prefName).commit();
 
 		ValueSlider<String> slider = new ValueSlider<>(appContext);
 		slider.setItems(strings);
