@@ -62,9 +62,6 @@ public class FloatSlider extends NumberSlider<Float> {
 
 	@Override
 	public void setStep(Float step) {
-		if (mItems != null)
-			throw new RuntimeException("Step cannot be set while custom slider values are set");
-
 		mStep = step;
 		setSliderStep((int) (step * getPercentPower()));
 		updateDecimalPlaces();
@@ -72,22 +69,18 @@ public class FloatSlider extends NumberSlider<Float> {
 
 	@Override
 	public void setValue(Float progress) {
-		if (mItems != null) {
-			setProgress(getItemIndex(progress));
-		} else {
-			if (progress > mMax || progress < mMin)
-				throw new IllegalArgumentException("Progress must be larger than " + mMin + " and smaller than " + mMax + " was " + progress);
+		if (progress > mMax || progress < mMin)
+			throw new IllegalArgumentException("Progress must be larger than " + mMin + " and smaller than " + mMax + " was " + progress);
 
-			setProgress((int) ((progress - mMin) * getPercentPower()));
-		}
+		setProgress((int) ((progress - mMin) * getPercentPower()));
 	}
 
 	@Override
 	@RequiresApi(24)
 	public void setValue(Float progress, boolean animate) {
-			if (progress > mMax || progress < mMin)
-				throw new IllegalArgumentException("Progress must be larger than " + mMin + " and smaller than " + mMax + " was " + progress);
-			setProgress((int) ((progress - mMin) * getPercentPower()), animate);
+		if (progress > mMax || progress < mMin)
+			throw new IllegalArgumentException("Progress must be larger than " + mMin + " and smaller than " + mMax + " was " + progress);
+		setProgress((int) ((progress - mMin) * getPercentPower()), animate);
 	}
 
 	private int getPercentPower() {

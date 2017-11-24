@@ -150,7 +150,7 @@ public class IntSliderInstrumentationTest {
 		slider.setValue(5);
 		Assert.assertEquals(6, (int) slider.getValue());
 	}
-	
+
 	@Test
 	public void sharedPreferences() throws Exception {
 		final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(appContext);
