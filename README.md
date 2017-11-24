@@ -13,7 +13,7 @@ Example shows IntSlider but FloatSlider works the same way just uses floats. You
     slider.setStep(2);
     slider.setMaxValue(8); //It is important to use this instead of setMax() for corrent behavior
     slider.setMinValue(1);
-    slider.setProgressValue(5); //Same goes for progress value if you would use setProgress(..) than you would directly modify progress value which might not correspond to desired progress
+    slider.setValue(5); //Same goes for progress value if you would use setProgress(..) than you would directly modify progress value which might not correspond to desired progress
     slider.setOnValueChangeListener(((value, fromUser) -> Log.d("TAG", "Value " + value))); //Adds listener for value change, this is added to simplify callback for value change because standard SeekBar.OnSeekBarChangeListener cannot be written as lambda
     
 ## Issues
