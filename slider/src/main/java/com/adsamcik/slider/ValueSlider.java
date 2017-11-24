@@ -10,23 +10,29 @@ import java.security.InvalidParameterException;
 import java.util.Arrays;
 
 public class ValueSlider<T> extends Slider<T> {
+	private static final String TAG = "ValueSlider";
+
 	private T[] mItems = null;
 	private IStringify<T> mPreferenceToString = null;
 
 	public ValueSlider(Context context) {
 		super(context);
+		setMax(0);
 	}
 
 	public ValueSlider(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		setMax(0);
 	}
 
 	public ValueSlider(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
+		setMax(0);
 	}
 
 	public ValueSlider(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
 		super(context, attrs, defStyleAttr, defStyleRes);
+		setMax(0);
 	}
 
 	/**
@@ -64,7 +70,22 @@ public class ValueSlider<T> extends Slider<T> {
 
 	@Override
 	public void loadPreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull T defaultValue) {
-		sharedPreferences.getString(preferenceString, mPreferenceToString == null ? defaultValue.toString() : mPreferenceToString.toString(defaultValue));
+		String defaultString = mPreferenceToString == null ? defaultValue.toString() : mPreferenceToString.toString(defaultValue);
+		String loadedValue = sharedPreferences.getString(preferenceString, defaultString);
+		int index = getItemIndex(loadedValue);
+		if (index >= 0)
+			super.setProgress(index);
+		else {
+			if (!loadedValue.equals(defaultString)) {
+				index = getItemIndex(defaultString);
+				if (index >= 0)
+					super.setProgress(index);
+				else
+					throw new RuntimeException("Neither loaded value (" + loadedValue + ") nor default value (" + defaultString + ") were found");
+			}
+
+			throw new RuntimeException("Default value " + defaultString + " was not found");
+		}
 	}
 
 	@Override
@@ -126,15 +147,21 @@ public class ValueSlider<T> extends Slider<T> {
 			throw new RuntimeException("Progress must be larger than 0 and not larger than " + getMax() + ". Was " + progress);
 	}
 
-	protected Integer getItemIndex(T item) {
+	private int getItemIndex(@NonNull String item) {
 		if (mItems != null) {
-			int index = Arrays.asList(mItems).indexOf(item);
-			if (index == -1)
-				return null;
-			else
-				return index;
+			for (int i = 0; i < mItems.length; i++) {
+				String sItem = mPreferenceToString != null ? mPreferenceToString.toString(mItems[i]) : mItems[i].toString();
+				if (item.equals(sItem))
+					return i;
+			}
 		}
-		return null;
+		return -1;
+	}
+
+	private int getItemIndex(@NonNull T item) {
+		if (mItems != null)
+			return Arrays.asList(mItems).indexOf(item);
+		return -1;
 	}
 
 	private int toSliderProgress(T item) {
