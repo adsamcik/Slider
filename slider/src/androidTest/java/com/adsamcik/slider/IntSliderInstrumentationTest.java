@@ -163,7 +163,7 @@ public class IntSliderInstrumentationTest {
 		slider.setMaxValue(5);
 		slider.setStep(2);
 
-		slider.setPreferencesAndLoad(preferences, prefName, 1);
+		slider.setPreferences(preferences, prefName, 1);
 
 		Assert.assertEquals(1, (long) slider.getValue());
 
@@ -172,7 +172,7 @@ public class IntSliderInstrumentationTest {
 		int value = slider.getValue();
 		Assert.assertEquals(value, preferences.getInt(prefName, Integer.MIN_VALUE));
 
-		slider.setPreferences(null, null);
+		slider.removePreferences();
 
 		slider.setValue(1);
 
@@ -189,9 +189,7 @@ public class IntSliderInstrumentationTest {
 	public void callbackTests() throws Exception {
 		IntSlider slider = new IntSlider(appContext);
 
-		Slider.OnValueChangeListener<Integer> valueChangeListener = (value, fromUser) -> {
-			atomicInteger.incrementAndGet();
-		};
+		Slider.OnValueChangeListener<Integer> valueChangeListener = (value, fromUser) -> atomicInteger.incrementAndGet();
 
 		slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override

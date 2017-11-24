@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 
@@ -83,6 +82,11 @@ public class FloatSlider extends NumberSlider<Float> {
 		setProgress((int) ((progress - mMin) * getPercentPower()), animate);
 	}
 
+	@Override
+	public void loadPreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull Float defaultValue) {
+		setValue(sharedPreferences.getFloat(preferenceString, defaultValue));
+	}
+
 	private int getPercentPower() {
 		return 100 * (int) Math.pow(10, mDecimalPlaces);
 	}
@@ -108,16 +112,6 @@ public class FloatSlider extends NumberSlider<Float> {
 		setMax(m);
 		setSliderStep(Math.round(mStep / diff * max));
 		updateDecimalPlaces();
-	}
-
-	@Override
-	public void setPreferencesAndLoad(@Nullable SharedPreferences sharedPreferences, @Nullable String preferenceString, Float defaultValue) {
-		if (sharedPreferences == null || preferenceString == null)
-			setPreferences(null, null);
-		else {
-			setValue(sharedPreferences.getFloat(preferenceString, defaultValue));
-			setPreferences(sharedPreferences, preferenceString);
-		}
 	}
 
 	@Override

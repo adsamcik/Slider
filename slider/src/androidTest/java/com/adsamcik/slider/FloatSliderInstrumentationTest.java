@@ -109,7 +109,7 @@ public class FloatSliderInstrumentationTest {
 		slider.setMinValue(-1.5f);
 		slider.setMaxValue(1.5f);
 		slider.setStep(0.3f);
-		slider.setPreferences(preferences, prefName);
+		slider.setPreferences(preferences, prefName, 1f);
 		slider.setValue(0.1f);
 
 		Assert.assertEquals(slider.getValue(), preferences.getFloat(prefName, Float.MIN_VALUE));

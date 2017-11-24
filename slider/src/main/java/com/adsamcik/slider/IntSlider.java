@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 
@@ -73,6 +72,11 @@ public class IntSlider extends NumberSlider<Integer> {
 	}
 
 	@Override
+	public void loadPreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull Integer defaultValue) {
+		setValue(sharedPreferences.getInt(preferenceString, defaultValue));
+	}
+
+	@Override
 	public void setValue(Integer progress) {
 		setProgress(toSliderProgress(progress));
 	}
@@ -95,16 +99,6 @@ public class IntSlider extends NumberSlider<Integer> {
 		mMax = max;
 		updateSeekBarMax();
 		updateText();
-	}
-
-	@Override
-	public void setPreferencesAndLoad(@Nullable SharedPreferences sharedPreferences, @Nullable String preferenceString, Integer defaultValue) {
-		if (sharedPreferences == null || preferenceString == null)
-			setPreferences(null, null);
-		else {
-			setValue(sharedPreferences.getInt(preferenceString, defaultValue));
-			setPreferences(sharedPreferences, preferenceString);
-		}
 	}
 
 	@Override
