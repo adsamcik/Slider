@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 
 import java.io.InvalidObjectException;
+import java.security.InvalidParameterException;
 import java.util.Arrays;
 
 public class ValueSlider<T> extends Slider<T> {
@@ -29,28 +31,16 @@ public class ValueSlider<T> extends Slider<T> {
 	}
 
 	@Override
-	public void setStep(T step) {
-		throw new UnsupportedOperationException("You cannot set step in value slider");
+	public void setValue(T item) {
+		Integer index = getItemIndex(item);
+		setProgress(index);
 	}
 
 	@Override
-	public void setValue(T progress) {
-		//todo implement
-	}
-
-	@Override
-	public void setValue(T progress, boolean animate) {
-//todo implement
-	}
-
-	@Override
-	public void setMinValue(T min) {
-		throw new UnsupportedOperationException("You cannot set min value in Value Slider");
-	}
-
-	@Override
-	public void setMaxValue(T max) {
-		throw new UnsupportedOperationException("You cannot set max value in Value Slider");
+	@RequiresApi(24)
+	public void setValue(T item, boolean animate) {
+		Integer index = getItemIndex(item);
+		setProgress(index, animate);
 	}
 
 	@Override
@@ -59,23 +49,8 @@ public class ValueSlider<T> extends Slider<T> {
 	}
 
 	@Override
-	public void updatePreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull Integer value) {
+	public void updatePreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull T value) {
 
-	}
-
-	@Override
-	public T getMinValue() {
-		throw new UnsupportedOperationException("There is no min value in value slider");
-	}
-
-	@Override
-	public T getMaxValue() {
-		throw new UnsupportedOperationException("There is no max value in value slider");
-	}
-
-	@Override
-	public T getStep() {
-		throw new UnsupportedOperationException("There is no step value in value slider");
 	}
 
 	@Override
@@ -96,7 +71,6 @@ public class ValueSlider<T> extends Slider<T> {
 	public void setItems(@Nullable T[] items) {
 		this.mItems = items;
 		if (items != null) {
-			setSliderStep(1);
 			setProgress(0);
 		}
 	}
@@ -121,8 +95,11 @@ public class ValueSlider<T> extends Slider<T> {
 		return null;
 	}
 
-	private int toSliderProgress(int progress) {
-		Integer itemIndex = getItemIndex(progress);
-		return itemIndex != null ? itemIndex : progress - mMin;
+	private int toSliderProgress(T item) {
+		Integer itemIndex = getItemIndex(item);
+		if(itemIndex == null)
+			throw new InvalidParameterException("Item not found in item list");
+		else
+			return itemIndex;
 	}
 }
