@@ -19,7 +19,6 @@ public abstract class Slider<T> extends SeekBar implements SeekBar.OnSeekBarChan
 
 	private SharedPreferences mPreferences = null;
 	private String mPreferenceString = null;
-	private IStringify<T> mPreferenceToString = null;
 
 	public Slider(Context context) {
 		super(context, null);
@@ -83,22 +82,6 @@ public abstract class Slider<T> extends SeekBar implements SeekBar.OnSeekBarChan
 
 	/**
 	 * Set slider's preferences for automatic saving inside passed instance of {@link SharedPreferences}.
-	 * Objects are saved as strings using passed function {@link IStringify}
-	 *
-	 * @param sharedPreferences Instance of shared preferences
-	 * @param preferenceString  String name of desired preference
-	 * @param defaultValue      Default value if no value is saved in shared preferences
-	 * @param itemsToString     function to convert object to string so they can be saved to shared preferences
-	 */
-	public void setPreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull T defaultValue, @NonNull IStringify<T> itemsToString) {
-		this.mPreferences = sharedPreferences;
-		this.mPreferenceString = preferenceString;
-		this.mPreferenceToString = itemsToString;
-		loadPreferences(sharedPreferences, preferenceString, defaultValue, itemsToString);
-	}
-
-	/**
-	 * Set slider's preferences for automatic saving inside passed instance of {@link SharedPreferences}.
 	 * Objects are either saved as strings using toString() method or more efficient way if Slider implementation implemented it
 	 *
 	 * @param sharedPreferences Instance of shared preferences
@@ -108,14 +91,12 @@ public abstract class Slider<T> extends SeekBar implements SeekBar.OnSeekBarChan
 	public void setPreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull T defaultValue) {
 		this.mPreferences = sharedPreferences;
 		this.mPreferenceString = preferenceString;
-		this.mPreferenceToString = null;
 		loadPreferences(sharedPreferences, preferenceString, defaultValue, null);
 	}
 
 	public void removePreferences() {
 		this.mPreferences = null;
 		this.mPreferenceString = null;
-		this.mPreferenceToString = null;
 	}
 
 	/**
