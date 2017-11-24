@@ -24,7 +24,7 @@ public class IntValueSlider extends ValueSlider<Integer> {
 
 	@Override
 	public void loadProgress(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull Integer defaultValue) {
-		super.setProgress(sharedPreferences.getInt(preferenceString, defaultValue));
+		super.setProgress(getItemIndex(sharedPreferences.getInt(preferenceString, defaultValue)));
 	}
 
 	@Override
