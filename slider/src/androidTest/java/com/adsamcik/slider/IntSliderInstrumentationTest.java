@@ -95,14 +95,14 @@ public class IntSliderInstrumentationTest {
 		if (Build.VERSION.SDK_INT >= 24)
 			slider.setValue(8, false);
 		else
-			slider.setProgress(8);
+			slider.setValue(8);
 
 		assertEquals(8, slider.getProgress());
 
 		if (Build.VERSION.SDK_INT >= 24)
 			slider.setValue(3, true);
 		else
-			slider.setProgress(3);
+			slider.setValue(3);
 
 		assertEquals(3, slider.getProgress());
 	}
