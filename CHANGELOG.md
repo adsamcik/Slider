@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.0] - 24-11-2017
+
+Hotfix release to architectural flaw in ValueSliders 0.4.0
+
+- ValueSlider reworked to abstract class so integers etc. can make better use of shared preferences
+
 ## [0.4.0] - 24-11-2017
 
 - Reworked how shared preferences are used
