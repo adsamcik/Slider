@@ -1,19 +1,14 @@
 package com.adsamcik.slider;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 
-import java.security.InvalidParameterException;
 import java.util.Arrays;
 
-public class ValueSlider<T> extends Slider<T> {
-	private static final String TAG = "ValueSlider";
-
-	private T[] mItems = null;
-	private IStringify<T> mPreferenceToString = null;
+public abstract class ValueSlider<T> extends Slider<T> {
+	protected T[] mItems = null;
 
 	public ValueSlider(Context context) {
 		super(context);
@@ -35,27 +30,6 @@ public class ValueSlider<T> extends Slider<T> {
 		setMax(0);
 	}
 
-	/**
-	 * Set slider's preferences for automatic saving inside passed instance of {@link SharedPreferences}.
-	 * Objects are saved as strings using passed function {@link IStringify}
-	 *
-	 * @param sharedPreferences Instance of shared preferences
-	 * @param preferenceString  String name of desired preference
-	 * @param defaultValue      Default value if no value is saved in shared preferences
-	 * @param itemsToString     function to convert object to string so they can be saved to shared preferences
-	 */
-	public void setPreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull T defaultValue, @NonNull IStringify<T> itemsToString) {
-		this.mPreferenceToString = itemsToString;
-		super.setPreferences(sharedPreferences, preferenceString, defaultValue);
-		loadPreferences(sharedPreferences, preferenceString, defaultValue);
-	}
-
-	@Override
-	public void removePreferences() {
-		super.removePreferences();
-		this.mPreferenceToString = null;
-	}
-
 	@Override
 	public void setValue(T item) {
 		setProgress(getItemIndex(item));
@@ -66,31 +40,6 @@ public class ValueSlider<T> extends Slider<T> {
 	public void setValue(T item, boolean animate) {
 		Integer index = getItemIndex(item);
 		setProgress(index, animate);
-	}
-
-	@Override
-	public void loadPreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull T defaultValue) {
-		String defaultString = mPreferenceToString == null ? defaultValue.toString() : mPreferenceToString.toString(defaultValue);
-		String loadedValue = sharedPreferences.getString(preferenceString, defaultString);
-		int index = getItemIndex(loadedValue);
-		if (index >= 0)
-			super.setProgress(index);
-		else {
-			if (!loadedValue.equals(defaultString)) {
-				index = getItemIndex(defaultString);
-				if (index >= 0)
-					super.setProgress(index);
-				else
-					throw new RuntimeException("Neither loaded value (" + loadedValue + ") nor default value (" + defaultString + ") were found");
-			}
-
-			throw new RuntimeException("Default value " + defaultString + " was not found");
-		}
-	}
-
-	@Override
-	public void updatePreferences(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull T value) {
-		sharedPreferences.edit().putString(preferenceString, value.toString()).apply();
 	}
 
 	@Override
@@ -147,28 +96,9 @@ public class ValueSlider<T> extends Slider<T> {
 			throw new RuntimeException("Progress must be larger than 0 and not larger than " + getMax() + ". Was " + progress);
 	}
 
-	private int getItemIndex(@NonNull String item) {
-		if (mItems != null) {
-			for (int i = 0; i < mItems.length; i++) {
-				String sItem = mPreferenceToString != null ? mPreferenceToString.toString(mItems[i]) : mItems[i].toString();
-				if (item.equals(sItem))
-					return i;
-			}
-		}
-		return -1;
-	}
-
-	private int getItemIndex(@NonNull T item) {
+	protected int getItemIndex(@NonNull T item) {
 		if (mItems != null)
 			return Arrays.asList(mItems).indexOf(item);
 		return -1;
-	}
-
-	private int toSliderProgress(T item) {
-		Integer itemIndex = getItemIndex(item);
-		if (itemIndex == null)
-			throw new InvalidParameterException("Item not found in item list");
-		else
-			return itemIndex;
 	}
 }
