@@ -95,14 +95,14 @@ public class IntSliderInstrumentationTest {
 		if (Build.VERSION.SDK_INT >= 24)
 			slider.setValue(8, false);
 		else
-			slider.setProgress(8);
+			slider.setValue(8);
 
 		assertEquals(8, slider.getProgress());
 
 		if (Build.VERSION.SDK_INT >= 24)
 			slider.setValue(3, true);
 		else
-			slider.setProgress(3);
+			slider.setValue(3);
 
 		assertEquals(3, slider.getProgress());
 	}
@@ -152,39 +152,6 @@ public class IntSliderInstrumentationTest {
 	}
 
 	@Test
-	public void valueTest() throws Exception {
-		Context appContext = InstrumentationRegistry.getTargetContext();
-
-		IntSlider slider = new IntSlider(appContext);
-		slider.setMinValue(-15);
-		slider.setMaxValue(15);
-		slider.setStep(3);
-		slider.setValue(15);
-		slider.setTextView(new TextView(appContext), value -> Integer.toString(value));
-		Integer[] integers = new Integer[]{0, 3, 4, 20, 35};
-		slider.setItems(integers);
-
-		slider.onProgressChanged(slider, 14, true);
-		Integer[] getInts = slider.getItems();
-		for (int i = 0; i < integers.length; i++)
-			assertEquals(integers[i], getInts[i]);
-
-		for (int i = 0; i < integers.length; i++) {
-			slider.setValue(integers[i]);
-			assertEquals((long) integers[i], (long) slider.getValue());
-		}
-
-		for (int i = 0; i < integers.length; i++) {
-			slider.setProgress(i);
-			assertEquals((long) integers[i], (long) slider.getValue());
-		}
-
-		EAssert.assertException(() -> slider.setMinValue(-15), RuntimeException.class);
-		EAssert.assertException(() -> slider.setMaxValue(15), RuntimeException.class);
-		EAssert.assertException(() -> slider.setStep(3), RuntimeException.class);
-	}
-
-	@Test
 	public void sharedPreferences() throws Exception {
 		final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(appContext);
 		final String prefName = "TESTING PREFERENCE";
@@ -196,7 +163,7 @@ public class IntSliderInstrumentationTest {
 		slider.setMaxValue(5);
 		slider.setStep(2);
 
-		slider.setPreferencesAndLoad(preferences, prefName, 1);
+		slider.setPreferences(preferences, prefName, 1);
 
 		Assert.assertEquals(1, (long) slider.getValue());
 
@@ -205,7 +172,7 @@ public class IntSliderInstrumentationTest {
 		int value = slider.getValue();
 		Assert.assertEquals(value, preferences.getInt(prefName, Integer.MIN_VALUE));
 
-		slider.setPreferences(null, null);
+		slider.removePreferences();
 
 		slider.setValue(1);
 
@@ -222,9 +189,7 @@ public class IntSliderInstrumentationTest {
 	public void callbackTests() throws Exception {
 		IntSlider slider = new IntSlider(appContext);
 
-		Slider.OnValueChangeListener<Integer> valueChangeListener = (value, fromUser) -> {
-			atomicInteger.incrementAndGet();
-		};
+		Slider.OnValueChangeListener<Integer> valueChangeListener = (value, fromUser) -> atomicInteger.incrementAndGet();
 
 		slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
