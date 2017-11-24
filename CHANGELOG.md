@@ -3,6 +3,8 @@
 ## [0.5.0] - 24-11-2017
 
 - ValueSlider reworked to abstract class so integers etc. can make better use of shared preferences
+- Add IntValueSlider
+- Add generic ObjectValueSlider
 
 ## [0.4.0] - 24-11-2017
 
