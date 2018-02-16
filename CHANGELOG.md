@@ -2,7 +2,9 @@
 
 ## [0.6.0] - 16-02-2018
 
-- Converted to Kotlin (Some might've changed during this rework)
+- Converted to Kotlin
+- Several methods were changed as part of the move to Kotlin
+- Callbacks were changed as part of move to Kotlin and its higher order functions
 - Moved from native SeekBar to AppCompatSeekBar to provide more uniform experience across all versions of Android
 
 ## [0.5.0] - 24-11-2017
