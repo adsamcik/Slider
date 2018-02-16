@@ -20,10 +20,6 @@ public class ObjectValueSlider<T> extends ValueSlider<T> {
 		super(context, attrs, defStyleAttr);
 	}
 
-	public ObjectValueSlider(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-		super(context, attrs, defStyleAttr, defStyleRes);
-	}
-
 	@Override
 	public void loadProgress(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull T defaultValue) {
 		String defaultString = mPreferenceToString == null ? defaultValue.toString() : mPreferenceToString.toString(defaultValue);

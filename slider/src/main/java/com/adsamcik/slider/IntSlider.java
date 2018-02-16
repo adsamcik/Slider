@@ -35,12 +35,6 @@ public class IntSlider extends NumberSlider<Integer> {
 		setAttrs(context, attrs);
 	}
 
-	public IntSlider(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-		super(context, attrs, defStyleAttr, defStyleRes);
-		init();
-		setAttrs(context, attrs);
-	}
-
 	private void init() {
 		setScale(LinearScale.getIntegerScale());
 	}

@@ -6,11 +6,12 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.v7.widget.AppCompatSeekBar;
 import android.util.AttributeSet;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-public abstract class Slider<T> extends SeekBar implements SeekBar.OnSeekBarChangeListener {
+public abstract class Slider<T> extends AppCompatSeekBar implements SeekBar.OnSeekBarChangeListener {
 	protected TextView mTextView = null;
 	protected IStringify<T> mStringify = null;
 
@@ -31,12 +32,7 @@ public abstract class Slider<T> extends SeekBar implements SeekBar.OnSeekBarChan
 	}
 
 	public Slider(Context context, AttributeSet attrs, int defStyleAttr) {
-		super(context, attrs, defStyleAttr, 0);
-		init();
-	}
-
-	public Slider(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-		super(context, attrs, defStyleAttr, defStyleRes);
+		super(context, attrs, defStyleAttr);
 		init();
 	}
 

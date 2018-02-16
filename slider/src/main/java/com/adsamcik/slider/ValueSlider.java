@@ -25,11 +25,6 @@ public abstract class ValueSlider<T> extends Slider<T> {
 		setMax(0);
 	}
 
-	public ValueSlider(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-		super(context, attrs, defStyleAttr, defStyleRes);
-		setMax(0);
-	}
-
 	@Override
 	public void setValue(T item) {
 		setProgress(getItemIndex(item));

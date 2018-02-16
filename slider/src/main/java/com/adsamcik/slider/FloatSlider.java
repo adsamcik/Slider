@@ -40,12 +40,6 @@ public class FloatSlider extends NumberSlider<Float> {
 		setAttrs(context, attrs);
 	}
 
-	public FloatSlider(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-		super(context, attrs, defStyleAttr, defStyleRes);
-		init();
-		setAttrs(context, attrs);
-	}
-
 	private void init() {
 		setScale(LinearScale.getFloatScale());
 	}

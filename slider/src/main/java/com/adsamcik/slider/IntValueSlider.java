@@ -18,10 +18,6 @@ public class IntValueSlider extends ValueSlider<Integer> {
 		super(context, attrs, defStyleAttr);
 	}
 
-	public IntValueSlider(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-		super(context, attrs, defStyleAttr, defStyleRes);
-	}
-
 	@Override
 	public void loadProgress(@NonNull SharedPreferences sharedPreferences, @NonNull String preferenceString, @NonNull Integer defaultValue) {
 		super.setProgress(getItemIndex(sharedPreferences.getInt(preferenceString, defaultValue)));
