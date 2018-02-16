@@ -1,8 +1,9 @@
-package com.adsamcik.slider.sliders
+package com.adsamcik.slider.implementations
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.AttributeSet
+import com.adsamcik.slider.abstracts.ValueSlider
 
 class IntValueSlider : ValueSlider<Int> {
     constructor(context: Context) : super(context)

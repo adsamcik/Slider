@@ -1,4 +1,4 @@
-package com.adsamcik.slider.sliders
+package com.adsamcik.slider.abstracts
 
 import android.content.Context
 import android.support.annotation.RequiresApi

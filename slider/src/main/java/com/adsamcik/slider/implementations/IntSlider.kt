@@ -1,4 +1,4 @@
-package com.adsamcik.slider.sliders
+package com.adsamcik.slider.implementations
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -8,6 +8,7 @@ import android.util.AttributeSet
 
 import com.adsamcik.slider.EMath
 import com.adsamcik.slider.R
+import com.adsamcik.slider.abstracts.NumberSlider
 import com.adsamcik.slider.scaleFunctions.LinearScale
 
 import java.security.InvalidParameterException

@@ -8,7 +8,7 @@ import android.support.test.runner.AndroidJUnit4
 import android.widget.SeekBar
 import android.widget.TextView
 import com.adsamcik.slider.scaleFunctions.LinearScale
-import com.adsamcik.slider.sliders.IntSlider
+import com.adsamcik.slider.implementations.IntSlider
 import junit.framework.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Test

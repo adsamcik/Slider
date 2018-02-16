@@ -7,7 +7,7 @@ import android.preference.PreferenceManager
 import android.support.test.InstrumentationRegistry
 import android.widget.SeekBar
 import android.widget.TextView
-import com.adsamcik.slider.sliders.ObjectValueSlider
+import com.adsamcik.slider.implementations.ObjectValueSlider
 import junit.framework.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Test
