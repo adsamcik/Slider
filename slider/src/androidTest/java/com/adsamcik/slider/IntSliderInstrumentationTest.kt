@@ -63,7 +63,7 @@ class IntSliderInstrumentationTest {
 
         slider.removeTextView()
         slider.value = 8
-        assertEquals("Test 4", textView.text)
+        assertEquals("Test 5", textView.text)
         assertEquals(8, slider.value.toLong())
     }
 
