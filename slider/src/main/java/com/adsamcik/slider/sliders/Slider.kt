@@ -122,7 +122,7 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
      *
      * @param l On SeekBar changes listener
      */
-    override fun setOnSeekBarChangeListener(l: SeekBar.OnSeekBarChangeListener) {
+    override fun setOnSeekBarChangeListener(l: SeekBar.OnSeekBarChangeListener?) {
         mOnSeekBarChangeListener = l
     }
 
@@ -131,7 +131,7 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
      *
      * @param l On value changed listener
      */
-    fun setOnValueChangeListener(l: OnValueChange<T>) {
+    fun setOnValueChangeListener(l: OnValueChange<T>?) {
         mOnValueChangeListener = l
     }
 
