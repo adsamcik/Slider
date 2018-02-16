@@ -10,9 +10,9 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.adsamcik.slider.ScaleFunctions.LinearScale;
-import com.adsamcik.slider.Sliders.IntSlider;
-import com.adsamcik.slider.Sliders.Slider;
+import com.adsamcik.slider.scaleFunctions.LinearScale;
+import com.adsamcik.slider.sliders.IntSlider;
+import com.adsamcik.slider.sliders.Slider;
 
 import junit.framework.Assert;
 
@@ -48,7 +48,7 @@ public class IntSliderInstrumentationTest {
 		assertEquals(4, (long) slider.getProgress());
 		assertEquals(5, (long) slider.getValue());
 
-		Slider.IScale<Integer> scale = LinearScale.getIntegerScale();
+		Slider.IScale<Integer> scale = LinearScale.INSTANCE.getIntegerScale();
 		slider.setScale(scale);
 		assertEquals(scale, slider.getScale());
 	}

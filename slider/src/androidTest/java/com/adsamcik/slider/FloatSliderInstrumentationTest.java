@@ -7,8 +7,8 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.TextView;
 
-import com.adsamcik.slider.Sliders.FloatSlider;
-import com.adsamcik.slider.Sliders.NumberSlider;
+import com.adsamcik.slider.sliders.FloatSlider;
+import com.adsamcik.slider.sliders.NumberSlider;
 
 import junit.framework.Assert;
 
