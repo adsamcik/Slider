@@ -32,22 +32,11 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
      */
     abstract var value: T
 
-    constructor(context: Context) : super(context, null) {
-        init()
-    }
+    constructor(context: Context) : super(context, null)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs, android.R.attr.seekBarStyle)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs, android.R.attr.seekBarStyle) {
-        init()
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init()
-    }
-
-    /**
-     * Initialization function
-     */
-    private fun init() {
+    init {
         super.setOnSeekBarChangeListener(this)
     }
 
@@ -109,7 +98,7 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
 
     /**
      * Function called when updating preferences is need.
-     * Function is guranteed to be called only when SharedPreferences are not null
+     * Function is guaranteed to be called only when SharedPreferences are not null
      *
      * @param sharedPreferences Shared Preferences instance
      * @param preferenceString  Preference String
