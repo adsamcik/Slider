@@ -27,7 +27,7 @@ class ValueSliderTest {
 
         slider.setItems(strings)
         slider.value = "b"
-        slider.setTextView(null, null)
+        slider.removeTextView()
 
         assertEquals("b", slider.value)
         assertEquals((strings.size - 1).toLong(), slider.max.toLong())
@@ -45,20 +45,9 @@ class ValueSliderTest {
 
         assertEquals("Test d", textView.text)
 
-        slider.setTextView(null) { value -> "Test " + value }
-        slider.value = "b"
-        assertEquals("Test d", textView.text)
-        assertEquals("b", slider.value)
-
-        slider.setTextView(textView) { value -> "Test " + value }
-        slider.setTextView(textView, null)
-        slider.value = "e"
-        assertEquals("Test b", textView.text)
-        assertEquals("e", slider.value)
-
-        slider.setTextView(null, null)
+        slider.removeTextView()
         slider.value = "a"
-        assertEquals("Test b", textView.text)
+        assertEquals("Test d", textView.text)
         assertEquals("a", slider.value)
     }
 

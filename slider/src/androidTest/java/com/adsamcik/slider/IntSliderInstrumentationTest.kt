@@ -35,7 +35,7 @@ class IntSliderInstrumentationTest {
         slider.maxValue = 9
         slider.step = 2
         slider.value = 5
-        slider.setTextView(null, null)
+        slider.removeTextView()
 
         assertEquals(1, slider.minValue.toLong())
         assertEquals(9, slider.maxValue.toLong())
@@ -61,18 +61,7 @@ class IntSliderInstrumentationTest {
 
         assertEquals("Test 5", textView.text)
 
-        slider.setTextView(null) { value -> "Test " + value }
-        slider.value = 4
-        assertEquals("Test 5", textView.text)
-        assertEquals(4, slider.value.toLong())
-
-        slider.setTextView(textView) { value -> "Test " + value }
-        slider.setTextView(textView, null)
-        slider.value = 6
-        assertEquals("Test 4", textView.text)
-        assertEquals(6, slider.value.toLong())
-
-        slider.setTextView(null, null)
+        slider.removeTextView()
         slider.value = 8
         assertEquals("Test 4", textView.text)
         assertEquals(8, slider.value.toLong())

@@ -78,8 +78,8 @@ class IntSlider : NumberSlider<Int> {
     }
 
     @RequiresApi(24)
-    override fun setValue(progress: Int, animate: Boolean) {
-        setProgress(toSliderProgress(EMath.step(progress, sliderStep)), animate)
+    override fun setValue(value: Int, animate: Boolean) {
+        setProgress(toSliderProgress(EMath.step(value, sliderStep)), animate)
     }
 
     override fun loadProgress(sharedPreferences: SharedPreferences, preferenceString: String, defaultValue: Int) {

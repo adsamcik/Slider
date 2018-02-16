@@ -46,15 +46,15 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
      * @param textView  TextView
      * @param stringify String function
      */
-    fun setTextView(textView: TextView?, stringify: Stringify<T>?) {
-        if (textView == null || stringify == null) {
-            mTextView = null
-            mStringify = null
-        } else {
-            mTextView = textView
-            mStringify = stringify
-            updateText()
-        }
+    fun setTextView(textView: TextView, stringify: Stringify<T>) {
+        mTextView = textView
+        mStringify = stringify
+        updateText()
+    }
+
+    fun removeTextView() {
+        mTextView = null
+        mStringify = null
     }
 
     /**
@@ -143,7 +143,6 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
 
     override fun onStopTrackingTouch(seekBar: SeekBar) {
         updateText()
-
         mOnSeekBarChangeListener?.onStopTrackingTouch(seekBar)
     }
 
