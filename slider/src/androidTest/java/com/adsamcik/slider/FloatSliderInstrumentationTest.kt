@@ -106,6 +106,8 @@ class FloatSliderInstrumentationTest {
     fun sharedPreferences() {
         val appContext = InstrumentationRegistry.getTargetContext()
         val preferences = PreferenceManager.getDefaultSharedPreferences(appContext)
+        preferences.edit().clear().apply()
+
         val prefName = "TESTING PREFERENCE"
 
         val slider = FloatSlider(appContext)

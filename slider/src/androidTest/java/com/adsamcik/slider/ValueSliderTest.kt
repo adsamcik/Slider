@@ -125,7 +125,7 @@ class ValueSliderTest {
         val prefName = "TESTING PREFERENCE"
         val noPreference = "NO PREFERENCE"
 
-        preferences.edit().remove(prefName).commit()
+        preferences.edit().clear().apply()
 
         val slider = ObjectValueSlider<String>(appContext)
         slider.setItems(strings)

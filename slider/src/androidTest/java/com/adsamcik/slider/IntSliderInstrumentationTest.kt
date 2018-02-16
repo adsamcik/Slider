@@ -159,7 +159,7 @@ class IntSliderInstrumentationTest {
         val preferences = PreferenceManager.getDefaultSharedPreferences(appContext)
         val prefName = "TESTING PREFERENCE"
 
-        preferences.edit().remove(prefName).apply()
+        preferences.edit().clear().apply()
 
         val slider = IntSlider(appContext)
         slider.minValue = -5

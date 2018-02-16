@@ -19,7 +19,7 @@ class IntValueSliderTest {
         val prefName = "TESTING PREFERENCE"
         val noPreference = -1
 
-        preferences.edit().remove(prefName).commit()
+        preferences.edit().clear().apply()
 
         val slider = IntValueSlider(appContext)
         slider.setItems(ints)
