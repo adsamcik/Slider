@@ -6,6 +6,7 @@ plugins {
 apply plugin: 'maven-publish'
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.dokka'
 
 ext.version = '0.5.0'
 
@@ -79,7 +80,7 @@ ext {
 
 if (file('../local.properties').exists()) {
     apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-    apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+    apply from: 'https://gist.githubusercontent.com/adsamcik/81084e03dd0190772fd32b90136da34e/raw/e8007b585e57a8dfa25ca5446acf1f65c6448373/bintrayv2.gradle'
 }
 repositories {
     mavenCentral()
