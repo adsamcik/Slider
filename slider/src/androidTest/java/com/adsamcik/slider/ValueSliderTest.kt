@@ -92,6 +92,22 @@ class ValueSliderTest {
         assertEquals("b", slider.value)
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun valueTest() {
+        if (Looper.myLooper() == null)
+            Looper.prepare()
+
+        val slider = ObjectValueSlider<String>(appContext)
+
+        slider.setItems(strings)
+        slider.value = "a"
+
+        slider.clearItems()
+
+        EAssert.assertException({ slider.value }, RuntimeException::class.java)
+    }
+
 
     @Test
     @Throws(Exception::class)
