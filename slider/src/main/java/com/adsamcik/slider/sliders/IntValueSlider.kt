@@ -12,7 +12,7 @@ class IntValueSlider : ValueSlider<Int> {
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     override fun loadProgress(sharedPreferences: SharedPreferences, preferenceString: String, defaultValue: Int) {
-        super.setProgress(getItemIndex(sharedPreferences.getInt(preferenceString, defaultValue)))
+        super.setProgress(getValueIndex(sharedPreferences.getInt(preferenceString, defaultValue)))
     }
 
     override fun updatePreferences(sharedPreferences: SharedPreferences, preferenceString: String, value: Int) {

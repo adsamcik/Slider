@@ -60,11 +60,11 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
     /**
      * Set slider's current progress value. This value needs to be between Min value and Max value not min and max from SeekBar.
      *
-     * @param progress Desired progress
+     * @param value Desired progress
      * @param animate  Animate
      */
     @RequiresApi(24)
-    abstract fun setValue(progress: T, animate: Boolean)
+    abstract fun setValue(value: T, animate: Boolean)
 
     /**
      * Set slider's preferences for automatic saving inside passed instance of [SharedPreferences].

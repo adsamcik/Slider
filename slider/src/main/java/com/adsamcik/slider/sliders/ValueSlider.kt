@@ -9,12 +9,14 @@ abstract class ValueSlider<T> : Slider<T> {
     protected var mItems: Array<T>? = null
 
     override var value: T
-        get() = if (mItems == null)
-            throw RuntimeException("You must first set items before requesting value")
-        else
-            mItems!![progress]
+        get() {
+            return if (mItems == null)
+                throw RuntimeException("You must first set items before requesting value")
+            else
+                mItems!![progress]
+        }
         set(item) {
-            progress = getItemIndex(item)
+            progress = getValueIndex(item)
         }
 
     constructor(context: Context) : super(context)
@@ -40,14 +42,18 @@ abstract class ValueSlider<T> : Slider<T> {
         this.mItems = items
     }
 
-    @RequiresApi(24)
-    override fun setValue(item: T, animate: Boolean) {
-        val index = getItemIndex(item)
-        setProgress(index, animate)
-    }
-
+    /**
+     * Removes items
+     */
     fun clearItems() {
         this.mItems = null
+    }
+
+
+    @RequiresApi(24)
+    override fun setValue(value: T, animate: Boolean) {
+        val index = getValueIndex(value)
+        setProgress(index, animate)
     }
 
     @Synchronized
@@ -66,5 +72,5 @@ abstract class ValueSlider<T> : Slider<T> {
             throw RuntimeException("Progress must be larger than 0 and not larger than $max. Was $progress")
     }
 
-    protected fun getItemIndex(item: T): Int = mItems?.indexOf(item) ?: -1
+    protected fun getValueIndex(item: T): Int = mItems?.indexOf(item) ?: -1
 }
