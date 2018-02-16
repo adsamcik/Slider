@@ -18,7 +18,7 @@ abstract class NumberSlider<N : Number> : Slider<N> {
 
             field = sliderStep
         }
-    
+
     /**
      *  Slider's min value
      *

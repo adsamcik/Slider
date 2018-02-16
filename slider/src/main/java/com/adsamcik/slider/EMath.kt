@@ -54,7 +54,7 @@ internal object EMath {
     fun step(value: Int, step: Int): Int {
         val left = value % step
         val roundDown = value - left
-        return if (Math.abs(left) >= Math.abs(step) * 0.5f) roundDown + step else roundDown
+        return if (Math.abs(left) >= Math.abs(step) / 2f) roundDown + step else roundDown
     }
 
     /**
