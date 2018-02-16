@@ -110,6 +110,16 @@ class ValueSliderTest {
 
     @Test
     @Throws(Exception::class)
+    fun exceptionTest() {
+        val appContext = InstrumentationRegistry.getTargetContext()
+
+        val slider = ObjectValueSlider<String>(appContext)
+
+        EAssert.assertException({ slider.value }, RuntimeException::class.java)
+    }
+
+    @Test
+    @Throws(Exception::class)
     fun sharedPreferences() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(appContext)
         val prefName = "TESTING PREFERENCE"
