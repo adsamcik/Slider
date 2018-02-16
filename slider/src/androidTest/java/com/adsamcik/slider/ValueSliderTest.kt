@@ -92,7 +92,7 @@ class ValueSliderTest {
         slider.setItems(strings)
         slider.value = "a"
 
-        slider.clearItems()
+        slider.removeItems()
 
         EAssert.assertException({ slider.value }, RuntimeException::class.java)
     }

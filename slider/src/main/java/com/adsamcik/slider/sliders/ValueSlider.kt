@@ -45,7 +45,7 @@ abstract class ValueSlider<T> : Slider<T> {
     /**
      * Removes items
      */
-    fun clearItems() {
+    fun removeItems() {
         this.mItems = null
     }
 
