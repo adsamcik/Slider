@@ -13,7 +13,7 @@ import com.adsamcik.slider.scaleFunctions.LinearScale
 import java.security.InvalidParameterException
 
 class FloatSlider : NumberSlider<Float> {
-     private var mStep = 1f
+    private var mStep = 1f
     private var mMin = 0f
     private var mMax = 10f
 
@@ -66,21 +66,16 @@ class FloatSlider : NumberSlider<Float> {
     private val stepProgress: Int
         get() = EMath.step(progress, sliderStep)
 
-    constructor(context: Context) : super(context) {
-        init()
-    }
-
+    constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init()
         setAttrs(context, attrs)
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init()
         setAttrs(context, attrs)
     }
 
-    private fun init() {
+    init {
         scale = LinearScale.floatScale
     }
 

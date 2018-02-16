@@ -9,9 +9,7 @@ class ObjectValueSlider<T> : ValueSlider<T> {
     private var mPreferenceToString: Stringify<T>? = null
 
     constructor(context: Context) : super(context)
-
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     override fun loadProgress(sharedPreferences: SharedPreferences, preferenceString: String, defaultValue: T) {

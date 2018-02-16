@@ -3,7 +3,6 @@ package com.adsamcik.slider.sliders
 import android.content.Context
 import android.support.annotation.RequiresApi
 import android.util.AttributeSet
-import java.util.*
 
 
 abstract class ValueSlider<T> : Slider<T> {
@@ -18,15 +17,11 @@ abstract class ValueSlider<T> : Slider<T> {
             progress = getItemIndex(item)
         }
 
-    constructor(context: Context) : super(context) {
-        max = 0
-    }
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        max = 0
-    }
-
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    init {
         max = 0
     }
 
@@ -71,7 +66,5 @@ abstract class ValueSlider<T> : Slider<T> {
             throw RuntimeException("Progress must be larger than 0 and not larger than $max. Was $progress")
     }
 
-    protected fun getItemIndex(item: T): Int {
-        return if (mItems != null) Arrays.asList(*mItems!!).indexOf(item) else -1
-    }
+    protected fun getItemIndex(item: T): Int = mItems?.indexOf(item) ?: -1
 }

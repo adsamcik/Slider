@@ -52,21 +52,17 @@ class IntSlider : NumberSlider<Int> {
         get() = scale!!.invoke(progress, max, mMin, mMax)
         set(progress) = setProgress(toSliderProgress(progress))
 
-    constructor(context: Context) : super(context) {
-        init()
-    }
+    constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init()
         setAttrs(context, attrs)
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init()
         setAttrs(context, attrs)
     }
 
-    private fun init() {
+    init {
         scale = LinearScale.integerScale
     }
 
