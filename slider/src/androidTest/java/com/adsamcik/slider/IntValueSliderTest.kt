@@ -4,7 +4,7 @@ package com.adsamcik.slider
 import android.preference.PreferenceManager
 import android.support.test.InstrumentationRegistry
 import com.adsamcik.slider.sliders.IntValueSlider
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Test
 
 class IntValueSliderTest {
