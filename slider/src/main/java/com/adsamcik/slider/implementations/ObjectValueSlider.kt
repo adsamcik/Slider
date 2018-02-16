@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import com.adsamcik.slider.Stringify
 import com.adsamcik.slider.abstracts.ValueSlider
 
-class ObjectValueSlider<T> : ValueSlider<T> {
+open class ObjectValueSlider<T> : ValueSlider<T> {
     private var mPreferenceToString: Stringify<T>? = null
 
     constructor(context: Context) : super(context)
