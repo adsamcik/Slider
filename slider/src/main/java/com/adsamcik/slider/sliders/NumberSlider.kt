@@ -8,12 +8,7 @@ import com.adsamcik.slider.Scale
 
 abstract class NumberSlider<N : Number> : Slider<N> {
     /**
-     * Returns step used by SeekBar
-     *
-     * @return Slider step
-     */
-    /**
-     * Sets step used by SeekBar
+     * Step used by SeekBar
      *
      */
     var sliderStep = 1
@@ -23,40 +18,23 @@ abstract class NumberSlider<N : Number> : Slider<N> {
 
             field = sliderStep
         }
-
+    
     /**
-     * Get slider's min value.
+     *  Slider's min value
      *
-     * @return Min value
-     */
-    /**
-     * Set slider's min value.
-     *
-     * @param min Min value
      */
     abstract var minValue: N
 
     /**
-     * Get slider's max value.
+     * Slider's max value
      *
-     * @return Max value
-     */
-    /**
-     * Set slider's max value.
-     *
-     * @param max Max value
      */
     abstract var maxValue: N
 
     /**
-     * Get slider's step value.
+     * Slider step value
      *
      * @return Step value
-     */
-    /**
-     * Set slider's step value.
-     *
-     * @param step Step value
      */
     abstract var step: N
 
