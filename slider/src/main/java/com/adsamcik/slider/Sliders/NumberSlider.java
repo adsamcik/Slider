@@ -1,8 +1,10 @@
-package com.adsamcik.slider;
+package com.adsamcik.slider.Sliders;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.SeekBar;
+
+import com.adsamcik.slider.EMath;
 
 import static com.adsamcik.slider.EMath.step;
 
@@ -30,7 +32,7 @@ public abstract class NumberSlider<N extends Number> extends Slider<N> {
 	 * @return Value after rounding to nearest step
 	 */
 	private int roundToStep(int value) {
-		return step(value, mSliderStep);
+		return EMath.step(value, mSliderStep);
 	}
 
 	/**

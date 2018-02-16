@@ -1,6 +1,6 @@
 package com.adsamcik.slider.ScaleFunctions;
 
-import com.adsamcik.slider.Slider;
+import com.adsamcik.slider.Sliders.Slider;
 
 public class LinearScale {
 	private LinearScale() {}

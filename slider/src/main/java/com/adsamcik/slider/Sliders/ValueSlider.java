@@ -1,4 +1,4 @@
-package com.adsamcik.slider;
+package com.adsamcik.slider.Sliders;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

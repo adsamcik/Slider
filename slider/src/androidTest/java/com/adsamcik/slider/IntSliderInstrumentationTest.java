@@ -11,6 +11,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.adsamcik.slider.ScaleFunctions.LinearScale;
+import com.adsamcik.slider.Sliders.IntSlider;
+import com.adsamcik.slider.Sliders.Slider;
 
 import junit.framework.Assert;
 

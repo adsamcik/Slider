@@ -1,4 +1,4 @@
-package com.adsamcik.slider;
+package com.adsamcik.slider.Sliders;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 
+import com.adsamcik.slider.EMath;
+import com.adsamcik.slider.R;
 import com.adsamcik.slider.ScaleFunctions.LinearScale;
 
 import java.security.InvalidParameterException;
@@ -134,7 +136,7 @@ public class FloatSlider extends NumberSlider<Float> {
 	}
 
 	private int getStepProgress() {
-		return step(getProgress(), getSliderStep());
+		return EMath.step(getProgress(), getSliderStep());
 	}
 
 	private void updateDecimalPlaces() {

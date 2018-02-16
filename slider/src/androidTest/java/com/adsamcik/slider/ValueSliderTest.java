@@ -10,6 +10,9 @@ import android.support.test.InstrumentationRegistry;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.adsamcik.slider.Sliders.ObjectValueSlider;
+import com.adsamcik.slider.Sliders.Slider;
+
 import junit.framework.Assert;
 
 import org.junit.Test;

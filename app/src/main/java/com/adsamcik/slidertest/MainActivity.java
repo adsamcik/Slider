@@ -6,7 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
-import com.adsamcik.slider.IntSlider;
+import com.adsamcik.slider.Sliders.IntSlider;
 
 import java.security.InvalidParameterException;
 

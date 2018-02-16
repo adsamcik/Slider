@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
 
+import com.adsamcik.slider.Sliders.IntValueSlider;
+
 import junit.framework.Assert;
 
 import org.junit.Test;

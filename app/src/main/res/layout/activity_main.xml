@@ -18,7 +18,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <com.adsamcik.slider.IntSlider
+    <com.adsamcik.slider.Sliders.IntSlider
         android:id="@+id/slider"
         android:layout_width="381dp"
         android:layout_height="wrap_content"

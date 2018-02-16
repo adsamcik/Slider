@@ -1,4 +1,4 @@
-package com.adsamcik.slider;
+package com.adsamcik.slider.Sliders;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 
+import com.adsamcik.slider.EMath;
+import com.adsamcik.slider.R;
 import com.adsamcik.slider.ScaleFunctions.LinearScale;
 
 import java.security.InvalidParameterException;
@@ -56,13 +58,13 @@ public class IntSlider extends NumberSlider<Integer> {
 			throw new InvalidParameterException("Step must be larger than 0");
 
 		setSliderStep(step);
-		setValue(step(getValue(), step));
+		setValue(EMath.step(getValue(), step));
 	}
 
 	@Override
 	@RequiresApi(24)
 	public void setValue(Integer progress, boolean animate) {
-		setProgress(toSliderProgress(step(progress, getSliderStep())), animate);
+		setProgress(toSliderProgress(EMath.step(progress, getSliderStep())), animate);
 	}
 
 	@Override
