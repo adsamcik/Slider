@@ -1,7 +1,7 @@
 package com.adsamcik.slider.abstracts
 
 import android.content.Context
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import android.util.AttributeSet
 
 

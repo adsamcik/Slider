@@ -2,9 +2,9 @@ package com.adsamcik.slider.abstracts
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.support.annotation.CallSuper
-import android.support.annotation.RequiresApi
-import android.support.v7.widget.AppCompatSeekBar
+import androidx.annotation.CallSuper
+import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.AppCompatSeekBar
 import android.util.AttributeSet
 import android.widget.SeekBar
 import android.widget.TextView

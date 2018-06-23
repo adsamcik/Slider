@@ -1,6 +1,5 @@
 package com.adsamcik.slidertest;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,7 +9,9 @@ import com.adsamcik.slider.implementations.IntSlider;
 
 import java.security.InvalidParameterException;
 
-public class MainActivity extends Activity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -3,8 +3,8 @@ package com.adsamcik.slider
 import android.os.Build
 import android.os.Looper
 import android.preference.PreferenceManager
-import android.support.test.InstrumentationRegistry
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.InstrumentationRegistry
+import androidx.test.runner.AndroidJUnit4
 import android.widget.SeekBar
 import android.widget.TextView
 import com.adsamcik.slider.scaleFunctions.LinearScale
