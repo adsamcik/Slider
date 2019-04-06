@@ -4,6 +4,9 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.annotation.RequiresApi
 
+/**
+ * Abstract implementation of [Slider] that allows the use of custom value lists
+ */
 abstract class ValueSlider<T> : Slider<T> {
 	protected var mItems: Array<T>? = null
 

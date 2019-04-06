@@ -17,15 +17,26 @@ internal object SliderUtility {
 	}
 
 	/**
-	 * Round float numbers to number of decimal places.
+	 * Round [Float] to number of decimal places.
 	 *
 	 * @param value     Number
 	 * @param precision Decimal places
 	 * @return Rounded number
 	 */
 	fun round(value: Float, precision: Int): Float {
+		return SliderUtility.round(value.toDouble(), precision).toFloat()
+	}
+
+	/**
+	 * Round [Double] to number of decimal places.
+	 *
+	 * @param value     Number
+	 * @param precision Decimal places
+	 * @return Rounded number
+	 */
+	fun round(value: Double, precision: Int): Double {
 		val scale = 10.0.pow(precision.toDouble())
-		return (kotlin.math.round(value * scale) / scale).toFloat()
+		return kotlin.math.round(value * scale) / scale
 	}
 
 	/**

@@ -60,12 +60,6 @@ abstract class NumberSlider<N : Number> : Slider<N> {
 	constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 	constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-	/**
-	 * Round desired value to step. Primarily used for SeekBar progress.
-	 *
-	 * @param value Value
-	 * @return Value after rounding to nearest step
-	 */
 	private fun roundToStep(value: Int): Int {
 		return SliderUtility.step(value, sliderStep)
 	}

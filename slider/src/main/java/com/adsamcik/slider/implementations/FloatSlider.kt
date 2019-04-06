@@ -15,6 +15,11 @@ import com.adsamcik.slider.scaleFunctions.LinearScale
 import java.security.InvalidParameterException
 import kotlin.math.roundToInt
 
+/**
+ * Implementation of [NumberSlider] for single precision floating point numbers ([Float])
+ *
+ * There is no default implementation of DoubleSlider because Android does not properly support [Double]. (Attrs can only have float and so can [SharedPreferences])
+ */
 class FloatSlider : NumberSlider<Float> {
 	private var mStep = 1f
 	private var mMin = 0f

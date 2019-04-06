@@ -11,6 +11,9 @@ import androidx.appcompat.widget.AppCompatSeekBar
 import com.adsamcik.slider.OnValueChange
 import com.adsamcik.slider.Stringify
 
+/**
+ * Base Slider class that implements [AppCompatSeekBar]
+ */
 abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
 	@Suppress("PRIVATE")
 	protected var mTextView: TextView? = null
@@ -148,7 +151,7 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
 		val preferences = mPreferences
 		if (preferences != null) {
 			val preferenceString = mPreferenceString
-					?: throw RuntimeException("Preferences set, but preference string is null")
+					?: throw NullPointerException("Preferences set, but preference string is null")
 			updatePreferences(preferences, preferenceString, value)
 		}
 	}
@@ -167,8 +170,9 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
 	 */
 	protected fun updateText() {
 		val textView = mTextView
-		if(textView != null) {
-			val stringify = mStringify ?: throw RuntimeException("TextView is set, but stringify is null")
+		if (textView != null) {
+			val stringify = mStringify
+					?: throw NullPointerException("TextView is set, but stringify is null")
 			mTextView?.text = stringify.invoke(value)
 		}
 	}
