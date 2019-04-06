@@ -6,6 +6,9 @@ import android.util.AttributeSet
 import com.adsamcik.slider.Stringify
 import com.adsamcik.slider.abstracts.ValueSlider
 
+/**
+ * Implementation of [ValueSlider] for custom objects
+ */
 open class ObjectValueSlider<T> : ValueSlider<T> {
 	private var mPreferenceToString: Stringify<T>? = null
 
@@ -25,10 +28,10 @@ open class ObjectValueSlider<T> : ValueSlider<T> {
 				if (index >= 0)
 					super.setProgress(index)
 				else
-					throw RuntimeException("Neither loaded value ($loadedValue) nor default value ($defaultString) were found")
+					throw IllegalArgumentException("Neither loaded value ($loadedValue) nor default value ($defaultString) were found")
 			}
 
-			throw RuntimeException("Default value $defaultString was not found")
+			throw IllegalArgumentException("Default value $defaultString was not found")
 		}
 	}
 
