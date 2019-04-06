@@ -94,7 +94,7 @@ class ValueSliderTest {
 
 		slider.removeItems()
 
-		AssertUtility.assertException({ slider.value }, IllegalArgumentException::class.java)
+		AssertUtility.assertException({ slider.value }, NullPointerException::class.java)
 	}
 
 
@@ -120,7 +120,7 @@ class ValueSliderTest {
 
 		val slider = ObjectValueSlider<String>(appContext)
 
-		AssertUtility.assertException({ slider.value }, IllegalArgumentException::class.java)
+		AssertUtility.assertException({ slider.value }, NullPointerException::class.java)
 	}
 
 	@Test

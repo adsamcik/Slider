@@ -29,7 +29,7 @@ class FloatSlider : NumberSlider<Float> {
 		get() = mMin
 		set(min) {
 			if (min >= mMax)
-				throw InvalidParameterException("Min must be smaller than max")
+				throw IllegalArgumentException("Min must be smaller than max")
 
 			mMin = min
 			updateDecimalPlaces()

@@ -11,7 +11,9 @@ class StringValueSlider : ValueSlider<String> {
 	constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
 	override fun loadProgress(sharedPreferences: SharedPreferences, preferenceString: String, defaultValue: String) {
-		value = sharedPreferences.getString(preferenceString, defaultValue)
+		val preferenceValue = sharedPreferences.getString(preferenceString, defaultValue)
+		if (preferenceValue != null)
+			value = preferenceValue
 	}
 
 	override fun updatePreferences(sharedPreferences: SharedPreferences, preferenceString: String, value: String) {

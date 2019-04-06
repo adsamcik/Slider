@@ -17,7 +17,7 @@ abstract class NumberSlider<N : Number> : Slider<N> {
 	var sliderStep = 1
 		set(sliderStep) {
 			if (sliderStep <= 0)
-				throw RuntimeException("Slider step must be larger than 0")
+				throw IllegalArgumentException("Slider step must be larger than 0")
 
 			field = sliderStep
 		}

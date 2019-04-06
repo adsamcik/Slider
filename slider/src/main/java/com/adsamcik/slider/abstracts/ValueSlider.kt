@@ -10,10 +10,8 @@ abstract class ValueSlider<T> : Slider<T> {
 	override var value: T
 		get() {
 			val items = mItems
-			return if (items == null)
-				throw RuntimeException("You must first set items before requesting value")
-			else
-				items[progress]
+					?: throw NullPointerException("You must first set items before requesting value")
+			return items[progress]
 		}
 		set(item) {
 			progress = getValueIndex(item)
@@ -35,7 +33,7 @@ abstract class ValueSlider<T> : Slider<T> {
 	 */
 	fun setItems(items: Array<T>) {
 		if (items.size < 2)
-			throw RuntimeException("Value slider requires 2 or more values")
+			throw IllegalArgumentException("Value slider requires 2 or more values")
 
 		progress = progress.coerceIn(0, items.size)
 		max = items.size - 1

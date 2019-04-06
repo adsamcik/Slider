@@ -206,7 +206,7 @@ class IntSliderInstrumentationTest {
 	@Test
 	fun exceptionTest() {
 		val slider = IntSlider(appContext)
-		AssertUtility.assertException({ slider.sliderStep = -5 }, RuntimeException::class.java)
+		AssertUtility.assertException({ slider.sliderStep = -5 }, IllegalArgumentException::class.java)
 
 		AssertUtility.assertException({ slider.minValue = slider.maxValue }, IllegalArgumentException::class.java)
 		AssertUtility.assertException({ slider.maxValue = slider.minValue }, IllegalArgumentException::class.java)
