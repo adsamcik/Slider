@@ -1,18 +1,17 @@
 package com.adsamcik.slider
 
+import android.content.Context
 import android.os.Build
 import android.os.Looper
 import android.preference.PreferenceManager
 import android.widget.SeekBar
 import android.widget.TextView
-import androidx.test.InstrumentationRegistry
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.core.app.ApplicationProvider
 import com.adsamcik.slider.implementations.IntSlider
 import com.adsamcik.slider.scaleFunctions.LinearScale
-import junit.framework.Assert
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.junit.runner.RunWith
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -20,9 +19,8 @@ import java.util.concurrent.atomic.AtomicInteger
  *
  * @see [Testing documentation](http://d.android.com/tools/testing)
  */
-@RunWith(AndroidJUnit4::class)
 class IntSliderInstrumentationTest {
-	private val appContext = InstrumentationRegistry.getTargetContext()
+	private val appContext = ApplicationProvider.getApplicationContext<Context>()
 
 	private val atomicInteger = AtomicInteger(0)
 
@@ -156,7 +154,7 @@ class IntSliderInstrumentationTest {
 
 		slider.setPreferences(preferences, prefName, 1)
 
-		Assert.assertEquals(1, slider.value.toLong())
+		org.junit.Assert.assertEquals(1, slider.value.toLong())
 
 		slider.value = 4
 

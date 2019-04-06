@@ -1,14 +1,15 @@
 package com.adsamcik.slider
 
 
+import android.content.Context
 import android.preference.PreferenceManager
-import androidx.test.InstrumentationRegistry
+import androidx.test.core.app.ApplicationProvider
 import com.adsamcik.slider.implementations.IntValueSlider
 import org.junit.Assert
 import org.junit.Test
 
 class IntValueSliderTest {
-	private val appContext = InstrumentationRegistry.getTargetContext()
+	private val appContext = ApplicationProvider.getApplicationContext<Context>()
 
 	private val ints = arrayOf(0, 1, 2, 4, 7, 12)
 

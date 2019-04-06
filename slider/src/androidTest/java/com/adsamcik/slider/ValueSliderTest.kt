@@ -1,20 +1,20 @@
 package com.adsamcik.slider
 
 
+import android.content.Context
 import android.os.Build
 import android.os.Looper
 import android.preference.PreferenceManager
 import android.widget.SeekBar
 import android.widget.TextView
-import androidx.test.InstrumentationRegistry
+import androidx.test.core.app.ApplicationProvider
 import com.adsamcik.slider.implementations.ObjectValueSlider
-import junit.framework.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.concurrent.atomic.AtomicInteger
 
 class ValueSliderTest {
-	private val appContext = InstrumentationRegistry.getTargetContext()
+	private val appContext = ApplicationProvider.getApplicationContext<Context>()
 
 	private val strings = arrayOf("a", "b", "c", "d", "e", "f")
 
@@ -94,33 +94,33 @@ class ValueSliderTest {
 
 		slider.removeItems()
 
-		AssertUtility.assertException({ slider.value }, RuntimeException::class.java)
+		AssertUtility.assertException({ slider.value }, IllegalArgumentException::class.java)
 	}
 
 
 	@Test
 	@Throws(Exception::class)
 	fun invalidCodeInputTest() {
-		val appContext = InstrumentationRegistry.getTargetContext()
+		val appContext = ApplicationProvider.getApplicationContext<Context>()
 
 		val slider = ObjectValueSlider<String>(appContext)
 
-		AssertUtility.assertException({ slider.setProgress(15) }, RuntimeException::class.java)
+		AssertUtility.assertException({ slider.setProgress(15) }, IllegalArgumentException::class.java)
 
 		slider.setItems(strings)
 
-		AssertUtility.assertException({ slider.setProgress(15) }, RuntimeException::class.java)
-		AssertUtility.assertException({ slider.setProgress(-1) }, RuntimeException::class.java)
+		AssertUtility.assertException({ slider.setProgress(15) }, IllegalArgumentException::class.java)
+		AssertUtility.assertException({ slider.setProgress(-1) }, IllegalArgumentException::class.java)
 	}
 
 	@Test
 	@Throws(Exception::class)
 	fun exceptionTest() {
-		val appContext = InstrumentationRegistry.getTargetContext()
+		val appContext = ApplicationProvider.getApplicationContext<Context>()
 
 		val slider = ObjectValueSlider<String>(appContext)
 
-		AssertUtility.assertException({ slider.value }, RuntimeException::class.java)
+		AssertUtility.assertException({ slider.value }, IllegalArgumentException::class.java)
 	}
 
 	@Test
@@ -137,19 +137,19 @@ class ValueSliderTest {
 
 		slider.setPreferences(preferences, prefName, "d") { value -> value }
 
-		Assert.assertEquals("d", slider.value)
+		assertEquals("d", slider.value)
 
 		slider.value = "c"
 
 		val value = slider.value
-		Assert.assertEquals(value, preferences.getString(prefName, noPreference))
+		assertEquals(value, preferences.getString(prefName, noPreference))
 
 		slider.removePreferences()
 
 		slider.value = "b"
 
-		Assert.assertEquals(value, preferences.getString(prefName, noPreference))
-		Assert.assertEquals("b", slider.value)
+		assertEquals(value, preferences.getString(prefName, noPreference))
+		assertEquals("b", slider.value)
 
 		//cleanup
 		preferences.edit().remove(prefName).apply()
