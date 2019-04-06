@@ -11,6 +11,9 @@ import com.adsamcik.slider.SliderUtility
 import com.adsamcik.slider.abstracts.NumberSlider
 import com.adsamcik.slider.scaleFunctions.LinearScale
 
+/**
+ * Implementation of [NumberSlider] for [Int]
+ */
 class IntSlider : NumberSlider<Int> {
 	private var mMin = 0
 	private var mMax = 10

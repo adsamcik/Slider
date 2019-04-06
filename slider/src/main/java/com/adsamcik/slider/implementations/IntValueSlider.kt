@@ -5,6 +5,9 @@ import android.content.SharedPreferences
 import android.util.AttributeSet
 import com.adsamcik.slider.abstracts.ValueSlider
 
+/**
+ * Implementation of [ValueSlider] for [Int]
+ */
 class IntValueSlider : ValueSlider<Int> {
 	constructor(context: Context) : super(context)
 
