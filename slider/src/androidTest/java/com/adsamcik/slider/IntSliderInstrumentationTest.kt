@@ -13,7 +13,6 @@ import junit.framework.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.security.InvalidParameterException
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -209,9 +208,9 @@ class IntSliderInstrumentationTest {
 	@Test
 	fun exceptionTest() {
 		val slider = IntSlider(appContext)
-		EAssert.assertException({ slider.sliderStep = -5 }, RuntimeException::class.java)
+		AssertUtility.assertException({ slider.sliderStep = -5 }, RuntimeException::class.java)
 
-		EAssert.assertException({ slider.minValue = slider.maxValue }, InvalidParameterException::class.java)
-		EAssert.assertException({ slider.maxValue = slider.minValue }, InvalidParameterException::class.java)
+		AssertUtility.assertException({ slider.minValue = slider.maxValue }, IllegalArgumentException::class.java)
+		AssertUtility.assertException({ slider.maxValue = slider.minValue }, IllegalArgumentException::class.java)
 	}
 }

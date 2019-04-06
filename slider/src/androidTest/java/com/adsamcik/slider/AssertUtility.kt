@@ -4,7 +4,7 @@ import org.junit.Assert.assertEquals
 
 typealias Method = () -> Unit
 
-internal object EAssert {
+internal object AssertUtility {
 	/**
 	 * Asserts that given methods throws exception.
 	 *

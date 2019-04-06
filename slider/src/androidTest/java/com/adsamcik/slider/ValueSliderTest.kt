@@ -94,7 +94,7 @@ class ValueSliderTest {
 
 		slider.removeItems()
 
-		EAssert.assertException({ slider.value }, RuntimeException::class.java)
+		AssertUtility.assertException({ slider.value }, RuntimeException::class.java)
 	}
 
 
@@ -105,12 +105,12 @@ class ValueSliderTest {
 
 		val slider = ObjectValueSlider<String>(appContext)
 
-		EAssert.assertException({ slider.setProgress(15) }, RuntimeException::class.java)
+		AssertUtility.assertException({ slider.setProgress(15) }, RuntimeException::class.java)
 
 		slider.setItems(strings)
 
-		EAssert.assertException({ slider.setProgress(15) }, RuntimeException::class.java)
-		EAssert.assertException({ slider.setProgress(-1) }, RuntimeException::class.java)
+		AssertUtility.assertException({ slider.setProgress(15) }, RuntimeException::class.java)
+		AssertUtility.assertException({ slider.setProgress(-1) }, RuntimeException::class.java)
 	}
 
 	@Test
@@ -120,7 +120,7 @@ class ValueSliderTest {
 
 		val slider = ObjectValueSlider<String>(appContext)
 
-		EAssert.assertException({ slider.value }, RuntimeException::class.java)
+		AssertUtility.assertException({ slider.value }, RuntimeException::class.java)
 	}
 
 	@Test
