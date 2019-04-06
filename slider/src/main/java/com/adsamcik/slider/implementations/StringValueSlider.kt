@@ -6,15 +6,15 @@ import android.util.AttributeSet
 import com.adsamcik.slider.abstracts.ValueSlider
 
 class StringValueSlider : ValueSlider<String> {
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+	constructor(context: Context) : super(context)
+	constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+	constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    override fun loadProgress(sharedPreferences: SharedPreferences, preferenceString: String, defaultValue: String) {
-        value = sharedPreferences.getString(preferenceString, defaultValue)
-    }
+	override fun loadProgress(sharedPreferences: SharedPreferences, preferenceString: String, defaultValue: String) {
+		value = sharedPreferences.getString(preferenceString, defaultValue)
+	}
 
-    override fun updatePreferences(sharedPreferences: SharedPreferences, preferenceString: String, value: String) {
-        sharedPreferences.edit().putString(preferenceString, value).apply()
-    }
+	override fun updatePreferences(sharedPreferences: SharedPreferences, preferenceString: String, value: String) {
+		sharedPreferences.edit().putString(preferenceString, value).apply()
+	}
 }
