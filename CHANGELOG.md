@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.8.0] - 06-04-2019
+
+- Updated dependencies
+- Improved documentation
+- Fixed some possible issues
+- Add FloatValueSlider
+- mScale from NumberSlider now needs to be implemented in implementations
+
+## [0.7.0] - 23-06-2018
+
+- Updated to AndroidX
+- Target changed to API 28
+- Updated dependencies
+
 ## [0.6.0] - 16-02-2018
 
 - Converted to Kotlin
