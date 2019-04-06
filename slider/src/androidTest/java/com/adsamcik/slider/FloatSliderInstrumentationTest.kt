@@ -16,7 +16,7 @@ import org.junit.Test
 class FloatSliderInstrumentationTest {
 	private val DELTA = 0.00001f
 
-	val appContext = ApplicationProvider.getApplicationContext<Context>()
+	private val appContext = ApplicationProvider.getApplicationContext<Context>()!!
 
 	@Test
 	@Throws(Exception::class)

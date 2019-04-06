@@ -38,8 +38,8 @@
         android:id="@+id/minEditText"
         android:layout_width="189dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="min"
@@ -47,14 +47,15 @@
         android:tooltipText="min"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/slider"/>
+        app:layout_constraintTop_toBottomOf="@+id/slider"
+        tools:targetApi="28"/>
 
     <EditText
         android:id="@+id/maxEditText"
         android:layout_width="174dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginRight="16dp"
         android:ems="10"
         android:hint="max"
         android:inputType="numberSigned|numberDecimal"

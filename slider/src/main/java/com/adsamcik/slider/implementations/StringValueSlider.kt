@@ -8,6 +8,7 @@ import com.adsamcik.slider.abstracts.ValueSlider
 /**
  * Implementation of [ValueSlider] for [String]
  */
+@Suppress("UNUSED")
 class StringValueSlider : ValueSlider<String> {
 	constructor(context: Context) : super(context)
 	constructor(context: Context, attrs: AttributeSet) : super(context, attrs)

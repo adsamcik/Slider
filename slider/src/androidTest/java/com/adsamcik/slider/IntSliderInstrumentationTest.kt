@@ -51,7 +51,7 @@ class IntSliderInstrumentationTest {
 		val slider = IntSlider(appContext)
 		val textView = TextView(appContext)
 
-		slider.setTextView(textView) { value -> "Test " + value }
+		slider.setTextView(textView) { value -> "Test $value" }
 		slider.minValue = 0
 		slider.maxValue = 10
 		slider.value = 5

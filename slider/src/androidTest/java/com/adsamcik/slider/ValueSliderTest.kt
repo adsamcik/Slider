@@ -40,7 +40,7 @@ class ValueSliderTest {
 		val textView = TextView(appContext)
 
 		slider.setItems(strings)
-		slider.setTextView(textView) { value -> "Test " + value }
+		slider.setTextView(textView) { value -> "Test $value" }
 		slider.value = "d"
 
 		assertEquals("Test d", textView.text)
