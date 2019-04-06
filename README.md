@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/adsamcik/Slider.svg?branch=master)](https://travis-ci.org/adsamcik/Slider)
-[![codecov](https://codecov.io/gh/adsamcik/Slider/branch/master/graph/badge.svg)](https://codecov.io/gh/adsamcik/Slider)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f706029f5a5f453e8f59844caf711ed8)](https://www.codacy.com/app/adsamcik/Slider?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=adsamcik/Slider&amp;utm_campaign=Badge_Grade)
 [ ![Download](https://api.bintray.com/packages/adsamcik/android-components/slider/images/download.svg) ](https://bintray.com/adsamcik/android-components/slider/_latestVersion)
 
 # Slider
