@@ -58,6 +58,9 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
 		updateText()
 	}
 
+	/**
+	 * Removes assigned TextView and String function
+	 */
 	fun removeTextView() {
 		mTextView = null
 		mStringify = null
@@ -73,7 +76,7 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
 	abstract fun setValue(value: T, animate: Boolean)
 
 	/**
-	 * Set slider's preferences for automatic saving inside passed instance of [SharedPreferences].
+	 * Set Slider's preferences for automatic saving inside passed instance of [SharedPreferences].
 	 * Objects are either saved as strings using toString() method or more efficient way if Slider implementation implemented it
 	 *
 	 * @param sharedPreferences Instance of shared preferences
@@ -86,6 +89,9 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
 		loadProgress(sharedPreferences, preferenceString, defaultValue)
 	}
 
+	/**
+	 * Removes Slider's [SharedPreferences] and preference string
+	 */
 	open fun removePreferences() {
 		this.mPreferences = null
 		this.mPreferenceString = null
