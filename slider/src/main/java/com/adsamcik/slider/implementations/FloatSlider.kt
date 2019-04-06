@@ -5,14 +5,15 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.util.AttributeSet
 import androidx.annotation.RequiresApi
-import com.adsamcik.slider.EMath
-import com.adsamcik.slider.EMath.decimalPlaces
-import com.adsamcik.slider.EMath.round
 import com.adsamcik.slider.R
 import com.adsamcik.slider.Scale
+import com.adsamcik.slider.SliderUtility
+import com.adsamcik.slider.SliderUtility.decimalPlaces
+import com.adsamcik.slider.SliderUtility.round
 import com.adsamcik.slider.abstracts.NumberSlider
 import com.adsamcik.slider.scaleFunctions.LinearScale
 import java.security.InvalidParameterException
+import kotlin.math.roundToInt
 
 class FloatSlider : NumberSlider<Float> {
 	private var mStep = 1f
@@ -44,7 +45,7 @@ class FloatSlider : NumberSlider<Float> {
 			val diff = round(mMax - mMin, 5)
 			val m = (diff * percentPower).toInt()
 			setMax(m)
-			sliderStep = Math.round(mStep / diff * max)
+			sliderStep = (mStep / diff * max).roundToInt()
 			updateDecimalPlaces()
 		}
 
@@ -68,7 +69,7 @@ class FloatSlider : NumberSlider<Float> {
 	override var mScale: Scale<Float> = LinearScale.floatScale
 
 	private val stepProgress: Int
-		get() = EMath.step(progress, sliderStep)
+		get() = SliderUtility.step(progress, sliderStep)
 
 	constructor(context: Context) : super(context)
 	constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {

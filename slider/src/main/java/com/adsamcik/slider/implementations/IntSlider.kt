@@ -5,12 +5,11 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.util.AttributeSet
 import androidx.annotation.RequiresApi
-import com.adsamcik.slider.EMath
 import com.adsamcik.slider.R
 import com.adsamcik.slider.Scale
+import com.adsamcik.slider.SliderUtility
 import com.adsamcik.slider.abstracts.NumberSlider
 import com.adsamcik.slider.scaleFunctions.LinearScale
-import java.security.InvalidParameterException
 
 class IntSlider : NumberSlider<Int> {
 	private var mMin = 0
@@ -20,7 +19,7 @@ class IntSlider : NumberSlider<Int> {
 		get() = mMin
 		set(min) {
 			if (min >= mMax)
-				throw InvalidParameterException("Min must be smaller than max")
+				throw IllegalArgumentException("Min must be smaller than max")
 
 			mMin = min
 			updateSeekBarMax()
@@ -31,7 +30,7 @@ class IntSlider : NumberSlider<Int> {
 		get() = mMax
 		set(max) {
 			if (max <= mMin)
-				throw InvalidParameterException("Max must be larger than min")
+				throw IllegalArgumentException("Max must be larger than min")
 
 			mMax = max
 			updateSeekBarMax()
@@ -42,10 +41,10 @@ class IntSlider : NumberSlider<Int> {
 		get() = sliderStep
 		set(step) {
 			if (step <= 0)
-				throw InvalidParameterException("Step must be larger than 0")
+				throw IllegalArgumentException("Step must be larger than 0")
 
 			sliderStep = step
-			value = EMath.step(value, step)
+			value = SliderUtility.step(value, step)
 		}
 
 	override var value: Int
@@ -77,7 +76,7 @@ class IntSlider : NumberSlider<Int> {
 
 	@RequiresApi(24)
 	override fun setValue(value: Int, animate: Boolean) {
-		setProgress(toSliderProgress(EMath.step(value, sliderStep)), animate)
+		setProgress(toSliderProgress(SliderUtility.step(value, sliderStep)), animate)
 	}
 
 	override fun loadProgress(sharedPreferences: SharedPreferences, preferenceString: String, defaultValue: Int) {

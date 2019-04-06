@@ -69,7 +69,7 @@ abstract class ValueSlider<T> : Slider<T> {
 
 	private fun setProgressValueCheck(progress: Int) {
 		if (progress < 0 || progress > max)
-			throw RuntimeException("Progress must be larger than 0 and not larger than $max. Was $progress")
+			throw IllegalArgumentException("Progress must be larger than 0 and not larger than $max. Was $progress")
 	}
 
 	protected fun getValueIndex(item: T): Int = mItems?.indexOf(item) ?: -1

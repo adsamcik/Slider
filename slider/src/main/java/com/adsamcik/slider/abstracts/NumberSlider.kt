@@ -3,9 +3,12 @@ package com.adsamcik.slider.abstracts
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.SeekBar
-import com.adsamcik.slider.EMath
 import com.adsamcik.slider.Scale
+import com.adsamcik.slider.SliderUtility
 
+/**
+ * Abstract implementation of [Slider] for numbers
+ */
 abstract class NumberSlider<N : Number> : Slider<N> {
 	/**
 	 * Step used by SeekBar
@@ -64,7 +67,7 @@ abstract class NumberSlider<N : Number> : Slider<N> {
 	 * @return Value after rounding to nearest step
 	 */
 	private fun roundToStep(value: Int): Int {
-		return EMath.step(value, sliderStep)
+		return SliderUtility.step(value, sliderStep)
 	}
 
 	override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {

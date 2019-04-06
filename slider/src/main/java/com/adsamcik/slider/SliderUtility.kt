@@ -1,6 +1,9 @@
 package com.adsamcik.slider
 
-internal object EMath {
+import kotlin.math.abs
+import kotlin.math.pow
+
+internal object SliderUtility {
 	/**
 	 * Returns number of decimal places in float.
 	 * Whole numbers can return 1 instead of 0, however there was no reason to change it for current use case.
@@ -21,8 +24,8 @@ internal object EMath {
 	 * @return Rounded number
 	 */
 	fun round(value: Float, precision: Int): Float {
-		val scale = Math.pow(10.0, precision.toDouble()).toInt()
-		return Math.round(value * scale) / scale.toFloat()
+		val scale = 10.0.pow(precision.toDouble())
+		return (kotlin.math.round(value * scale) / scale).toFloat()
 	}
 
 	/**
@@ -54,15 +57,9 @@ internal object EMath {
 	fun step(value: Int, step: Int): Int {
 		val left = value % step
 		val roundDown = value - left
-		return if (Math.abs(left) >= Math.abs(step) / 2f) roundDown + step else roundDown
+		return if (abs(left) >= abs(step) / 2f) roundDown + step else roundDown
 	}
 
-	/**
-	 * Returns sign for integer numbers
-	 *
-	 * @param value Value
-	 * @return Signum of value
-	 */
 	private fun sign(value: Int): Int {
 		return when {
 			value > 0 -> 1
