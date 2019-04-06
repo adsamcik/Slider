@@ -16,7 +16,7 @@ open class ObjectValueSlider<T> : ValueSlider<T> {
 	override fun loadProgress(sharedPreferences: SharedPreferences, preferenceString: String, defaultValue: T) {
 		val defaultString = mPreferenceToString?.invoke(defaultValue) ?: defaultValue.toString()
 		val loadedValue = sharedPreferences.getString(preferenceString, defaultString)
-		var index = getItemIndex(loadedValue!!)
+		var index = getItemIndex(loadedValue)
 		if (index >= 0)
 			super.setProgress(index)
 		else {
@@ -56,10 +56,13 @@ open class ObjectValueSlider<T> : ValueSlider<T> {
 		sharedPreferences.edit().putString(preferenceString, value.toString()).apply()
 	}
 
+	@Suppress("PRIVATE")
+	protected fun getItemIndex(item: String?): Int {
+		if (item == null)
+			return -1
 
-	protected fun getItemIndex(item: String): Int {
-		if (mItems != null) {
-			val items = mItems!!
+		val items = mItems
+		if (items != null) {
 			for (i in items.indices) {
 				val sItem = mPreferenceToString?.invoke(items[i]) ?: items[i].toString()
 				if (item == sItem)

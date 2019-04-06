@@ -4,16 +4,16 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.annotation.RequiresApi
 
-
 abstract class ValueSlider<T> : Slider<T> {
 	protected var mItems: Array<T>? = null
 
 	override var value: T
 		get() {
-			return if (mItems == null)
+			val items = mItems
+			return if (items == null)
 				throw RuntimeException("You must first set items before requesting value")
 			else
-				mItems!![progress]
+				items[progress]
 		}
 		set(item) {
 			progress = getValueIndex(item)
@@ -37,7 +37,7 @@ abstract class ValueSlider<T> : Slider<T> {
 		if (items.size < 2)
 			throw RuntimeException("Value slider requires 2 or more values")
 
-		progress = 0
+		progress = progress.coerceIn(0, items.size)
 		max = items.size - 1
 		this.mItems = items
 	}

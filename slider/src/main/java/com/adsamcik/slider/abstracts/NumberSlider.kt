@@ -38,14 +38,18 @@ abstract class NumberSlider<N : Number> : Slider<N> {
 	 */
 	abstract var step: N
 
+
+	protected abstract var mScale: Scale<N>
+
 	/**
 	 * Returns current scale function
 	 *
 	 * @return Scale function
 	 */
-	var scale: Scale<N>? = null
+	var scale: Scale<N>
+		get() = mScale
 		set(value) {
-			field = value
+			mScale = value
 			updateText()
 		}
 

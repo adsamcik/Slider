@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import androidx.annotation.RequiresApi
 import com.adsamcik.slider.EMath
 import com.adsamcik.slider.R
+import com.adsamcik.slider.Scale
 import com.adsamcik.slider.abstracts.NumberSlider
 import com.adsamcik.slider.scaleFunctions.LinearScale
 import java.security.InvalidParameterException
@@ -48,8 +49,10 @@ class IntSlider : NumberSlider<Int> {
 		}
 
 	override var value: Int
-		get() = scale!!.invoke(progress, max, mMin, mMax)
+		get() = scale.invoke(progress, max, mMin, mMax)
 		set(progress) = setProgress(toSliderProgress(progress))
+
+	override var mScale: Scale<Int> = LinearScale.integerScale
 
 	constructor(context: Context) : super(context)
 
@@ -59,10 +62,6 @@ class IntSlider : NumberSlider<Int> {
 
 	constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
 		setAttrs(context, attrs)
-	}
-
-	init {
-		scale = LinearScale.integerScale
 	}
 
 	private fun setAttrs(context: Context, attrs: AttributeSet) {

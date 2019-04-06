@@ -12,10 +12,16 @@ import com.adsamcik.slider.OnValueChange
 import com.adsamcik.slider.Stringify
 
 abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
+	@Suppress("PRIVATE")
 	protected var mTextView: TextView? = null
+
+	@Suppress("PRIVATE")
 	protected var mStringify: Stringify<T>? = null
 
+	@Suppress("PRIVATE")
 	protected var mOnSeekBarChangeListener: SeekBar.OnSeekBarChangeListener? = null
+
+	@Suppress("PRIVATE")
 	protected var mOnValueChangeListener: OnValueChange<T>? = null
 
 	private var mPreferences: SharedPreferences? = null
@@ -133,8 +139,12 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
 
 		mOnValueChangeListener?.invoke(value, fromUser)
 
-		if (mPreferences != null)
-			updatePreferences(mPreferences!!, mPreferenceString!!, value)
+		val preferences = mPreferences
+		if (preferences != null) {
+			val preferenceString = mPreferenceString
+					?: throw RuntimeException("Preferences set, but preference string is null")
+			updatePreferences(preferences, preferenceString, value)
+		}
 	}
 
 	override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -150,6 +160,10 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
 	 * Updates TextView if it is not null using stringify function
 	 */
 	protected fun updateText() {
-		mTextView?.text = mStringify!!.invoke(value)
+		val textView = mTextView
+		if(textView != null) {
+			val stringify = mStringify ?: throw RuntimeException("TextView is set, but stringify is null")
+			mTextView?.text = stringify.invoke(value)
+		}
 	}
 }
