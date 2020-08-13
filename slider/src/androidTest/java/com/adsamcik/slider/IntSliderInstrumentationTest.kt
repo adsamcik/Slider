@@ -13,6 +13,7 @@ import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.math.roundToLong
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -101,7 +102,7 @@ class IntSliderInstrumentationTest {
 		slider.step = 3
 		for (i in 0..11) {
 			slider.value = i
-			assertEquals(Math.round(i / 3.0) * 3, slider.value.toLong())
+			assertEquals((i / 3.0).roundToLong() * 3, slider.value.toLong())
 		}
 	}
 
@@ -114,7 +115,7 @@ class IntSliderInstrumentationTest {
 		slider.step = 3
 		for (i in -15..15) {
 			slider.value = i
-			assertEquals(Math.round(i / 3.0) * 3, slider.value.toLong())
+			assertEquals((i / 3.0).roundToLong() * 3, slider.value.toLong())
 		}
 	}
 

@@ -7,6 +7,8 @@ import androidx.test.core.app.ApplicationProvider
 import com.adsamcik.slider.implementations.FloatSlider
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import kotlin.math.pow
+import kotlin.math.roundToInt
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -14,17 +16,20 @@ import org.junit.Test
  * @see [Testing documentation](http://d.android.com/tools/testing)
  */
 class FloatSliderInstrumentationTest {
-	private val DELTA = 0.00001f
+	companion object {
+		private const val DELTA = 0.00001f
+	}
 
 	private val appContext = ApplicationProvider.getApplicationContext<Context>()!!
 
+	@Suppress("LocalVariableName")
 	@Test
 	@Throws(Exception::class)
 	fun baseTest() {
 		val MAX = 9f
 		val MIN = 1f
 		val PLACES = 1
-		val POW = (100 * Math.pow(10.0, PLACES.toDouble())).toInt()
+		val POW = (100 * 10.0.pow(PLACES.toDouble())).toInt()
 		val MAX_SLIDER = (MAX - MIN) * POW
 
 		val slider = FloatSlider(appContext)
@@ -48,7 +53,7 @@ class FloatSliderInstrumentationTest {
 		slider.step = 3f
 		for (i in 0..11) {
 			slider.value = i.toFloat()
-			assertEquals((Math.round(i / 3.0) * 3).toFloat(), slider.value, DELTA)
+			assertEquals(((i / 3.0).roundToInt() * 3).toFloat(), slider.value, DELTA)
 		}
 	}
 
@@ -61,7 +66,7 @@ class FloatSliderInstrumentationTest {
 		slider.step = 3f
 		for (i in -15..15) {
 			slider.value = i.toFloat()
-			assertEquals(Math.round(i / 3f) * 3f, slider.value, DELTA)
+			assertEquals((i / 3f).roundToInt() * 3f, slider.value, DELTA)
 		}
 	}
 
@@ -75,7 +80,7 @@ class FloatSliderInstrumentationTest {
 		var i = -1.5f
 		while (i <= 1.5f) {
 			slider.value = i
-			assertEquals(Math.round(i / 0.3f) * 0.3f, slider.value, DELTA)
+			assertEquals((i / 0.3f).roundToInt() * 0.3f, slider.value, DELTA)
 			i += 0.3f
 		}
 	}
@@ -83,7 +88,7 @@ class FloatSliderInstrumentationTest {
 	@Test
 	@Throws(Exception::class)
 	fun sharedPreferences() {
-		val preferences = PreferenceManager.getDefaultSharedPreferences(appContext)
+		val preferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(appContext)
 		preferences.edit().clear().apply()
 
 		val prefName = "TESTING PREFERENCE"
@@ -109,7 +114,7 @@ class FloatSliderInstrumentationTest {
 		slider.step = 3f
 		slider.value = 15f
 
-		slider.setTextView(TextView(appContext)) { `val` -> java.lang.Float.toString(`val`) }
+		slider.setTextView(TextView(appContext)) { `val` -> `val`.toString() }
 
 		slider.onProgressChanged(slider, 14, true)
 	}

@@ -13,6 +13,7 @@ import com.adsamcik.slider.SliderUtility.round
 import com.adsamcik.slider.abstracts.NumberSlider
 import com.adsamcik.slider.scaleFunctions.LinearScale
 import java.security.InvalidParameterException
+import kotlin.math.pow
 import kotlin.math.roundToInt
 
 /**
@@ -28,7 +29,7 @@ class FloatSlider : NumberSlider<Float> {
 	private var mDecimalPlaces = 0
 
 	private val percentPower: Int
-		get() = 100 * Math.pow(10.0, mDecimalPlaces.toDouble()).toInt()
+		get() = 100 * 10.0.pow(mDecimalPlaces.toDouble()).toInt()
 
 	override var minValue: Float
 		get() = mMin
