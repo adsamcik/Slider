@@ -53,3 +53,4 @@ google-services.json
 gradle.properties
 
 .vscode/
+.idea/
