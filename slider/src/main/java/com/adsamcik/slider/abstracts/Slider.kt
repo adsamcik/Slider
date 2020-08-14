@@ -5,12 +5,11 @@ import android.content.SharedPreferences
 import android.util.AttributeSet
 import android.widget.SeekBar
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatSeekBar
 import com.adsamcik.slider.OnValueChange
 import com.adsamcik.slider.Stringify
 
 /**
- * Base Slider class that implements [AppCompatSeekBar]
+ * Base Slider class
  */
 abstract class Slider<T> : FluidSlider {
 	@Suppress("PRIVATE")
