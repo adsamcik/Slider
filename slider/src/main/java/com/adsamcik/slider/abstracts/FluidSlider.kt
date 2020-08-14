@@ -17,6 +17,8 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewOutlineProvider
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import com.adsamcik.slider.R
 import com.adsamcik.slider.SliderUtility
@@ -580,9 +582,6 @@ abstract class FluidSlider @JvmOverloads constructor(
 		}
 		MotionEvent.ACTION_UP,
 		MotionEvent.ACTION_CANCEL -> {
-			if (fluidStep > 0) {
-				position = SliderUtility.step(position, fluidStep)
-			}
 			touchX?.let {
 				touchX = null
 				endTrackingListener?.invoke()
@@ -779,6 +778,7 @@ abstract class FluidSlider @JvmOverloads constructor(
 	private fun hideLabel() {
 		val labelVOffset = (topCircleDiameter - labelRectDiameter) / 2f
 		val animation = ValueAnimator.ofFloat(rectTopCircle.top, barVerticalOffset)
+		animation.interpolator = AccelerateInterpolator()
 		animation.addUpdateListener {
 			val value = it.animatedValue as Float
 			rectTopCircle.offsetTo(rectTopCircle.left, value)
@@ -787,6 +787,15 @@ abstract class FluidSlider @JvmOverloads constructor(
 		}
 		animation.duration = duration
 		animation.start()
+
+		val positionSnapAnimation = ValueAnimator.ofFloat(position, fluidPosition)
+		positionSnapAnimation.interpolator = DecelerateInterpolator(2f)
+		positionSnapAnimation.addUpdateListener {
+			position = it.animatedValue as Float
+			invalidate()
+		}
+		positionSnapAnimation.duration = duration
+		positionSnapAnimation.start()
 	}
 
 }
