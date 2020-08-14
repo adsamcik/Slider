@@ -1,22 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.adsamcik.slidertest.MainActivity">
-
-    <TextView
-        android:id="@+id/slider_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Hello World!"
-        app:layout_constraintHorizontal_bias="0.051"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
 
     <com.adsamcik.slider.implementations.IntSlider
         android:id="@+id/slider"
@@ -29,10 +17,9 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/slider_title"
         app:maxInt="10"
         app:minInt="2"
-        app:stepInt="2"/>
+        app:stepInt="2" />
 
     <EditText
         android:id="@+id/minEditText"
@@ -44,11 +31,12 @@
         android:ems="10"
         android:hint="min"
         android:inputType="numberSigned|numberDecimal"
+        android:text="2"
         android:tooltipText="min"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/slider"
-        tools:targetApi="28"/>
+        tools:targetApi="28" />
 
     <EditText
         android:id="@+id/maxEditText"
@@ -59,9 +47,10 @@
         android:ems="10"
         android:hint="max"
         android:inputType="numberSigned|numberDecimal"
+        android:text="10"
         android:tooltipText="max"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/slider"/>
+        app:layout_constraintTop_toBottomOf="@+id/slider" />
 
     <EditText
         android:id="@+id/stepEditText"
@@ -72,7 +61,8 @@
         android:ems="10"
         android:hint="step"
         android:inputType="numberSigned|numberDecimal"
+        android:text="2"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/minEditText"/>
+        app:layout_constraintTop_toBottomOf="@+id/minEditText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

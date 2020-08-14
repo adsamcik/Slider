@@ -1,11 +1,9 @@
 package com.adsamcik.slider
 
 import android.content.Context
-import android.os.Build
 import android.os.Looper
 import android.preference.PreferenceManager
 import android.widget.SeekBar
-import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import com.adsamcik.slider.implementations.IntSlider
 import com.adsamcik.slider.scaleFunctions.LinearScale
@@ -21,9 +19,14 @@ import kotlin.math.roundToLong
  * @see [Testing documentation](http://d.android.com/tools/testing)
  */
 class IntSliderInstrumentationTest {
+	companion object {
+		private const val FLUID_DELTA = 0.0001f
+	}
+
 	private val appContext = ApplicationProvider.getApplicationContext<Context>()
 
 	private val atomicInteger = AtomicInteger(0)
+
 
 	@Test
 	@Throws(Exception::class)
@@ -33,36 +36,16 @@ class IntSliderInstrumentationTest {
 		slider.maxValue = 9
 		slider.step = 2
 		slider.value = 5
-		slider.removeTextView()
+		slider.setStringify(null)
 
 		assertEquals(1, slider.minValue.toLong())
 		assertEquals(9, slider.maxValue.toLong())
-		assertEquals(8, slider.max.toLong())
-		assertEquals(4, slider.progress.toLong())
+		assertEquals(0.5f, slider.fluidPosition, FLUID_DELTA)
 		assertEquals(5, slider.value.toLong())
 
 		val scale = LinearScale.integerScale
 		slider.scale = scale
 		assertEquals(scale, slider.scale)
-	}
-
-	@Test
-	@Throws(Exception::class)
-	fun textViewTest() {
-		val slider = IntSlider(appContext)
-		val textView = TextView(appContext)
-
-		slider.setTextView(textView) { value -> "Test $value" }
-		slider.minValue = 0
-		slider.maxValue = 10
-		slider.value = 5
-
-		assertEquals("Test 5", textView.text)
-
-		slider.removeTextView()
-		slider.value = 8
-		assertEquals("Test 5", textView.text)
-		assertEquals(8, slider.value.toLong())
 	}
 
 	@Test
@@ -76,21 +59,16 @@ class IntSliderInstrumentationTest {
 		slider.maxValue = 10
 		slider.value = 5
 
-		assertEquals(5, slider.progress.toLong())
+		assertEquals(0.5f, slider.fluidPosition, FLUID_DELTA)
 
-		if (Build.VERSION.SDK_INT >= 24)
-			slider.setValue(8, false)
-		else
-			slider.value = 8
+		slider.value = 8
 
-		assertEquals(8, slider.progress.toLong())
+		assertEquals(0.8f, slider.fluidPosition, FLUID_DELTA)
 
-		if (Build.VERSION.SDK_INT >= 24)
-			slider.setValue(3, true)
-		else
-			slider.value = 3
 
-		assertEquals(3, slider.progress.toLong())
+		slider.value = 3
+
+		assertEquals(0.3f, slider.fluidPosition, FLUID_DELTA)
 	}
 
 	@Test
@@ -180,36 +158,30 @@ class IntSliderInstrumentationTest {
 
 		val valueChangeListener: OnValueChange<Int> = { _, _ -> atomicInteger.incrementAndGet() }
 
-		slider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-			override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
-				atomicInteger.incrementAndGet()
-			}
-
-			override fun onStartTrackingTouch(seekBar: SeekBar) {
-
-			}
-
-			override fun onStopTrackingTouch(seekBar: SeekBar) {
-
-			}
-		})
-
 		slider.setOnValueChangeListener(valueChangeListener)
 		slider.value = 5
-		assertEquals(2, atomicInteger.get().toLong())
+		assertEquals(1, atomicInteger.get().toLong())
 
 		slider.setOnValueChangeListener(null)
-		slider.setOnSeekBarChangeListener(null)
 		slider.value = 3
-		assertEquals(2, atomicInteger.get().toLong())
+		assertEquals(1, atomicInteger.get().toLong())
 	}
 
 	@Test
 	fun exceptionTest() {
 		val slider = IntSlider(appContext)
-		AssertUtility.assertException({ slider.sliderStep = -5 }, IllegalArgumentException::class.java)
+		AssertUtility.assertException(
+				{ slider.step = -5 },
+				IllegalArgumentException::class.java
+		)
 
-		AssertUtility.assertException({ slider.minValue = slider.maxValue }, IllegalArgumentException::class.java)
-		AssertUtility.assertException({ slider.maxValue = slider.minValue }, IllegalArgumentException::class.java)
+		AssertUtility.assertException(
+				{ slider.minValue = slider.maxValue },
+				IllegalArgumentException::class.java
+		)
+		AssertUtility.assertException(
+				{ slider.maxValue = slider.minValue },
+				IllegalArgumentException::class.java
+		)
 	}
 }

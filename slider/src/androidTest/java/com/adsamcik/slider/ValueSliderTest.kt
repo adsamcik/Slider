@@ -2,9 +2,7 @@ package com.adsamcik.slider
 
 
 import android.content.Context
-import android.os.Build
 import android.os.Looper
-import android.preference.PreferenceManager
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
@@ -27,28 +25,10 @@ class ValueSliderTest {
 
 		slider.setItems(strings)
 		slider.value = "b"
-		slider.removeTextView()
 
 		assertEquals("b", slider.value)
-		assertEquals((strings.size - 1).toLong(), slider.max.toLong())
-	}
 
-	@Test
-	@Throws(Exception::class)
-	fun textViewTest() {
-		val slider = ObjectValueSlider<String>(appContext)
-		val textView = TextView(appContext)
-
-		slider.setItems(strings)
-		slider.setTextView(textView) { value -> "Test $value" }
-		slider.value = "d"
-
-		assertEquals("Test d", textView.text)
-
-		slider.removeTextView()
-		slider.value = "a"
-		assertEquals("Test d", textView.text)
-		assertEquals("a", slider.value)
+		assertEquals(1, slider.index)
 	}
 
 	@Test
@@ -62,22 +42,16 @@ class ValueSliderTest {
 		slider.value = "a"
 
 		assertEquals("a", slider.value)
-		assertEquals(0, slider.progress.toLong())
+		assertEquals(0f, slider.fluidPosition)
 
-		if (Build.VERSION.SDK_INT >= 24)
-			slider.setValue("f", false)
-		else
-			slider.value = "f"
+		slider.value = "f"
 
-		assertEquals(5, slider.progress.toLong())
+		assertEquals(1f, slider.fluidPosition)
 		assertEquals("f", slider.value)
 
-		if (Build.VERSION.SDK_INT >= 24)
-			slider.setValue("b", true)
-		else
-			slider.value = "b"
+		slider.value = "b"
 
-		assertEquals(1, slider.progress.toLong())
+		assertEquals(0.2f, slider.fluidPosition)
 		assertEquals("b", slider.value)
 	}
 
@@ -105,12 +79,16 @@ class ValueSliderTest {
 
 		val slider = ObjectValueSlider<String>(appContext)
 
-		AssertUtility.assertException({ slider.setProgress(15) }, IllegalArgumentException::class.java)
+		AssertUtility.assertException(
+				{ slider.index = 15 },
+				NullPointerException::class.java
+		)
 
 		slider.setItems(strings)
 
-		AssertUtility.assertException({ slider.setProgress(15) }, IllegalArgumentException::class.java)
-		AssertUtility.assertException({ slider.setProgress(-1) }, IllegalArgumentException::class.java)
+		//checks whether it crashes here, it shouldn't
+		slider.index = 15
+		slider.index = -1
 	}
 
 	@Test
@@ -126,7 +104,7 @@ class ValueSliderTest {
 	@Test
 	@Throws(Exception::class)
 	fun sharedPreferences() {
-		val preferences = PreferenceManager.getDefaultSharedPreferences(appContext)
+		val preferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(appContext)
 		val prefName = "TESTING PREFERENCE"
 		val noPreference = "NO PREFERENCE"
 
@@ -163,27 +141,12 @@ class ValueSliderTest {
 
 		val valueChangeListener: OnValueChange<String> = { _, _ -> atomicInteger.incrementAndGet() }
 
-		slider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-			override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
-				atomicInteger.incrementAndGet()
-			}
-
-			override fun onStartTrackingTouch(seekBar: SeekBar) {
-
-			}
-
-			override fun onStopTrackingTouch(seekBar: SeekBar) {
-
-			}
-		})
-
 		slider.setOnValueChangeListener(valueChangeListener)
 		slider.value = "d"
-		assertEquals(2, atomicInteger.get().toLong())
+		assertEquals(1, atomicInteger.get().toLong())
 
 		slider.setOnValueChangeListener(null)
-		slider.setOnSeekBarChangeListener(null)
 		slider.value = "c"
-		assertEquals(2, atomicInteger.get().toLong())
+		assertEquals(1, atomicInteger.get().toLong())
 	}
 }

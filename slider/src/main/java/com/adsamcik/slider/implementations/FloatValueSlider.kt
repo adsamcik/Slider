@@ -16,7 +16,7 @@ class FloatValueSlider : ValueSlider<Float> {
 	constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
 	override fun loadProgress(sharedPreferences: SharedPreferences, preferenceString: String, defaultValue: Float) {
-		super.setProgress(getValueIndex(sharedPreferences.getFloat(preferenceString, defaultValue)))
+		value = sharedPreferences.getFloat(preferenceString, defaultValue)
 	}
 
 	override fun updatePreferences(sharedPreferences: SharedPreferences, preferenceString: String, value: Float) {

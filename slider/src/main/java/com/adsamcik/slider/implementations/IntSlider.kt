@@ -2,12 +2,9 @@ package com.adsamcik.slider.implementations
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.os.Build
 import android.util.AttributeSet
-import androidx.annotation.RequiresApi
 import com.adsamcik.slider.R
 import com.adsamcik.slider.Scale
-import com.adsamcik.slider.SliderUtility
 import com.adsamcik.slider.abstracts.NumberSlider
 import com.adsamcik.slider.scaleFunctions.LinearScale
 
@@ -21,38 +18,32 @@ class IntSlider : NumberSlider<Int> {
 	override var minValue: Int
 		get() = mMin
 		set(min) {
-			if (min >= mMax)
-				throw IllegalArgumentException("Min must be smaller than max")
-
 			mMin = min
-			updateSeekBarMax()
-			updateText()
+			invalidatePosition()
 		}
 
 	override var maxValue: Int
 		get() = mMax
 		set(max) {
-			if (max <= mMin)
-				throw IllegalArgumentException("Max must be larger than min")
-
 			mMax = max
-			updateSeekBarMax()
-			updateText()
+			invalidatePosition()
 		}
 
-	override var step: Int
-		get() = sliderStep
+	override var step: Int = 1
 		set(step) {
-			if (step <= 0)
-				throw IllegalArgumentException("Step must be larger than 0")
+			require(step > 0) { "Step must be larger than 0" }
 
-			sliderStep = step
-			value = SliderUtility.step(value, step)
+			fluidStep = step.toFloat() / (mMax - mMin).toFloat()
+			field = step
+
+			invalidatePosition()
 		}
 
 	override var value: Int
-		get() = scale.invoke(progress, max, mMin, mMax)
-		set(progress) = setProgress(toSliderProgress(progress))
+		get() = scale.invoke(fluidPosition, mMin, mMax)
+		set(value) {
+			invalidatePosition(value)
+		}
 
 	override var mScale: Scale<Int> = LinearScale.integerScale
 
@@ -62,39 +53,49 @@ class IntSlider : NumberSlider<Int> {
 		setAttrs(context, attrs)
 	}
 
-	constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+	constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+			context,
+			attrs,
+			defStyleAttr
+	) {
 		setAttrs(context, attrs)
 	}
 
 	private fun setAttrs(context: Context, attrs: AttributeSet) {
 		val ta = context.obtainStyledAttributes(attrs, R.styleable.IntSlider)
-		mMin = ta.getInteger(R.styleable.IntSlider_minInt, if (Build.VERSION.SDK_INT >= 26) min else 0)
-		mMax = ta.getInteger(R.styleable.IntSlider_maxInt, max)
+		mMin = ta.getInteger(
+				R.styleable.IntSlider_minInt,
+				mMin
+		)
+		mMax = ta.getInteger(R.styleable.IntSlider_maxInt, mMax)
 		step = ta.getInteger(R.styleable.IntSlider_stepInt, 1)
 		ta.recycle()
 
-		updateSeekBarMax()
-		updateText()
+		invalidatePosition()
 	}
 
-	@RequiresApi(24)
-	override fun setValue(value: Int, animate: Boolean) {
-		setProgress(toSliderProgress(SliderUtility.step(value, sliderStep)), animate)
-	}
-
-	override fun loadProgress(sharedPreferences: SharedPreferences, preferenceString: String, defaultValue: Int) {
+	override fun loadProgress(
+			sharedPreferences: SharedPreferences,
+			preferenceString: String,
+			defaultValue: Int
+	) {
 		value = sharedPreferences.getInt(preferenceString, defaultValue)
 	}
 
-	public override fun updatePreferences(sharedPreferences: SharedPreferences, preferenceString: String, value: Int) {
+	public override fun updatePreferences(
+			sharedPreferences: SharedPreferences,
+			preferenceString: String,
+			value: Int
+	) {
 		sharedPreferences.edit().putInt(preferenceString, value).apply()
 	}
 
-	private fun updateSeekBarMax() {
-		max = mMax - mMin
+	override fun invalidatePosition() {
+		invalidatePosition(value)
+		invalidateText()
 	}
 
-	private fun toSliderProgress(progress: Int): Int {
-		return progress - mMin
+	protected fun invalidatePosition(value: Int) {
+		fluidPosition = (value - mMin).toFloat() / (mMax - mMin).toFloat()
 	}
 }

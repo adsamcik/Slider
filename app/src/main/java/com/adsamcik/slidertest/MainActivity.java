@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		IntSlider slider = findViewById(R.id.slider);
-		slider.setTextView(findViewById(R.id.slider_title), String::valueOf);
+		slider.setStringify(String::valueOf);
 
 		EditText minEditText = findViewById(R.id.minEditText);
 		minEditText.addTextChangedListener(new TextWatcher() {

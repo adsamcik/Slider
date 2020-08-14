@@ -2,7 +2,7 @@ package com.adsamcik.slider.abstracts
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.annotation.RequiresApi
+import kotlin.math.round
 
 /**
  * Abstract implementation of [Slider] that allows the use of custom value lists
@@ -10,23 +10,44 @@ import androidx.annotation.RequiresApi
 abstract class ValueSlider<T> : Slider<T> {
 	protected var mItems: Array<T>? = null
 
+	/**
+	 * Number of items in value slider
+	 */
+	val size: Int get() = mItems?.size ?: 0
+
+	/**
+	 * Selected index
+	 */
+	var index: Int
+		get() {
+			val size = size
+			if(size == 0) return -1
+
+			return round(fluidPosition / fluidStep).toInt()
+		}
+		set(value) {
+			fluidPosition = value * fluidStep
+		}
+
 	override var value: T
 		get() {
 			val items = mItems
 					?: throw NullPointerException("You must first set items before requesting value")
-			return items[progress]
+			return items[index]
 		}
 		set(item) {
-			progress = getValueIndex(item)
+			val index = getValueIndex(item)
+			fluidPosition = index * fluidStep
+			this.index = index
 		}
 
 	constructor(context: Context) : super(context)
 	constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-	constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-	init {
-		max = 0
-	}
+	constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+			context,
+			attrs,
+			defStyleAttr
+	)
 
 	/**
 	 * Sets items.
@@ -35,12 +56,21 @@ abstract class ValueSlider<T> : Slider<T> {
 	 * @param items Items
 	 */
 	fun setItems(items: Array<T>) {
-		if (items.size < 2)
-			throw IllegalArgumentException("Value slider requires 2 or more values")
+		require(items.size >= 2) { "Value slider requires 2 or more values" }
 
-		progress = progress.coerceIn(0, items.size)
-		max = items.size - 1
 		this.mItems = items
+
+		fluidStep = 1f / (items.size - 1).toFloat()
+
+		invalidateText()
+	}
+
+	override fun onTextInvalidated() {
+		val items = mItems
+		if (items != null) {
+			endText = stringify.invoke(items.last())
+			startText = stringify.invoke(items.first())
+		}
 	}
 
 	/**
@@ -50,28 +80,6 @@ abstract class ValueSlider<T> : Slider<T> {
 		this.mItems = null
 	}
 
-
-	@RequiresApi(24)
-	override fun setValue(value: T, animate: Boolean) {
-		val index = getValueIndex(value)
-		setProgress(index, animate)
-	}
-
-	@Synchronized
-	override fun setProgress(progress: Int) {
-		setProgressValueCheck(progress)
-		super.setProgress(progress)
-	}
-
-	override fun setProgress(progress: Int, animate: Boolean) {
-		setProgressValueCheck(progress)
-		super.setProgress(progress, animate)
-	}
-
-	private fun setProgressValueCheck(progress: Int) {
-		if (progress < 0 || progress > max)
-			throw IllegalArgumentException("Progress must be larger than 0 and not larger than $max. Was $progress")
-	}
 
 	protected fun getValueIndex(item: T): Int = mItems?.indexOf(item) ?: -1
 }

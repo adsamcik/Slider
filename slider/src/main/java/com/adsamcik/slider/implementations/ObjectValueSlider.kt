@@ -14,21 +14,30 @@ open class ObjectValueSlider<T> : ValueSlider<T> {
 
 	constructor(context: Context) : super(context)
 	constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-	constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+	constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+			context,
+			attrs,
+			defStyleAttr
+	)
 
-	override fun loadProgress(sharedPreferences: SharedPreferences, preferenceString: String, defaultValue: T) {
+	override fun loadProgress(
+			sharedPreferences: SharedPreferences,
+			preferenceString: String,
+			defaultValue: T
+	) {
 		val defaultString = mPreferenceToString?.invoke(defaultValue) ?: defaultValue.toString()
 		val loadedValue = sharedPreferences.getString(preferenceString, defaultString)
-		var index = getItemIndex(loadedValue)
-		if (index >= 0)
-			super.setProgress(index)
+		var newIndex = getItemIndex(loadedValue)
+		if (newIndex >= 0)
+			this.index = newIndex
 		else {
 			if (loadedValue != defaultString) {
-				index = getItemIndex(defaultString)
-				if (index >= 0)
-					super.setProgress(index)
-				else
+				newIndex = getItemIndex(defaultString)
+				if (newIndex >= 0) {
+					index = newIndex
+				} else {
 					throw IllegalArgumentException("Neither loaded value ($loadedValue) nor default value ($defaultString) were found")
+				}
 			}
 
 			throw IllegalArgumentException("Default value $defaultString was not found")
@@ -44,7 +53,12 @@ open class ObjectValueSlider<T> : ValueSlider<T> {
 	 * @param defaultValue      Default value if no value is saved in shared preferences
 	 * @param itemsToString     function to convert object to string so they can be saved to shared preferences
 	 */
-	fun setPreferences(sharedPreferences: SharedPreferences, preferenceString: String, defaultValue: T, itemsToString: Stringify<T>) {
+	fun setPreferences(
+			sharedPreferences: SharedPreferences,
+			preferenceString: String,
+			defaultValue: T,
+			itemsToString: Stringify<T>
+	) {
 		this.mPreferenceToString = itemsToString
 		super.setPreferences(sharedPreferences, preferenceString, defaultValue)
 		loadProgress(sharedPreferences, preferenceString, defaultValue)
@@ -55,7 +69,11 @@ open class ObjectValueSlider<T> : ValueSlider<T> {
 		this.mPreferenceToString = null
 	}
 
-	public override fun updatePreferences(sharedPreferences: SharedPreferences, preferenceString: String, value: T) {
+	public override fun updatePreferences(
+			sharedPreferences: SharedPreferences,
+			preferenceString: String,
+			value: T
+	) {
 		sharedPreferences.edit().putString(preferenceString, value.toString()).apply()
 	}
 

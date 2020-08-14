@@ -1,7 +1,6 @@
 package com.adsamcik.slider
 
 import android.content.Context
-import android.preference.PreferenceManager
 import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import com.adsamcik.slider.implementations.FloatSlider
@@ -29,8 +28,6 @@ class FloatSliderInstrumentationTest {
 		val MAX = 9f
 		val MIN = 1f
 		val PLACES = 1
-		val POW = (100 * 10.0.pow(PLACES.toDouble())).toInt()
-		val MAX_SLIDER = (MAX - MIN) * POW
 
 		val slider = FloatSlider(appContext)
 		slider.minValue = MIN
@@ -39,8 +36,7 @@ class FloatSliderInstrumentationTest {
 		slider.value = 5f
 		assertEquals(MIN, slider.minValue, DELTA)
 		assertEquals(MAX, slider.maxValue, DELTA)
-		assertEquals(MAX_SLIDER, slider.max.toFloat(), DELTA)
-		assertEquals((4 * POW).toFloat(), slider.progress.toFloat(), DELTA)
+		assertEquals(0.5f, slider.fluidPosition, DELTA)
 		assertEquals(5f, slider.value, DELTA)
 	}
 
@@ -103,19 +99,5 @@ class FloatSliderInstrumentationTest {
 		assertEquals(slider.value, preferences.getFloat(prefName, java.lang.Float.MIN_VALUE))
 
 		preferences.edit().remove(prefName).apply()
-	}
-
-	@Test
-	@Throws(Exception::class)
-	fun textViewTest() {
-		val slider = FloatSlider(appContext)
-		slider.minValue = -15f
-		slider.maxValue = 15f
-		slider.step = 3f
-		slider.value = 15f
-
-		slider.setTextView(TextView(appContext)) { `val` -> `val`.toString() }
-
-		slider.onProgressChanged(slider, 14, true)
 	}
 }

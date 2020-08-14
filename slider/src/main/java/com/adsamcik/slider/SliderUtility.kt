@@ -65,7 +65,7 @@ internal object SliderUtility {
 	 * @param step  Step value
 	 * @return Value after rounding
 	 */
-	fun step(value: Int, step: Int): Int {
+	fun step(value: Float, step: Float): Float {
 		val left = value % step
 		val roundDown = value - left
 		return if (abs(left) >= abs(step) / 2f) roundDown + step else roundDown

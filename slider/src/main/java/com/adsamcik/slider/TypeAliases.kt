@@ -20,10 +20,9 @@ typealias Stringify<N> = (value: N) -> String
 /**
  * Scale SeekBar progress to desired value.
  *
- * @param progress    SeekBar progress
- * @param maxProgress SeekBar max
+ * @param position    SeekBar progress
  * @param min         desired minimum
  * @param max         desired maximum
  * @return scaled value
  */
-typealias Scale<N> = (progress: Int, maxProgress: Int, min: N, max: N) -> N
+typealias Scale<N> = (position: Float, min: N, max: N) -> N

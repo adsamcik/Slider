@@ -5,8 +5,6 @@ import android.content.SharedPreferences
 import android.util.AttributeSet
 import android.widget.SeekBar
 import android.widget.TextView
-import androidx.annotation.CallSuper
-import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatSeekBar
 import com.adsamcik.slider.OnValueChange
 import com.adsamcik.slider.Stringify
@@ -14,12 +12,14 @@ import com.adsamcik.slider.Stringify
 /**
  * Base Slider class that implements [AppCompatSeekBar]
  */
-abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
+abstract class Slider<T> : FluidSlider {
 	@Suppress("PRIVATE")
 	protected var mTextView: TextView? = null
 
-	@Suppress("PRIVATE")
-	protected var mStringify: Stringify<T>? = null
+	private var mStringify: Stringify<T>? = null
+
+	protected val stringify: Stringify<T>
+		get() = mStringify ?: { it.toString() }
 
 	@Suppress("PRIVATE")
 	protected var mOnSeekBarChangeListener: SeekBar.OnSeekBarChangeListener? = null
@@ -36,47 +36,36 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
 	 * @return Current value
 	 */
 	/**
-	 * Set slider's current progress value. This value needs to be between Min value and Max value not min and max from SeekBar.
+	 * Set slider's current progress value.
+	 * This value needs to be between Min value and Max value not min and max from SeekBar.
 	 *
 	 */
 	abstract var value: T
 
 	constructor(context: Context) : super(context, null)
-	constructor(context: Context, attrs: AttributeSet) : super(context, attrs, android.R.attr.seekBarStyle)
-	constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+	constructor(context: Context, attrs: AttributeSet) : super(
+			context,
+			attrs,
+			android.R.attr.seekBarStyle
+	)
 
-	init {
-		super.setOnSeekBarChangeListener(this)
-	}
+	constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+			context,
+			attrs,
+			defStyleAttr
+	)
+
 
 	/**
-	 * Set slider's TextView and String function. This TextView will be automatically updated when slider's progress changes and formatted using String function.
+	 * Set sliders String function. This TextView will be automatically
+	 * updated when slider's progress changes and formatted using String function.
 	 *
-	 * @param textView  TextView
 	 * @param stringify String function
 	 */
-	fun setTextView(textView: TextView, stringify: Stringify<T>) {
-		mTextView = textView
+	fun setStringify(stringify: Stringify<T>?) {
 		mStringify = stringify
-		updateText()
+		invalidateText()
 	}
-
-	/**
-	 * Removes assigned TextView and String function
-	 */
-	fun removeTextView() {
-		mTextView = null
-		mStringify = null
-	}
-
-	/**
-	 * Set slider's current progress value. This value needs to be between Min value and Max value not min and max from SeekBar.
-	 *
-	 * @param value Desired progress
-	 * @param animate  Animate
-	 */
-	@RequiresApi(24)
-	abstract fun setValue(value: T, animate: Boolean)
 
 	/**
 	 * Set Slider's preferences for automatic saving inside passed instance of [SharedPreferences].
@@ -86,7 +75,11 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
 	 * @param preferenceString  String name of desired preference
 	 * @param defaultValue      Default value if no value is saved in shared preferences
 	 */
-	fun setPreferences(sharedPreferences: SharedPreferences, preferenceString: String, defaultValue: T) {
+	fun setPreferences(
+			sharedPreferences: SharedPreferences,
+			preferenceString: String,
+			defaultValue: T
+	) {
 		this.mPreferences = sharedPreferences
 		this.mPreferenceString = preferenceString
 		loadProgress(sharedPreferences, preferenceString, defaultValue)
@@ -109,7 +102,11 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
 	 * @param preferenceString  String name of desired preference
 	 * @param defaultValue      Default value to load if there are none saved
 	 */
-	abstract fun loadProgress(sharedPreferences: SharedPreferences, preferenceString: String, defaultValue: T)
+	abstract fun loadProgress(
+			sharedPreferences: SharedPreferences,
+			preferenceString: String,
+			defaultValue: T
+	)
 
 	/**
 	 * Function called when updating preferences is need.
@@ -119,16 +116,20 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
 	 * @param preferenceString  Preference String
 	 * @param value             Value
 	 */
-	protected abstract fun updatePreferences(sharedPreferences: SharedPreferences, preferenceString: String, value: T)
+	protected abstract fun updatePreferences(
+			sharedPreferences: SharedPreferences,
+			preferenceString: String,
+			value: T
+	)
 
 	/**
 	 * Sets on seek bar changes listener
 	 *
 	 * @param l On SeekBar changes listener
 	 */
-	override fun setOnSeekBarChangeListener(l: SeekBar.OnSeekBarChangeListener?) {
+	/*override fun setOnSeekBarChangeListener(l: SeekBar.OnSeekBarChangeListener?) {
 		mOnSeekBarChangeListener = l
-	}
+	}*/
 
 	/**
 	 * Sets on value changed listener
@@ -140,7 +141,7 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
 	}
 
 
-	@CallSuper
+	/*@CallSuper
 	override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
 		updateText()
 
@@ -154,26 +155,24 @@ abstract class Slider<T> : AppCompatSeekBar, SeekBar.OnSeekBarChangeListener {
 					?: throw NullPointerException("Preferences set, but preference string is null")
 			updatePreferences(preferences, preferenceString, value)
 		}
-	}
+	}*/
 
-	override fun onStartTrackingTouch(seekBar: SeekBar) {
+	/*override fun onStartTrackingTouch(seekBar: SeekBar) {
 		mOnSeekBarChangeListener?.onStartTrackingTouch(seekBar)
 	}
 
 	override fun onStopTrackingTouch(seekBar: SeekBar) {
 		updateText()
 		mOnSeekBarChangeListener?.onStopTrackingTouch(seekBar)
+	}*/
+
+	override fun onPositionChanged(position: Float) {
+		bubbleText = stringify.invoke(value)
 	}
 
-	/**
-	 * Updates TextView if it is not null using stringify function
-	 */
-	protected fun updateText() {
-		val textView = mTextView
-		if (textView != null) {
-			val stringify = mStringify
-					?: throw NullPointerException("TextView is set, but stringify is null")
-			mTextView?.text = stringify.invoke(value)
-		}
+	protected  fun invalidateText() {
+		onTextInvalidated()
 	}
+
+	protected abstract fun onTextInvalidated()
 }

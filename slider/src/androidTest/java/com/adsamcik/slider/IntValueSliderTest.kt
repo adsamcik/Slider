@@ -2,7 +2,7 @@ package com.adsamcik.slider
 
 
 import android.content.Context
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import androidx.test.core.app.ApplicationProvider
 import com.adsamcik.slider.implementations.IntValueSlider
 import org.junit.Assert
