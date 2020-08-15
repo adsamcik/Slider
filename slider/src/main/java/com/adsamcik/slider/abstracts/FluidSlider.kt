@@ -13,6 +13,10 @@ import android.graphics.RectF
 import android.os.Build
 import android.os.Parcel
 import android.os.Parcelable
+import android.text.Layout
+import android.text.StaticLayout
+import android.text.TextPaint
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -29,8 +33,10 @@ import kotlin.math.abs
 import kotlin.math.acos
 import kotlin.math.atan2
 import kotlin.math.cos
+import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlin.math.sqrt
 
@@ -63,6 +69,7 @@ SOFTWARE.
 /**
  * Fluid slider forked from https://github.com/Ramotion/fluid-slider-android
  */
+@Suppress("MemberVisibilityCanBePrivate")
 abstract class FluidSlider @JvmOverloads constructor(
 		context: Context,
 		attrs: AttributeSet? = null,
@@ -88,11 +95,11 @@ abstract class FluidSlider @JvmOverloads constructor(
 	}
 
 	private companion object {
-		const val BAR_CORNER_RADIUS = 2
-		const val BAR_VERTICAL_OFFSET = 1.5f
+		const val BAR_CORNER_RADIUS = 4
+		const val BAR_VERTICAL_OFFSET = 1.3f
 		const val BAR_INNER_HORIZONTAL_OFFSET = 0
 
-		const val SLIDER_WIDTH = 4
+		const val SLIDER_WIDTH = 2
 		const val SLIDER_HEIGHT = 1 + BAR_VERTICAL_OFFSET
 
 		const val TOP_CIRCLE_DIAMETER = 1
@@ -119,6 +126,8 @@ abstract class FluidSlider @JvmOverloads constructor(
 		const val COLOR_BAR_TEXT = Color.WHITE
 
 		const val INITIAL_POSITION = 0.5f
+
+		const val DESCRIPTION_PADDING = 8f
 	}
 
 	private val barHeight: Float
@@ -151,6 +160,9 @@ abstract class FluidSlider @JvmOverloads constructor(
 	private val paintLabel: Paint
 	private val paintText: Paint
 
+	private var description: CharSequence = ""
+	private var descriptionLayout: StaticLayout? = null
+
 	private var maxMovement = 0f
 	private var touchX: Float? = null
 
@@ -165,19 +177,16 @@ abstract class FluidSlider @JvmOverloads constructor(
 	/**
 	 * Color of text inside "bubble".
 	 */
-	@Suppress("MemberVisibilityCanBePrivate")
 	var colorBubbleText = COLOR_LABEL_TEXT
 
 	/**
 	 * Color of `start` and `end` texts of slider.
 	 */
-	@Suppress("MemberVisibilityCanBePrivate")
 	var colorBarText = COLOR_BAR_TEXT
 
 	/**
 	 * Color of slider.
 	 */
-	@Suppress("MemberVisibilityCanBePrivate")
 	var colorBar: Int
 		get() = paintBar.color
 		set(value) {
@@ -187,7 +196,6 @@ abstract class FluidSlider @JvmOverloads constructor(
 	/**
 	 * Color of circle "bubble" inside bar.
 	 */
-	@Suppress("MemberVisibilityCanBePrivate")
 	var colorBubble: Int
 		get() = paintLabel.color
 		set(value) {
@@ -202,6 +210,26 @@ abstract class FluidSlider @JvmOverloads constructor(
 		set(value) {
 			paintText.textSize = value
 		}
+
+	/**
+	 * Description color
+	 */
+	var descriptionColor: Int
+		get() = descriptionPaint.color
+		set(value) {
+			descriptionPaint.color = value
+		}
+
+	/**
+	 * Description text paint
+	 */
+	var descriptionPaint: TextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
+		set(value) {
+			field = value
+			updateDescription()
+		}
+
+	var descriptionPadding: RectF
 
 	/**
 	 * Bubble text.
@@ -355,7 +383,13 @@ abstract class FluidSlider @JvmOverloads constructor(
 		paintLabel = Paint(Paint.ANTI_ALIAS_FLAG)
 		paintLabel.style = Paint.Style.FILL
 
-		paintText = Paint(Paint.ANTI_ALIAS_FLAG)
+		paintText = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+			this.color = Color.WHITE
+		}
+
+		descriptionPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+			this.color = Color.WHITE
+		}
 
 		val density = context.resources.displayMetrics.density
 
@@ -376,6 +410,10 @@ abstract class FluidSlider @JvmOverloads constructor(
 				)
 
 				textSize = a.getDimension(R.styleable.FluidSlider_text_size, TEXT_SIZE * density)
+				descriptionPaint.textSize = a.getDimension(
+						R.styleable.FluidSlider_description_text_size,
+						TEXT_SIZE * density
+				)
 				duration = abs(
 						a.getInteger(
 								R.styleable.FluidSlider_duration,
@@ -399,8 +437,10 @@ abstract class FluidSlider @JvmOverloads constructor(
 				val defaultBarHeight = if (a.getInteger(
 								R.styleable.FluidSlider_size,
 								1
-						) == 1) Size.NORMAL.value else Size.SMALL.value
+						) == 1) NORMAL.value else SMALL.value
 				barHeight = defaultBarHeight * density
+
+				description = a.getText(R.styleable.FluidSlider_description) ?: ""
 			} finally {
 				a.recycle()
 			}
@@ -426,6 +466,9 @@ abstract class FluidSlider @JvmOverloads constructor(
 		barCornerRadius = BAR_CORNER_RADIUS * density
 		barInnerOffset = BAR_INNER_HORIZONTAL_OFFSET * density
 		textOffset = TEXT_OFFSET * density
+
+		val padding = DESCRIPTION_PADDING * density
+		descriptionPadding = RectF(padding, padding, padding, padding)
 	}
 
 	/**
@@ -467,6 +510,45 @@ abstract class FluidSlider @JvmOverloads constructor(
 		setMeasuredDimension(w, h)
 	}
 
+	private fun updateDescription() {
+		if (description.isBlank()) {
+			descriptionLayout = null
+			return
+		}
+		val fontMetrics = descriptionPaint.fontMetrics
+		val lineHeight = fontMetrics.bottom - fontMetrics.top + fontMetrics.leading
+		val offsetHeight = barVerticalOffset - descriptionPadding.top - descriptionPadding.bottom
+		val maxLines = floor(offsetHeight / lineHeight).toInt()
+
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			descriptionLayout = StaticLayout.Builder.obtain(
+					description,
+					0,
+					description.length,
+					descriptionPaint,
+					width - (descriptionPadding.left + descriptionPadding.right).roundToInt()
+			)
+					.setMaxLines(maxLines)
+					.setEllipsize(TextUtils.TruncateAt.END)
+					.setBreakStrategy(Layout.BREAK_STRATEGY_BALANCED)
+					.build()
+		} else {
+			@Suppress("DEPRECATION")
+			descriptionLayout = StaticLayout(
+					description,
+					0,
+					description.length,
+					descriptionPaint,
+					width,
+					Layout.Alignment.ALIGN_NORMAL,
+					1f,
+					0f,
+					true
+			)
+		}
+	}
+
 	override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
 		super.onSizeChanged(w, h, oldw, oldh)
 
@@ -495,10 +577,15 @@ abstract class FluidSlider @JvmOverloads constructor(
 		rectLabel.set(0f, vOffset, labelRectDiameter, vOffset + labelRectDiameter)
 
 		maxMovement = width - touchRectDiameter - barInnerOffset * 2
+		updateDescription()
 	}
 
 	override fun onDraw(canvas: Canvas) {
 		super.onDraw(canvas)
+
+		canvas.translate(descriptionPadding.left, descriptionPadding.top)
+		descriptionLayout?.draw(canvas)
+		canvas.translate(-descriptionPadding.left, -descriptionPadding.top)
 
 		// Draw slider bar and text
 		canvas.drawRoundRect(rectBar, barCornerRadius, barCornerRadius, paintBar)

@@ -14,6 +14,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/colorPrimary"
+        app:description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus hendrerit viverra tortor nec tempor. Proin non eros in elit accumsan porta nec a ligula. Suspendisse in purus tortor. Vestibulum at accumsan odio. Praesent fringilla metus in vehicula fermentum. Ut sit amet neque non massa facilisis mollis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Cras nec massa eget neque laoreet gravida id nec libero. Maecenas eget diam iaculis, dignissim mi vitae, molestie velit. Sed aliquam lectus sit amet elit commodo, s"
         app:maxInt="10"
         app:minInt="2"
         app:stepInt="2" />
