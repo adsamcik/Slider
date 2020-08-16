@@ -69,7 +69,7 @@ SOFTWARE.
 /**
  * Fluid slider forked from https://github.com/Ramotion/fluid-slider-android
  */
-@Suppress("MemberVisibilityCanBePrivate")
+@Suppress("MemberVisibilityCanBePrivate", "Unused")
 abstract class FluidSlider @JvmOverloads constructor(
 		context: Context,
 		attrs: AttributeSet? = null,
@@ -229,6 +229,9 @@ abstract class FluidSlider @JvmOverloads constructor(
 			updateDescription()
 		}
 
+	/**
+	 * Description padding
+	 */
 	var descriptionPadding: RectF
 
 	/**
@@ -285,6 +288,14 @@ abstract class FluidSlider @JvmOverloads constructor(
 	var endTrackingListener: (() -> Unit)? = null
 
 	abstract fun onPositionChanged(position: Float)
+
+	/**
+	 * Additional constructor that can be used to create FluidSlider programmatically.
+	 * @param context The Context the view is running in, through which it can access the current theme, resources, etc.
+	 * @param size Size of FluidSlider.
+	 * @see Size
+	 */
+	constructor(context: Context, size: Size) : this(context, null, 0, size)
 
 	@SuppressLint("NewApi")
 	inner class OutlineProvider : ViewOutlineProvider() {
@@ -470,14 +481,6 @@ abstract class FluidSlider @JvmOverloads constructor(
 		val padding = DESCRIPTION_PADDING * density
 		descriptionPadding = RectF(padding, padding, padding, padding)
 	}
-
-	/**
-	 * Additional constructor that can be used to create FluidSlider programmatically.
-	 * @param context The Context the view is running in, through which it can access the current theme, resources, etc.
-	 * @param size Size of FluidSlider.
-	 * @see Size
-	 */
-	constructor(context: Context, size: Size) : this(context, null, 0, size)
 
 	override fun onSaveInstanceState(): Parcelable {
 		return State(
