@@ -499,6 +499,9 @@ abstract class FluidSlider @JvmOverloads constructor(
 
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			// Suppress of a bug, where gradle lint incorrectly requires LineBreaker.BREAK_STRATEGY_BALANCED
+			// Android Studio and documentation however agree that Layout.BREAK_STRATEGY_BALANCED should be used here.
+			@Suppress("WrongConstant")
 			descriptionLayout = StaticLayout.Builder.obtain(
 					description,
 					0,
