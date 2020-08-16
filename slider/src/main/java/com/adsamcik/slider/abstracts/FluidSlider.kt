@@ -300,15 +300,13 @@ abstract class FluidSlider @JvmOverloads constructor(
 	@SuppressLint("NewApi")
 	inner class OutlineProvider : ViewOutlineProvider() {
 		override fun getOutline(v: View?, outline: Outline?) {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-				val rect = Rect(
-						rectBar.left.toInt(),
-						rectBar.top.toInt(),
-						rectBar.right.toInt(),
-						rectBar.bottom.toInt()
-				)
-				outline?.setRoundRect(rect, barCornerRadius)
-			}
+			val rect = Rect(
+					rectBar.left.toInt(),
+					rectBar.top.toInt(),
+					rectBar.right.toInt(),
+					rectBar.bottom.toInt()
+			)
+			outline?.setRoundRect(rect, barCornerRadius)
 		}
 	}
 
@@ -384,9 +382,7 @@ abstract class FluidSlider @JvmOverloads constructor(
 	}
 
 	init {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			outlineProvider = OutlineProvider()
-		}
+		outlineProvider = OutlineProvider()
 
 		paintBar = Paint(Paint.ANTI_ALIAS_FLAG)
 		paintBar.style = Paint.Style.FILL
@@ -547,7 +543,7 @@ abstract class FluidSlider @JvmOverloads constructor(
 					Layout.Alignment.ALIGN_NORMAL,
 					1f,
 					0f,
-					true
+					true,
 			)
 		}
 	}
@@ -684,8 +680,8 @@ abstract class FluidSlider @JvmOverloads constructor(
 		else -> false
 	}
 
-	private fun offsetRectToPosition(position: Float, vararg rects: RectF) {
-		for (rect in rects) {
+	private fun offsetRectToPosition(position: Float, vararg rectangles: RectF) {
+		for (rect in rectangles) {
 			rect.offsetTo(position - rect.width() / 2f, rect.top)
 		}
 	}
@@ -876,7 +872,6 @@ abstract class FluidSlider @JvmOverloads constructor(
 			invalidate()
 		}
 		animation.duration = duration
-		animation.start()
 
 		val positionSnapAnimation = ValueAnimator.ofFloat(position, fluidPosition)
 		positionSnapAnimation.interpolator = DecelerateInterpolator(2f)
@@ -885,7 +880,9 @@ abstract class FluidSlider @JvmOverloads constructor(
 			invalidate()
 		}
 		positionSnapAnimation.duration = duration
+
 		positionSnapAnimation.start()
+		animation.start()
 	}
 
 }
