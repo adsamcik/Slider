@@ -2,10 +2,11 @@ package com.adsamcik.slider
 
 import android.content.Context
 import android.os.Looper
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import androidx.test.core.app.ApplicationProvider
 import com.adsamcik.slider.abstracts.Slider
 import com.adsamcik.slider.abstracts.SliderExtension
+import com.adsamcik.slider.extensions.IntSliderSharedPreferencesExtension
 import com.adsamcik.slider.implementations.IntSlider
 import com.adsamcik.slider.scaleFunctions.LinearScale
 import org.junit.Assert
@@ -132,16 +133,17 @@ class IntSliderInstrumentationTest {
 		slider.maxValue = 5
 		slider.step = 2
 
-		slider.setPreferences(preferences, prefName, 1)
+		val extension = IntSliderSharedPreferencesExtension(preferences, prefName, 1)
+		slider.addExtension(extension)
 
-		org.junit.Assert.assertEquals(1, slider.value.toLong())
+		assertEquals(1, slider.value.toLong())
 
 		slider.value = 4
 
 		val value = slider.value
 		assertEquals(value, preferences.getInt(prefName, Integer.MIN_VALUE))
 
-		slider.removePreferences()
+		slider.removeExtension(extension)
 
 		slider.value = 1
 

@@ -91,22 +91,6 @@ class FloatSlider : NumberSlider<Float> {
 		invalidatePosition()
 	}
 
-	override fun loadProgress(
-			sharedPreferences: SharedPreferences,
-			preferenceString: String,
-			defaultValue: Float
-	) {
-		value = sharedPreferences.getFloat(preferenceString, defaultValue)
-	}
-
-	public override fun updatePreferences(
-			sharedPreferences: SharedPreferences,
-			preferenceString: String,
-			value: Float
-	) {
-		sharedPreferences.edit().putFloat(preferenceString, value).apply()
-	}
-
 	private fun updateDecimalPlaces() {
 		mDecimalPlaces = decimalPlaces(mMax)
 		var temp = decimalPlaces(mMin)

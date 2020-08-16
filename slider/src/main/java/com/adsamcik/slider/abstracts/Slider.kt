@@ -18,9 +18,6 @@ abstract class Slider<T> : FluidSlider {
 	protected val stringify: Stringify<T>
 		get() = mStringify ?: { it.toString() }
 
-	private var mPreferences: SharedPreferences? = null
-	private var mPreferenceString: String? = null
-
 	private val extensions: MutableList<SliderExtension<T>> = mutableListOf()
 
 	/**
@@ -61,86 +58,6 @@ abstract class Slider<T> : FluidSlider {
 		mStringify = stringify
 		invalidateText()
 	}
-
-	/**
-	 * Set Slider's preferences for automatic saving inside passed instance of [SharedPreferences].
-	 * Objects are either saved as strings using toString() method or more efficient way if Slider implementation implemented it
-	 *
-	 * @param sharedPreferences Instance of shared preferences
-	 * @param preferenceString  String name of desired preference
-	 * @param defaultValue      Default value if no value is saved in shared preferences
-	 */
-	fun setPreferences(
-			sharedPreferences: SharedPreferences,
-			preferenceString: String,
-			defaultValue: T
-	) {
-		this.mPreferences = sharedPreferences
-		this.mPreferenceString = preferenceString
-		loadProgress(sharedPreferences, preferenceString, defaultValue)
-	}
-
-	/**
-	 * Removes Slider's [SharedPreferences] and preference string
-	 */
-	open fun removePreferences() {
-		this.mPreferences = null
-		this.mPreferenceString = null
-	}
-
-	/**
-	 * Set slider's preferences for automatic saving inside passed instance of [SharedPreferences] and loads currently saved values.
-	 * Saves only value not bounds or step.
-	 * It is important NOT to call this function before setting min, max and step.
-	 *
-	 * @param sharedPreferences Instance of shared preferences
-	 * @param preferenceString  String name of desired preference
-	 * @param defaultValue      Default value to load if there are none saved
-	 */
-	abstract fun loadProgress(
-			sharedPreferences: SharedPreferences,
-			preferenceString: String,
-			defaultValue: T
-	)
-
-	/**
-	 * Function called when updating preferences is need.
-	 * Function is guaranteed to be called only when SharedPreferences are not null
-	 *
-	 * @param sharedPreferences Shared Preferences instance
-	 * @param preferenceString  Preference String
-	 * @param value             Value
-	 */
-	protected abstract fun updatePreferences(
-			sharedPreferences: SharedPreferences,
-			preferenceString: String,
-			value: T
-	)
-
-	/*@CallSuper
-	override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-		updateText()
-
-		mOnSeekBarChangeListener?.onProgressChanged(seekBar, progress, fromUser)
-
-		mOnValueChangeListener?.invoke(value, fromUser)
-
-		val preferences = mPreferences
-		if (preferences != null) {
-			val preferenceString = mPreferenceString
-					?: throw NullPointerException("Preferences set, but preference string is null")
-			updatePreferences(preferences, preferenceString, value)
-		}
-	}*/
-
-	/*override fun onStartTrackingTouch(seekBar: SeekBar) {
-		mOnSeekBarChangeListener?.onStartTrackingTouch(seekBar)
-	}
-
-	override fun onStopTrackingTouch(seekBar: SeekBar) {
-		updateText()
-		mOnSeekBarChangeListener?.onStopTrackingTouch(seekBar)
-	}*/
 
 	/**
 	 * Adds new extension.

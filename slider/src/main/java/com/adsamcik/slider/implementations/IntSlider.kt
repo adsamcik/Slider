@@ -74,22 +74,6 @@ class IntSlider : NumberSlider<Int> {
 		invalidatePosition()
 	}
 
-	override fun loadProgress(
-			sharedPreferences: SharedPreferences,
-			preferenceString: String,
-			defaultValue: Int
-	) {
-		value = sharedPreferences.getInt(preferenceString, defaultValue)
-	}
-
-	public override fun updatePreferences(
-			sharedPreferences: SharedPreferences,
-			preferenceString: String,
-			value: Int
-	) {
-		sharedPreferences.edit().putInt(preferenceString, value).apply()
-	}
-
 	override fun invalidatePosition() {
 		invalidatePosition(value)
 		invalidateText()

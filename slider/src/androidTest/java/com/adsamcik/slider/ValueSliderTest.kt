@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import com.adsamcik.slider.abstracts.Slider
 import com.adsamcik.slider.abstracts.SliderExtension
+import com.adsamcik.slider.extensions.IntSliderSharedPreferencesExtension
+import com.adsamcik.slider.extensions.StringSliderSharedPreferencesExtension
 import com.adsamcik.slider.implementations.ObjectValueSlider
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -105,7 +107,7 @@ class ValueSliderTest {
 
 	@Test
 	@Throws(Exception::class)
-	fun sharedPreferences() {
+	fun stringSharedPreferences() {
 		val preferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(appContext)
 		val prefName = "TESTING PREFERENCE"
 		val noPreference = "NO PREFERENCE"
@@ -115,7 +117,8 @@ class ValueSliderTest {
 		val slider = ObjectValueSlider<String>(appContext)
 		slider.setItems(strings)
 
-		slider.setPreferences(preferences, prefName, "d") { value -> value }
+		val extension = StringSliderSharedPreferencesExtension(preferences, prefName,  "d")
+		slider.addExtension(extension)
 
 		assertEquals("d", slider.value)
 
@@ -124,7 +127,7 @@ class ValueSliderTest {
 		val value = slider.value
 		assertEquals(value, preferences.getString(prefName, noPreference))
 
-		slider.removePreferences()
+		slider.removeExtension(extension)
 
 		slider.value = "b"
 
