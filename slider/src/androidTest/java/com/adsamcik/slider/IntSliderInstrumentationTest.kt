@@ -3,8 +3,9 @@ package com.adsamcik.slider
 import android.content.Context
 import android.os.Looper
 import android.preference.PreferenceManager
-import android.widget.SeekBar
 import androidx.test.core.app.ApplicationProvider
+import com.adsamcik.slider.abstracts.Slider
+import com.adsamcik.slider.abstracts.SliderExtension
 import com.adsamcik.slider.implementations.IntSlider
 import com.adsamcik.slider.scaleFunctions.LinearScale
 import org.junit.Assert
@@ -106,7 +107,7 @@ class IntSliderInstrumentationTest {
 
 		slider.value = 5
 
-		Assert.assertEquals(5, slider.value)
+		assertEquals(5, slider.value)
 
 		slider.step = 2
 
@@ -115,7 +116,7 @@ class IntSliderInstrumentationTest {
 
 		slider.step = 3
 		slider.value = 5
-		Assert.assertEquals(6, slider.value)
+		assertEquals(6, slider.value)
 	}
 
 	@Test
@@ -138,14 +139,14 @@ class IntSliderInstrumentationTest {
 		slider.value = 4
 
 		val value = slider.value
-		Assert.assertEquals(value, preferences.getInt(prefName, Integer.MIN_VALUE))
+		assertEquals(value, preferences.getInt(prefName, Integer.MIN_VALUE))
 
 		slider.removePreferences()
 
 		slider.value = 1
 
-		Assert.assertEquals(value, preferences.getInt(prefName, Integer.MIN_VALUE))
-		Assert.assertEquals(1, slider.value)
+		assertEquals(value, preferences.getInt(prefName, Integer.MIN_VALUE))
+		assertEquals(1, slider.value)
 
 		//cleanup
 		preferences.edit().remove(prefName).apply()
@@ -156,13 +157,26 @@ class IntSliderInstrumentationTest {
 	fun callbackTests() {
 		val slider = IntSlider(appContext)
 
-		val valueChangeListener: OnValueChange<Int> = { _, _ -> atomicInteger.incrementAndGet() }
+		val lastValue = 5
 
-		slider.setOnValueChangeListener(valueChangeListener)
-		slider.value = 5
+		val extension = object : SliderExtension<Int> {
+			override fun onValueChanged(
+					slider: Slider<Int>,
+					value: Int,
+					position: Float,
+					isFromUser: Boolean
+			) {
+				assertEquals(lastValue, value)
+				assertEquals(false, isFromUser)
+				atomicInteger.incrementAndGet()
+			}
+		}
+
+		slider.addExtension(extension)
+		slider.value = lastValue
 		assertEquals(1, atomicInteger.get().toLong())
 
-		slider.setOnValueChangeListener(null)
+		slider.removeExtension(extension)
 		slider.value = 3
 		assertEquals(1, atomicInteger.get().toLong())
 	}

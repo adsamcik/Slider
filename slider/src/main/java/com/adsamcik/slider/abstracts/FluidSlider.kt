@@ -11,7 +11,6 @@ import android.graphics.Path
 import android.graphics.Rect
 import android.graphics.RectF
 import android.os.Build
-import android.os.Parcel
 import android.os.Parcelable
 import android.text.Layout
 import android.text.StaticLayout
@@ -28,6 +27,7 @@ import com.adsamcik.slider.R
 import com.adsamcik.slider.SliderUtility
 import com.adsamcik.slider.abstracts.FluidSlider.Size.NORMAL
 import com.adsamcik.slider.abstracts.FluidSlider.Size.SMALL
+import kotlinx.android.parcel.Parcelize
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.acos
@@ -249,25 +249,25 @@ abstract class FluidSlider @JvmOverloads constructor(
 	 */
 	var endText: String? = TEXT_END
 
-
 	private var mPosition: Float = INITIAL_POSITION
 
 	/**
 	 * Initial position of "bubble" in range form `0.0` to `1.0`.
 	 */
-	private var position: Float
+	private val position: Float
 		get() = mPosition
-		set(value) {
-			val newValue = value.coerceIn(0f, 1f)
-			mPosition = newValue
-			invalidate()
-			onPositionChanged(newValue)
-		}
+
+	private fun setPosition(value: Float, isFromUser: Boolean) {
+		val newValue = value.coerceIn(0f, 1f)
+		mPosition = newValue
+		invalidate()
+		onPositionChanged(newValue, isFromUser)
+	}
 
 	var fluidPosition: Float
 		get() = SliderUtility.step(position, fluidStep)
 		set(value) {
-			position = SliderUtility.step(value, fluidStep)
+			setPosition(SliderUtility.step(value, fluidStep), false)
 		}
 
 
@@ -287,7 +287,24 @@ abstract class FluidSlider @JvmOverloads constructor(
 	 */
 	var endTrackingListener: (() -> Unit)? = null
 
-	abstract fun onPositionChanged(position: Float)
+	/// region Abstract functions
+
+	/**
+	 * Called when position changes
+	 */
+	abstract fun onPositionChanged(position: Float, isFromUser: Boolean)
+
+	/**
+	 * Called when started tracking touch.
+	 */
+	abstract fun onStartTrackingTouch()
+
+	/**
+	 * Called when stopped tracking touch.
+	 */
+	abstract fun onEndTrackingTouch()
+
+	/// endregion
 
 	/**
 	 * Additional constructor that can be used to create FluidSlider programmatically.
@@ -308,77 +325,6 @@ abstract class FluidSlider @JvmOverloads constructor(
 			)
 			outline?.setRoundRect(rect, barCornerRadius)
 		}
-	}
-
-	class State : BaseSavedState {
-		companion object {
-			@JvmField
-			@Suppress("unused")
-			val CREATOR = object : Parcelable.Creator<State> {
-				override fun createFromParcel(parcel: Parcel): State = State(parcel)
-				override fun newArray(size: Int): Array<State?> = arrayOfNulls(size)
-			}
-		}
-
-		val position: Float
-		val startText: String?
-		val endText: String?
-		val textSize: Float
-		val colorLabel: Int
-		val colorBar: Int
-		val colorBarText: Int
-		val colorLabelText: Int
-		val duration: Long
-
-		constructor(
-				superState: Parcelable?,
-				position: Float,
-				startText: String?,
-				endText: String?,
-				textSize: Float,
-				colorLabel: Int,
-				colorBar: Int,
-				colorBarText: Int,
-				colorLabelText: Int,
-				duration: Long
-		) : super(superState) {
-			this.position = position
-			this.startText = startText
-			this.endText = endText
-			this.textSize = textSize
-			this.colorLabel = colorLabel
-			this.colorBar = colorBar
-			this.colorBarText = colorBarText
-			this.colorLabelText = colorLabelText
-			this.duration = duration
-		}
-
-		private constructor(parcel: Parcel) : super(parcel) {
-			this.position = parcel.readFloat()
-			this.startText = parcel.readString()
-			this.endText = parcel.readString()
-			this.textSize = parcel.readFloat()
-			this.colorLabel = parcel.readInt()
-			this.colorBar = parcel.readInt()
-			this.colorBarText = parcel.readInt()
-			this.colorLabelText = parcel.readInt()
-			this.duration = parcel.readLong()
-		}
-
-		override fun writeToParcel(parcel: Parcel, i: Int) {
-			super.writeToParcel(parcel, i)
-			parcel.writeFloat(position)
-			parcel.writeString(startText)
-			parcel.writeString(endText)
-			parcel.writeFloat(textSize)
-			parcel.writeInt(colorLabel)
-			parcel.writeInt(colorBar)
-			parcel.writeInt(colorBarText)
-			parcel.writeInt(colorLabelText)
-			parcel.writeLong(duration)
-		}
-
-		override fun describeContents(): Int = 0
 	}
 
 	init {
@@ -478,18 +424,46 @@ abstract class FluidSlider @JvmOverloads constructor(
 		descriptionPadding = RectF(padding, padding, padding, padding)
 	}
 
+	/// region State
+	@Parcelize
+	class State(
+			val superState: Parcelable?,
+			val position: Float,
+			val startText: String?,
+			val endText: String?,
+			val textSize: Float,
+			val colorLabel: Int,
+			val colorBar: Int,
+			val colorBarText: Int,
+			val colorLabelText: Int,
+			val duration: Long,
+			val description: CharSequence,
+			val descriptionPadding: RectF,
+
+			) : Parcelable
+
+
 	override fun onSaveInstanceState(): Parcelable {
 		return State(
 				super.onSaveInstanceState(),
-				position, startText, endText, textSize,
-				colorBubble, colorBar, colorBarText, colorBubbleText, duration
+				position,
+				startText,
+				endText,
+				textSize,
+				colorBubble,
+				colorBar,
+				colorBarText,
+				colorBubbleText,
+				duration,
+				description,
+				descriptionPadding
 		)
 	}
 
 	override fun onRestoreInstanceState(state: Parcelable) {
 		if (state is State) {
 			super.onRestoreInstanceState(state.superState)
-			position = state.position
+			mPosition = state.position
 			startText = state.startText
 			endText = state.endText
 			textSize = state.textSize
@@ -498,10 +472,14 @@ abstract class FluidSlider @JvmOverloads constructor(
 			colorBarText = state.colorBarText
 			colorBubbleText = state.colorLabelText
 			duration = state.duration
+			description = state.description
+			descriptionPadding = state.descriptionPadding
 		} else {
 			super.onRestoreInstanceState(state)
 		}
 	}
+
+	/// endregion
 
 	override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 		val w = resolveSizeAndState(desiredWidth, widthMeasureSpec, 0)
@@ -647,7 +625,8 @@ abstract class FluidSlider @JvmOverloads constructor(
 			val y = event.y
 			if (rectBar.contains(x, y)) {
 				if (!rectTouch.contains(x, y)) {
-					position = max(0f, min(1f, (x - rectTouch.width() / 2) / maxMovement))
+					val position = max(0f, min(1f, (x - rectTouch.width() / 2) / maxMovement))
+					setPosition(position, true)
 				}
 				touchX = x
 				beginTrackingListener?.invoke()
@@ -662,7 +641,7 @@ abstract class FluidSlider @JvmOverloads constructor(
 			touchX?.let {
 				touchX = event.x
 				val newPos = max(0f, min(1f, position + (event.x - it) / maxMovement))
-				position = newPos
+				setPosition(newPos, true)
 				true
 			} == true
 		}
@@ -876,7 +855,7 @@ abstract class FluidSlider @JvmOverloads constructor(
 		val positionSnapAnimation = ValueAnimator.ofFloat(position, fluidPosition)
 		positionSnapAnimation.interpolator = DecelerateInterpolator(2f)
 		positionSnapAnimation.addUpdateListener {
-			position = it.animatedValue as Float
+			setPosition(it.animatedValue as Float, false)
 			invalidate()
 		}
 		positionSnapAnimation.duration = duration

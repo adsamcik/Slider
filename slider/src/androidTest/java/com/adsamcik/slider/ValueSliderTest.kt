@@ -6,6 +6,8 @@ import android.os.Looper
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
+import com.adsamcik.slider.abstracts.Slider
+import com.adsamcik.slider.abstracts.SliderExtension
 import com.adsamcik.slider.implementations.ObjectValueSlider
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -139,13 +141,25 @@ class ValueSliderTest {
 		val slider = ObjectValueSlider<String>(appContext)
 		slider.setItems(strings)
 
-		val valueChangeListener: OnValueChange<String> = { _, _ -> atomicInteger.incrementAndGet() }
+		val lastValue = "d"
+		val extension = object : SliderExtension<String> {
+			override fun onValueChanged(
+					slider: Slider<String>,
+					value: String,
+					position: Float,
+					isFromUser: Boolean
+			) {
+				assertEquals(lastValue, value)
+				assertEquals(false, isFromUser)
+				atomicInteger.incrementAndGet()
+			}
+		}
 
-		slider.setOnValueChangeListener(valueChangeListener)
-		slider.value = "d"
+		slider.addExtension(extension)
+		slider.value = lastValue
 		assertEquals(1, atomicInteger.get().toLong())
 
-		slider.setOnValueChangeListener(null)
+		slider.removeExtension(extension)
 		slider.value = "c"
 		assertEquals(1, atomicInteger.get().toLong())
 	}

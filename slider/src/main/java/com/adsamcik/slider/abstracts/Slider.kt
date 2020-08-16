@@ -3,9 +3,7 @@ package com.adsamcik.slider.abstracts
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.AttributeSet
-import android.widget.SeekBar
 import android.widget.TextView
-import com.adsamcik.slider.OnValueChange
 import com.adsamcik.slider.Stringify
 
 /**
@@ -20,14 +18,10 @@ abstract class Slider<T> : FluidSlider {
 	protected val stringify: Stringify<T>
 		get() = mStringify ?: { it.toString() }
 
-	@Suppress("PRIVATE")
-	protected var mOnSeekBarChangeListener: SeekBar.OnSeekBarChangeListener? = null
-
-	@Suppress("PRIVATE")
-	protected var mOnValueChangeListener: OnValueChange<T>? = null
-
 	private var mPreferences: SharedPreferences? = null
 	private var mPreferenceString: String? = null
+
+	private val extensions: MutableList<SliderExtension<T>> = mutableListOf()
 
 	/**
 	 * Get slider's current value after scaling.
@@ -40,6 +34,8 @@ abstract class Slider<T> : FluidSlider {
 	 *
 	 */
 	abstract var value: T
+
+	private var lastValue: T? = null
 
 	constructor(context: Context) : super(context, null)
 	constructor(context: Context, attrs: AttributeSet) : super(
@@ -121,25 +117,6 @@ abstract class Slider<T> : FluidSlider {
 			value: T
 	)
 
-	/**
-	 * Sets on seek bar changes listener
-	 *
-	 * @param l On SeekBar changes listener
-	 */
-	/*override fun setOnSeekBarChangeListener(l: SeekBar.OnSeekBarChangeListener?) {
-		mOnSeekBarChangeListener = l
-	}*/
-
-	/**
-	 * Sets on value changed listener
-	 *
-	 * @param l On value changed listener
-	 */
-	fun setOnValueChangeListener(l: OnValueChange<T>?) {
-		mOnValueChangeListener = l
-	}
-
-
 	/*@CallSuper
 	override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
 		updateText()
@@ -165,11 +142,42 @@ abstract class Slider<T> : FluidSlider {
 		mOnSeekBarChangeListener?.onStopTrackingTouch(seekBar)
 	}*/
 
-	override fun onPositionChanged(position: Float) {
-		bubbleText = stringify.invoke(value)
+	/**
+	 * Adds new extension.
+	 */
+	fun addExtension(extension: SliderExtension<T>) {
+		extensions.add(extension)
+		extension.onAttach(this)
 	}
 
-	protected  fun invalidateText() {
+	/**
+	 * Removes existing extension.
+	 *
+	 * @return True if extension was found and removed.
+	 */
+	fun removeExtension(extension: SliderExtension<T>): Boolean {
+		return extensions.remove(extension)
+	}
+
+	override fun onStartTrackingTouch() {
+		extensions.forEach { it.onStartTrackingTouch(this) }
+	}
+
+	override fun onEndTrackingTouch() {
+		extensions.forEach { it.onEndTrackingTouch(this) }
+	}
+
+	override fun onPositionChanged(position: Float, isFromUser: Boolean) {
+		bubbleText = stringify.invoke(value)
+		val newValue = value
+
+		if (lastValue != newValue) {
+			lastValue = newValue
+			extensions.forEach { it.onValueChanged(this, value, position, isFromUser) }
+		}
+	}
+
+	protected fun invalidateText() {
 		onTextInvalidated()
 	}
 
