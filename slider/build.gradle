@@ -65,7 +65,7 @@ ext {
     libraryName = 'slider'
     artifact = 'slider'
 
-    libraryDescription = 'Slider built on top of Android\'s SeekBar with support for floating point, steps and min value'
+    libraryDescription = 'Slider built on top of FluidSlider with support for floating point, steps and min value'
 
     siteUrl = 'https://github.com/adsamcik/Slider'
     gitUrl = 'https://github.com/adsamcik/Slider.git'
