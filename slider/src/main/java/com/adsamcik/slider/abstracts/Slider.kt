@@ -1,10 +1,9 @@
 package com.adsamcik.slider.abstracts
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.util.AttributeSet
 import android.widget.TextView
-import com.adsamcik.slider.Stringify
+import com.adsamcik.slider.LabelFormatter
 
 /**
  * Base Slider class
@@ -13,10 +12,10 @@ abstract class Slider<T> : FluidSlider {
 	@Suppress("PRIVATE")
 	protected var mTextView: TextView? = null
 
-	private var mStringify: Stringify<T>? = null
+	private var mLabelFormatter: LabelFormatter<T>? = null
 
-	protected val stringify: Stringify<T>
-		get() = mStringify ?: { it.toString() }
+	protected val labelFormatter: LabelFormatter<T>
+		get() = mLabelFormatter ?: { it.toString() }
 
 	private val extensions: MutableList<SliderExtension<T>> = mutableListOf()
 
@@ -52,10 +51,10 @@ abstract class Slider<T> : FluidSlider {
 	 * Set sliders String function. This TextView will be automatically
 	 * updated when slider's progress changes and formatted using String function.
 	 *
-	 * @param stringify String function
+	 * @param labelFormatter String function
 	 */
-	fun setStringify(stringify: Stringify<T>?) {
-		mStringify = stringify
+	fun setLabelFormatter(labelFormatter: LabelFormatter<T>?) {
+		mLabelFormatter = labelFormatter
 		invalidateText()
 	}
 
@@ -85,7 +84,7 @@ abstract class Slider<T> : FluidSlider {
 	}
 
 	override fun onPositionChanged(position: Float, isFromUser: Boolean) {
-		bubbleText = stringify.invoke(value)
+		bubbleText = labelFormatter.invoke(value)
 		val newValue = value
 
 		if (lastValue != newValue) {

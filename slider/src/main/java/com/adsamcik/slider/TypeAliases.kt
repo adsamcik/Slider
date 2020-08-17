@@ -15,7 +15,7 @@ typealias OnValueChange<N> = (value: N, fromUser: Boolean) -> Unit
  * @param value number
  * @return desired output
  */
-typealias Stringify<N> = (value: N) -> String
+typealias LabelFormatter<N> = (value: N) -> String
 
 /**
  * Scale SeekBar progress to desired value.

@@ -68,8 +68,8 @@ abstract class ValueSlider<T> : Slider<T> {
 	override fun onTextInvalidated() {
 		val items = mItems
 		if (items != null) {
-			endText = stringify.invoke(items.last())
-			startText = stringify.invoke(items.first())
+			endText = labelFormatter.invoke(items.last())
+			startText = labelFormatter.invoke(items.first())
 		}
 	}
 

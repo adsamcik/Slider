@@ -52,9 +52,9 @@ abstract class NumberSlider<N : Number> : Slider<N> {
 	)
 
 	override fun onTextInvalidated() {
-		endText = stringify(maxValue)
-		startText = stringify(minValue)
-		bubbleText = stringify(scale(fluidPosition, minValue, maxValue))
+		endText = labelFormatter(maxValue)
+		startText = labelFormatter(minValue)
+		bubbleText = labelFormatter(scale(fluidPosition, minValue, maxValue))
 	}
 
 	abstract fun invalidatePosition()

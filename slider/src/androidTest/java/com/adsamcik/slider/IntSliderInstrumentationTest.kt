@@ -38,7 +38,7 @@ class IntSliderInstrumentationTest {
 		slider.maxValue = 9
 		slider.step = 2
 		slider.value = 5
-		slider.setStringify(null)
+		slider.setLabelFormatter(null)
 
 		assertEquals(1, slider.minValue.toLong())
 		assertEquals(9, slider.maxValue.toLong())
