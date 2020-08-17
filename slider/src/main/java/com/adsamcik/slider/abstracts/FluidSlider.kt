@@ -1,7 +1,6 @@
 package com.adsamcik.slider.abstracts
 
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -306,6 +305,7 @@ abstract class FluidSlider @JvmOverloads constructor(
 
 	/// endregion
 
+
 	/**
 	 * Additional constructor that can be used to create FluidSlider programmatically.
 	 * @param context The Context the view is running in, through which it can access the current theme, resources, etc.
@@ -313,19 +313,6 @@ abstract class FluidSlider @JvmOverloads constructor(
 	 * @see Size
 	 */
 	constructor(context: Context, size: Size) : this(context, null, 0, size)
-
-	@SuppressLint("NewApi")
-	inner class OutlineProvider : ViewOutlineProvider() {
-		override fun getOutline(v: View?, outline: Outline?) {
-			val rect = Rect(
-					rectBar.left.toInt(),
-					rectBar.top.toInt(),
-					rectBar.right.toInt(),
-					rectBar.bottom.toInt()
-			)
-			outline?.setRoundRect(rect, barCornerRadius)
-		}
-	}
 
 	init {
 		outlineProvider = OutlineProvider()
@@ -424,68 +411,21 @@ abstract class FluidSlider @JvmOverloads constructor(
 		descriptionPadding = RectF(padding, padding, padding, padding)
 	}
 
-	/// region State
-	@Parcelize
-	class State(
-			val superState: Parcelable?,
-			val position: Float,
-			val startText: String?,
-			val endText: String?,
-			val textSize: Float,
-			val colorLabel: Int,
-			val colorBar: Int,
-			val colorBarText: Int,
-			val colorLabelText: Int,
-			val duration: Long,
-			val description: CharSequence,
-			val descriptionPadding: RectF,
 
-			) : Parcelable
-
-
-	override fun onSaveInstanceState(): Parcelable {
-		return State(
-				super.onSaveInstanceState(),
-				position,
-				startText,
-				endText,
-				textSize,
-				colorBubble,
-				colorBar,
-				colorBarText,
-				colorBubbleText,
-				duration,
-				description,
-				descriptionPadding
-		)
+	/**
+	 * Sets description
+	 */
+	fun setDescription(text: CharSequence) {
+		description = text
+		updateDescription()
 	}
-
-	override fun onRestoreInstanceState(state: Parcelable) {
-		if (state is State) {
-			super.onRestoreInstanceState(state.superState)
-			mPosition = state.position
-			startText = state.startText
-			endText = state.endText
-			textSize = state.textSize
-			colorBubble = state.colorLabel
-			colorBar = state.colorBar
-			colorBarText = state.colorBarText
-			colorBubbleText = state.colorLabelText
-			duration = state.duration
-			description = state.description
-			descriptionPadding = state.descriptionPadding
-		} else {
-			super.onRestoreInstanceState(state)
-		}
-	}
-
-	/// endregion
 
 	override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 		val w = resolveSizeAndState(desiredWidth, widthMeasureSpec, 0)
 		val h = resolveSizeAndState(desiredHeight, heightMeasureSpec, 0)
 		setMeasuredDimension(w, h)
 	}
+
 
 	private fun updateDescription() {
 		if (description.isBlank()) {
@@ -867,4 +807,73 @@ abstract class FluidSlider @JvmOverloads constructor(
 		animation.start()
 	}
 
+
+	inner class OutlineProvider : ViewOutlineProvider() {
+		override fun getOutline(v: View?, outline: Outline?) {
+			val rect = Rect(
+					rectBar.left.toInt(),
+					rectBar.top.toInt(),
+					rectBar.right.toInt(),
+					rectBar.bottom.toInt()
+			)
+			outline?.setRoundRect(rect, barCornerRadius)
+		}
+	}
+
+	/// region State
+	@Parcelize
+	class State(
+			val superState: Parcelable?,
+			val position: Float,
+			val startText: String?,
+			val endText: String?,
+			val textSize: Float,
+			val colorLabel: Int,
+			val colorBar: Int,
+			val colorBarText: Int,
+			val colorLabelText: Int,
+			val duration: Long,
+			val description: CharSequence,
+			val descriptionPadding: RectF,
+
+			) : Parcelable
+
+
+	override fun onSaveInstanceState(): Parcelable {
+		return State(
+				super.onSaveInstanceState(),
+				position,
+				startText,
+				endText,
+				textSize,
+				colorBubble,
+				colorBar,
+				colorBarText,
+				colorBubbleText,
+				duration,
+				description,
+				descriptionPadding
+		)
+	}
+
+	override fun onRestoreInstanceState(state: Parcelable) {
+		if (state is State) {
+			super.onRestoreInstanceState(state.superState)
+			mPosition = state.position
+			startText = state.startText
+			endText = state.endText
+			textSize = state.textSize
+			colorBubble = state.colorLabel
+			colorBar = state.colorBar
+			colorBarText = state.colorBarText
+			colorBubbleText = state.colorLabelText
+			duration = state.duration
+			description = state.description
+			descriptionPadding = state.descriptionPadding
+		} else {
+			super.onRestoreInstanceState(state)
+		}
+	}
+
+	/// endregion
 }
