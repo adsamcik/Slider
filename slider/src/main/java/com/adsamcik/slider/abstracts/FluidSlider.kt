@@ -159,7 +159,12 @@ abstract class FluidSlider @JvmOverloads constructor(
 	private val paintLabel: Paint
 	private val paintText: Paint
 
-	private var description: CharSequence = ""
+	var description: CharSequence = ""
+		set(value) {
+			field = value
+			invalidate()
+		}
+
 	private var descriptionLayout: StaticLayout? = null
 
 	private var maxMovement = 0f
@@ -225,7 +230,7 @@ abstract class FluidSlider @JvmOverloads constructor(
 	var descriptionPaint: TextPaint = TextPaint(Paint.ANTI_ALIAS_FLAG)
 		set(value) {
 			field = value
-			updateDescription()
+			invalidate()
 		}
 
 	/**
@@ -411,23 +416,19 @@ abstract class FluidSlider @JvmOverloads constructor(
 		descriptionPadding = RectF(padding, padding, padding, padding)
 	}
 
-
-	/**
-	 * Sets description
-	 */
-	fun setDescription(text: CharSequence) {
-		description = text
-		updateDescription()
-	}
-
 	override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 		val w = resolveSizeAndState(desiredWidth, widthMeasureSpec, 0)
 		val h = resolveSizeAndState(desiredHeight, heightMeasureSpec, 0)
 		setMeasuredDimension(w, h)
 	}
 
+	override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+		super.onLayout(changed, left, top, right, bottom)
+		onLayoutDescription()
+	}
 
-	private fun updateDescription() {
+
+	private fun onLayoutDescription() {
 		if (description.isBlank()) {
 			descriptionLayout = null
 			return
@@ -497,7 +498,6 @@ abstract class FluidSlider @JvmOverloads constructor(
 		rectLabel.set(0f, vOffset, labelRectDiameter, vOffset + labelRectDiameter)
 
 		maxMovement = width - touchRectDiameter - barInnerOffset * 2
-		updateDescription()
 	}
 
 	override fun onDraw(canvas: Canvas) {

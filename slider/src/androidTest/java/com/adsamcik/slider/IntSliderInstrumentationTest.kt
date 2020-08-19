@@ -51,6 +51,27 @@ class IntSliderInstrumentationTest {
 	}
 
 	@Test
+			/**
+			 * This tests check if description is set properly.
+			 * This also ensures updating description does not crash the slider.
+			 */
+	fun descriptionTest() {
+		val slider = IntSlider(appContext)
+		slider.minValue = 1
+		slider.maxValue = 9
+		slider.step = 2
+		slider.value = 5
+		val description = "TestDescription"
+		slider.description = description
+
+		assertEquals(description, slider.description)
+
+		val scale = LinearScale.integerScale
+		slider.scale = scale
+		assertEquals(scale, slider.scale)
+	}
+
+	@Test
 	@Throws(Exception::class)
 	fun progressTest() {
 		if (Looper.myLooper() == null)
