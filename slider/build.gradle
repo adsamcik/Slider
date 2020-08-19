@@ -13,7 +13,7 @@ ext.version = '2.0.0-alpha02'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.1"
+    buildToolsVersion "30.0.2"
 
 
     defaultConfig {
