@@ -56,6 +56,7 @@ abstract class Slider<T> : FluidSlider {
 	fun setLabelFormatter(labelFormatter: LabelFormatter<T>?) {
 		mLabelFormatter = labelFormatter
 		invalidateText()
+		invalidate()
 	}
 
 	/**
@@ -64,6 +65,7 @@ abstract class Slider<T> : FluidSlider {
 	fun addExtension(extension: SliderExtension<T>) {
 		extensions.add(extension)
 		extension.onAttach(this)
+		invalidate()
 	}
 
 	/**
@@ -72,7 +74,7 @@ abstract class Slider<T> : FluidSlider {
 	 * @return True if extension was found and removed.
 	 */
 	fun removeExtension(extension: SliderExtension<T>): Boolean {
-		return extensions.remove(extension)
+		return extensions.remove(extension).also { invalidate() }
 	}
 
 	override fun onStartTrackingTouch() {
