@@ -114,7 +114,8 @@ abstract class FluidSlider @JvmOverloads constructor(
 		const val METABALL_MAX_DISTANCE = 15.0f
 		const val METABALL_RISE_DISTANCE = 1.1f
 
-		const val TEXT_SIZE = 12
+		const val TEXT_SIZE = 13
+		const val DESCRIPTION_TEXT_SIZE = 14
 		const val TEXT_OFFSET = 8
 		const val TEXT_START = "0"
 		const val TEXT_END = "100"
@@ -337,6 +338,7 @@ abstract class FluidSlider @JvmOverloads constructor(
 		}
 
 		val density = context.resources.displayMetrics.density
+		val scaledDensity = context.resources.displayMetrics.scaledDensity
 
 		if (attrs != null) {
 			val a = context.theme.obtainStyledAttributes(
@@ -354,10 +356,10 @@ abstract class FluidSlider @JvmOverloads constructor(
 						COLOR_LABEL_TEXT
 				)
 
-				textSize = a.getDimension(R.styleable.FluidSlider_text_size, TEXT_SIZE * density)
+				textSize = a.getDimension(R.styleable.FluidSlider_text_size, TEXT_SIZE * scaledDensity)
 				descriptionPaint.textSize = a.getDimension(
 						R.styleable.FluidSlider_description_text_size,
-						TEXT_SIZE * density
+						DESCRIPTION_TEXT_SIZE * scaledDensity
 				)
 				duration = abs(
 						a.getInteger(
