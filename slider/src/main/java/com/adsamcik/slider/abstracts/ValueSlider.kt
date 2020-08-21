@@ -70,6 +70,7 @@ abstract class ValueSlider<T> : Slider<T> {
 		if (items != null) {
 			endText = labelFormatter.invoke(items.last())
 			startText = labelFormatter.invoke(items.first())
+			bubbleText = labelFormatter.invoke(value)
 		}
 	}
 
