@@ -3,22 +3,19 @@ package com.adsamcik.slider.implementations
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.AttributeSet
-import androidx.annotation.RequiresApi
 import com.adsamcik.slider.R
 import com.adsamcik.slider.Scale
-import com.adsamcik.slider.SliderUtility
 import com.adsamcik.slider.SliderUtility.decimalPlaces
 import com.adsamcik.slider.SliderUtility.round
 import com.adsamcik.slider.abstracts.NumberSlider
 import com.adsamcik.slider.scaleFunctions.LinearScale
-import java.security.InvalidParameterException
 
 /**
  * Implementation of [NumberSlider] for single precision floating point numbers ([Float])
  *
  * There is no default implementation of DoubleSlider because Android does not properly support [Double]. (Attrs can only have float and so can [SharedPreferences])
  */
-class FloatSlider : NumberSlider<Float> {
+open class FloatSlider : NumberSlider<Float> {
 	private var mStep = 1f
 	private var mMin = 0f
 	private var mMax = 10f

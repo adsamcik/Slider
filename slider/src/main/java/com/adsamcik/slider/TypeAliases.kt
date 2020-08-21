@@ -1,14 +1,5 @@
 package com.adsamcik.slider
 
-
-/**
- * On value changed listener
- *
- * @param value    value
- * @param fromUser whether it is from a user
- */
-typealias OnValueChange<N> = (value: N, fromUser: Boolean) -> Unit
-
 /**
  * Convert desired number to string
  *

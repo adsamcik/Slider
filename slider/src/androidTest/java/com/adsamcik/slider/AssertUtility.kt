@@ -1,7 +1,5 @@
 package com.adsamcik.slider
 
-import org.junit.Assert.assertEquals
-
 typealias Method = () -> Unit
 
 internal object AssertUtility {

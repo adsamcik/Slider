@@ -1,13 +1,11 @@
 package com.adsamcik.slider
 
 import android.content.Context
-import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import com.adsamcik.slider.extensions.FloatSliderSharedPreferencesExtension
 import com.adsamcik.slider.implementations.FloatSlider
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import kotlin.math.pow
 import kotlin.math.roundToInt
 
 /**

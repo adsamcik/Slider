@@ -7,6 +7,7 @@ import com.adsamcik.slider.abstracts.ValueSlider
 /**
  * Implementation of [ValueSlider] for [Float]
  */
+@Suppress("unused")
 class FloatValueSlider : ValueSlider<Float> {
 	constructor(context: Context) : super(context)
 

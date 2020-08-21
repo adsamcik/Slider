@@ -1,7 +1,6 @@
 package com.adsamcik.slider.implementations
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.util.AttributeSet
 import com.adsamcik.slider.R
 import com.adsamcik.slider.Scale

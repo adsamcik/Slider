@@ -24,7 +24,7 @@ internal object SliderUtility {
 	 * @return Rounded number
 	 */
 	fun round(value: Float, precision: Int): Float {
-		return SliderUtility.round(value.toDouble(), precision).toFloat()
+		return round(value.toDouble(), precision).toFloat()
 	}
 
 	/**

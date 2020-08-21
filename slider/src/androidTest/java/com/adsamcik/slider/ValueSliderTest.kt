@@ -3,12 +3,9 @@ package com.adsamcik.slider
 
 import android.content.Context
 import android.os.Looper
-import android.widget.SeekBar
-import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import com.adsamcik.slider.abstracts.Slider
 import com.adsamcik.slider.abstracts.SliderExtension
-import com.adsamcik.slider.extensions.IntSliderSharedPreferencesExtension
 import com.adsamcik.slider.extensions.StringSliderSharedPreferencesExtension
 import com.adsamcik.slider.implementations.ObjectValueSlider
 import org.junit.Assert.assertEquals

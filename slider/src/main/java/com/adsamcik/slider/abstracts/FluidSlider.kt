@@ -73,7 +73,7 @@ abstract class FluidSlider @JvmOverloads constructor(
 		context: Context,
 		attrs: AttributeSet? = null,
 		defStyleAttr: Int = 0,
-		size: Size = Size.NORMAL
+		size: Size = NORMAL
 ) : View(context, attrs, defStyleAttr) {
 
 	/**
