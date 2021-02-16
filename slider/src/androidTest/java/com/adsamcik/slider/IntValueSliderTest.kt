@@ -2,8 +2,9 @@ package com.adsamcik.slider
 
 
 import android.content.Context
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import androidx.test.core.app.ApplicationProvider
+import com.adsamcik.slider.extensions.IntSliderSharedPreferencesExtension
 import com.adsamcik.slider.implementations.IntValueSlider
 import org.junit.Assert
 import org.junit.Test
@@ -25,7 +26,8 @@ class IntValueSliderTest {
 		val slider = IntValueSlider(appContext)
 		slider.setItems(ints)
 
-		slider.setPreferences(preferences, prefName, 4)
+		val extension = IntSliderSharedPreferencesExtension(preferences, prefName, 4)
+		slider.addExtension(extension)
 
 		Assert.assertEquals(4L, slider.value.toLong())
 
@@ -34,7 +36,7 @@ class IntValueSliderTest {
 		val value = slider.value
 		Assert.assertEquals(value, preferences.getInt(prefName, noPreference))
 
-		slider.removePreferences()
+		slider.removeExtension(extension)
 
 		slider.value = 1
 

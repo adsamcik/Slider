@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="IntSlider">
-        <attr name="minInt" format="integer"/>
-        <attr name="maxInt" format="integer"/>
-        <attr name="stepInt" format="integer"/>
+        <attr name="minInt" format="integer" />
+        <attr name="maxInt" format="integer" />
+        <attr name="stepInt" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="FloatSlider">
-        <attr name="minFloat" format="float"/>
-        <attr name="maxFloat" format="float"/>
-        <attr name="stepFloat" format="float"/>
+        <attr name="minFloat" format="float" />
+        <attr name="maxFloat" format="float" />
+        <attr name="stepFloat" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="FluidSlider">
+        <attr name="bar_color" format="color" />
+        <attr name="bubble_color" format="color" />
+        <attr name="bar_text_color" format="color" />
+        <attr name="bubble_text_color" format="color" />
+        <attr name="start_text" format="string" />
+        <attr name="end_text" format="string" />
+        <attr name="text_size" format="dimension" />
+        <attr name="duration" format="integer" />
+        <!-- Initial position in range from 0.0 to 1.0 -->
+        <attr name="initial_position" format="float" />
+        <attr name="size" format="enum">
+            <enum name="small" value="0" />
+            <enum name="normal" value="1" />
+        </attr>
+        <attr name="description" format="string" />
+        <attr name="description_text_size" format="dimension" />
     </declare-styleable>
 </resources>

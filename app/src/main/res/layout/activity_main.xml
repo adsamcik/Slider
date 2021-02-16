@@ -1,78 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context="com.adsamcik.slidertest.MainActivity">
-
-    <TextView
-        android:id="@+id/slider_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Hello World!"
-        app:layout_constraintHorizontal_bias="0.051"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
 
     <com.adsamcik.slider.implementations.IntSlider
         android:id="@+id/slider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:padding="16dp"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/slider_title"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/colorPrimary"
+        app:description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus hendrerit viverra tortor nec tempor. Proin non eros in elit accumsan porta nec a ligula. Suspendisse in purus tortor. Vestibulum at accumsan odio. Praesent fringilla metus in vehicula fermentum. Ut sit amet neque non massa facilisis mollis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Cras nec massa eget neque laoreet gravida id nec libero. Maecenas eget diam iaculis, dignissim mi vitae, molestie velit. Sed aliquam lectus sit amet elit commodo, s"
         app:maxInt="10"
         app:minInt="2"
-        app:stepInt="2"/>
+        app:stepInt="2" />
 
     <EditText
         android:id="@+id/minEditText"
         android:layout_width="189dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="min"
         android:inputType="numberSigned|numberDecimal"
+        android:text="2"
         android:tooltipText="min"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/slider"
-        tools:targetApi="28"/>
+        tools:targetApi="28" />
 
     <EditText
         android:id="@+id/maxEditText"
         android:layout_width="174dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginRight="16dp"
         android:ems="10"
         android:hint="max"
         android:inputType="numberSigned|numberDecimal"
+        android:text="10"
         android:tooltipText="max"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/slider"/>
+        app:layout_constraintTop_toBottomOf="@+id/slider" />
 
     <EditText
         android:id="@+id/stepEditText"
         android:layout_width="187dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="step"
         android:inputType="numberSigned|numberDecimal"
+        android:text="2"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/minEditText"/>
+        app:layout_constraintTop_toBottomOf="@+id/minEditText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

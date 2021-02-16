@@ -1,12 +1,12 @@
 package com.adsamcik.slider
 
 import android.content.Context
-import android.os.Build
 import android.os.Looper
-import android.preference.PreferenceManager
-import android.widget.SeekBar
-import android.widget.TextView
+import androidx.preference.PreferenceManager
 import androidx.test.core.app.ApplicationProvider
+import com.adsamcik.slider.abstracts.Slider
+import com.adsamcik.slider.abstracts.SliderExtension
+import com.adsamcik.slider.extensions.IntSliderSharedPreferencesExtension
 import com.adsamcik.slider.implementations.IntSlider
 import com.adsamcik.slider.scaleFunctions.LinearScale
 import org.junit.Assert
@@ -21,9 +21,14 @@ import kotlin.math.roundToLong
  * @see [Testing documentation](http://d.android.com/tools/testing)
  */
 class IntSliderInstrumentationTest {
+	companion object {
+		private const val FLUID_DELTA = 0.0001f
+	}
+
 	private val appContext = ApplicationProvider.getApplicationContext<Context>()
 
 	private val atomicInteger = AtomicInteger(0)
+
 
 	@Test
 	@Throws(Exception::class)
@@ -33,12 +38,11 @@ class IntSliderInstrumentationTest {
 		slider.maxValue = 9
 		slider.step = 2
 		slider.value = 5
-		slider.removeTextView()
+		slider.setLabelFormatter(null)
 
 		assertEquals(1, slider.minValue.toLong())
 		assertEquals(9, slider.maxValue.toLong())
-		assertEquals(8, slider.max.toLong())
-		assertEquals(4, slider.progress.toLong())
+		assertEquals(0.5f, slider.fluidPosition, FLUID_DELTA)
 		assertEquals(5, slider.value.toLong())
 
 		val scale = LinearScale.integerScale
@@ -47,22 +51,24 @@ class IntSliderInstrumentationTest {
 	}
 
 	@Test
-	@Throws(Exception::class)
-	fun textViewTest() {
+			/**
+			 * This tests check if description is set properly.
+			 * This also ensures updating description does not crash the slider.
+			 */
+	fun descriptionTest() {
 		val slider = IntSlider(appContext)
-		val textView = TextView(appContext)
-
-		slider.setTextView(textView) { value -> "Test $value" }
-		slider.minValue = 0
-		slider.maxValue = 10
+		slider.minValue = 1
+		slider.maxValue = 9
+		slider.step = 2
 		slider.value = 5
+		val description = "TestDescription"
+		slider.description = description
 
-		assertEquals("Test 5", textView.text)
+		assertEquals(description, slider.description)
 
-		slider.removeTextView()
-		slider.value = 8
-		assertEquals("Test 5", textView.text)
-		assertEquals(8, slider.value.toLong())
+		val scale = LinearScale.integerScale
+		slider.scale = scale
+		assertEquals(scale, slider.scale)
 	}
 
 	@Test
@@ -76,21 +82,16 @@ class IntSliderInstrumentationTest {
 		slider.maxValue = 10
 		slider.value = 5
 
-		assertEquals(5, slider.progress.toLong())
+		assertEquals(0.5f, slider.fluidPosition, FLUID_DELTA)
 
-		if (Build.VERSION.SDK_INT >= 24)
-			slider.setValue(8, false)
-		else
-			slider.value = 8
+		slider.value = 8
 
-		assertEquals(8, slider.progress.toLong())
+		assertEquals(0.8f, slider.fluidPosition, FLUID_DELTA)
 
-		if (Build.VERSION.SDK_INT >= 24)
-			slider.setValue(3, true)
-		else
-			slider.value = 3
 
-		assertEquals(3, slider.progress.toLong())
+		slider.value = 3
+
+		assertEquals(0.3f, slider.fluidPosition, FLUID_DELTA)
 	}
 
 	@Test
@@ -128,7 +129,7 @@ class IntSliderInstrumentationTest {
 
 		slider.value = 5
 
-		Assert.assertEquals(5, slider.value)
+		assertEquals(5, slider.value)
 
 		slider.step = 2
 
@@ -137,7 +138,7 @@ class IntSliderInstrumentationTest {
 
 		slider.step = 3
 		slider.value = 5
-		Assert.assertEquals(6, slider.value)
+		assertEquals(6, slider.value)
 	}
 
 	@Test
@@ -153,21 +154,22 @@ class IntSliderInstrumentationTest {
 		slider.maxValue = 5
 		slider.step = 2
 
-		slider.setPreferences(preferences, prefName, 1)
+		val extension = IntSliderSharedPreferencesExtension(preferences, prefName, 1)
+		slider.addExtension(extension)
 
-		org.junit.Assert.assertEquals(1, slider.value.toLong())
+		assertEquals(1, slider.value.toLong())
 
 		slider.value = 4
 
 		val value = slider.value
-		Assert.assertEquals(value, preferences.getInt(prefName, Integer.MIN_VALUE))
+		assertEquals(value, preferences.getInt(prefName, Integer.MIN_VALUE))
 
-		slider.removePreferences()
+		slider.removeExtension(extension)
 
 		slider.value = 1
 
-		Assert.assertEquals(value, preferences.getInt(prefName, Integer.MIN_VALUE))
-		Assert.assertEquals(1, slider.value)
+		assertEquals(value, preferences.getInt(prefName, Integer.MIN_VALUE))
+		assertEquals(1, slider.value)
 
 		//cleanup
 		preferences.edit().remove(prefName).apply()
@@ -178,38 +180,45 @@ class IntSliderInstrumentationTest {
 	fun callbackTests() {
 		val slider = IntSlider(appContext)
 
-		val valueChangeListener: OnValueChange<Int> = { _, _ -> atomicInteger.incrementAndGet() }
+		val lastValue = 5
 
-		slider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-			override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
+		val extension = object : SliderExtension<Int> {
+			override fun onValueChanged(
+					slider: Slider<Int>,
+					value: Int,
+					position: Float,
+					isFromUser: Boolean
+			) {
+				assertEquals(lastValue, value)
+				assertEquals(false, isFromUser)
 				atomicInteger.incrementAndGet()
 			}
+		}
 
-			override fun onStartTrackingTouch(seekBar: SeekBar) {
+		slider.addExtension(extension)
+		slider.value = lastValue
+		assertEquals(1, atomicInteger.get().toLong())
 
-			}
-
-			override fun onStopTrackingTouch(seekBar: SeekBar) {
-
-			}
-		})
-
-		slider.setOnValueChangeListener(valueChangeListener)
-		slider.value = 5
-		assertEquals(2, atomicInteger.get().toLong())
-
-		slider.setOnValueChangeListener(null)
-		slider.setOnSeekBarChangeListener(null)
+		slider.removeExtension(extension)
 		slider.value = 3
-		assertEquals(2, atomicInteger.get().toLong())
+		assertEquals(1, atomicInteger.get().toLong())
 	}
 
 	@Test
 	fun exceptionTest() {
 		val slider = IntSlider(appContext)
-		AssertUtility.assertException({ slider.sliderStep = -5 }, IllegalArgumentException::class.java)
+		AssertUtility.assertException(
+				{ slider.step = -5 },
+				IllegalArgumentException::class.java
+		)
 
-		AssertUtility.assertException({ slider.minValue = slider.maxValue }, IllegalArgumentException::class.java)
-		AssertUtility.assertException({ slider.maxValue = slider.minValue }, IllegalArgumentException::class.java)
+		AssertUtility.assertException(
+				{ slider.minValue = slider.maxValue },
+				IllegalArgumentException::class.java
+		)
+		AssertUtility.assertException(
+				{ slider.maxValue = slider.minValue },
+				IllegalArgumentException::class.java
+		)
 	}
 }

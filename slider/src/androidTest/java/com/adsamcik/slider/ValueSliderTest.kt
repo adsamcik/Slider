@@ -2,12 +2,11 @@ package com.adsamcik.slider
 
 
 import android.content.Context
-import android.os.Build
 import android.os.Looper
-import android.preference.PreferenceManager
-import android.widget.SeekBar
-import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
+import com.adsamcik.slider.abstracts.Slider
+import com.adsamcik.slider.abstracts.SliderExtension
+import com.adsamcik.slider.extensions.StringSliderSharedPreferencesExtension
 import com.adsamcik.slider.implementations.ObjectValueSlider
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -27,28 +26,10 @@ class ValueSliderTest {
 
 		slider.setItems(strings)
 		slider.value = "b"
-		slider.removeTextView()
 
 		assertEquals("b", slider.value)
-		assertEquals((strings.size - 1).toLong(), slider.max.toLong())
-	}
 
-	@Test
-	@Throws(Exception::class)
-	fun textViewTest() {
-		val slider = ObjectValueSlider<String>(appContext)
-		val textView = TextView(appContext)
-
-		slider.setItems(strings)
-		slider.setTextView(textView) { value -> "Test $value" }
-		slider.value = "d"
-
-		assertEquals("Test d", textView.text)
-
-		slider.removeTextView()
-		slider.value = "a"
-		assertEquals("Test d", textView.text)
-		assertEquals("a", slider.value)
+		assertEquals(1, slider.index)
 	}
 
 	@Test
@@ -62,22 +43,16 @@ class ValueSliderTest {
 		slider.value = "a"
 
 		assertEquals("a", slider.value)
-		assertEquals(0, slider.progress.toLong())
+		assertEquals(0f, slider.fluidPosition)
 
-		if (Build.VERSION.SDK_INT >= 24)
-			slider.setValue("f", false)
-		else
-			slider.value = "f"
+		slider.value = "f"
 
-		assertEquals(5, slider.progress.toLong())
+		assertEquals(1f, slider.fluidPosition)
 		assertEquals("f", slider.value)
 
-		if (Build.VERSION.SDK_INT >= 24)
-			slider.setValue("b", true)
-		else
-			slider.value = "b"
+		slider.value = "b"
 
-		assertEquals(1, slider.progress.toLong())
+		assertEquals(0.2f, slider.fluidPosition)
 		assertEquals("b", slider.value)
 	}
 
@@ -105,12 +80,16 @@ class ValueSliderTest {
 
 		val slider = ObjectValueSlider<String>(appContext)
 
-		AssertUtility.assertException({ slider.setProgress(15) }, IllegalArgumentException::class.java)
+		AssertUtility.assertException(
+				{ slider.index = 15 },
+				NullPointerException::class.java
+		)
 
 		slider.setItems(strings)
 
-		AssertUtility.assertException({ slider.setProgress(15) }, IllegalArgumentException::class.java)
-		AssertUtility.assertException({ slider.setProgress(-1) }, IllegalArgumentException::class.java)
+		//checks whether it crashes here, it shouldn't
+		slider.index = 15
+		slider.index = -1
 	}
 
 	@Test
@@ -125,8 +104,8 @@ class ValueSliderTest {
 
 	@Test
 	@Throws(Exception::class)
-	fun sharedPreferences() {
-		val preferences = PreferenceManager.getDefaultSharedPreferences(appContext)
+	fun stringSharedPreferences() {
+		val preferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(appContext)
 		val prefName = "TESTING PREFERENCE"
 		val noPreference = "NO PREFERENCE"
 
@@ -135,7 +114,8 @@ class ValueSliderTest {
 		val slider = ObjectValueSlider<String>(appContext)
 		slider.setItems(strings)
 
-		slider.setPreferences(preferences, prefName, "d") { value -> value }
+		val extension = StringSliderSharedPreferencesExtension(preferences, prefName,  "d")
+		slider.addExtension(extension)
 
 		assertEquals("d", slider.value)
 
@@ -144,7 +124,7 @@ class ValueSliderTest {
 		val value = slider.value
 		assertEquals(value, preferences.getString(prefName, noPreference))
 
-		slider.removePreferences()
+		slider.removeExtension(extension)
 
 		slider.value = "b"
 
@@ -161,29 +141,26 @@ class ValueSliderTest {
 		val slider = ObjectValueSlider<String>(appContext)
 		slider.setItems(strings)
 
-		val valueChangeListener: OnValueChange<String> = { _, _ -> atomicInteger.incrementAndGet() }
-
-		slider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-			override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
+		val lastValue = "d"
+		val extension = object : SliderExtension<String> {
+			override fun onValueChanged(
+					slider: Slider<String>,
+					value: String,
+					position: Float,
+					isFromUser: Boolean
+			) {
+				assertEquals(lastValue, value)
+				assertEquals(false, isFromUser)
 				atomicInteger.incrementAndGet()
 			}
+		}
 
-			override fun onStartTrackingTouch(seekBar: SeekBar) {
+		slider.addExtension(extension)
+		slider.value = lastValue
+		assertEquals(1, atomicInteger.get().toLong())
 
-			}
-
-			override fun onStopTrackingTouch(seekBar: SeekBar) {
-
-			}
-		})
-
-		slider.setOnValueChangeListener(valueChangeListener)
-		slider.value = "d"
-		assertEquals(2, atomicInteger.get().toLong())
-
-		slider.setOnValueChangeListener(null)
-		slider.setOnSeekBarChangeListener(null)
+		slider.removeExtension(extension)
 		slider.value = "c"
-		assertEquals(2, atomicInteger.get().toLong())
+		assertEquals(1, atomicInteger.get().toLong())
 	}
 }

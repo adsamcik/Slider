@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.0.0] - 21-08-2020 (beta)
+
+Jumped from 0.8 to 2.0, because 0.8 was supposed to be 1.0 and this is a major breaking change.
+
+- Rewritten to use FluidSlider. (It looks completely different!)
+- Add extension support (basically you can add sort of listeners that add behaviour)
+- Removed shared preferences from base class (they are now an extension)
+- Removed AppCompat dependency
+- Add description support
+- Renamed Stringify to LabelFormatter
+- Targeting Android 11 (R)
+- Updated dependencies
+- Improved documentation
+- Fixed some possible issues
+
 ## [0.8.0] - 06-04-2019
 
 - Updated dependencies

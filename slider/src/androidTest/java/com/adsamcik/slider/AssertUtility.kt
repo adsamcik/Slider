@@ -1,7 +1,5 @@
 package com.adsamcik.slider
 
-import org.junit.Assert.assertEquals
-
 typealias Method = () -> Unit
 
 internal object AssertUtility {
@@ -16,9 +14,9 @@ internal object AssertUtility {
 			callback.invoke()
 			throw AssertionError("Exception of type " + exceptionClass.name + " expected.")
 		} catch (e: Exception) {
-			if (e is AssertionError)
+			if (e is AssertionError || exceptionClass != e.javaClass) {
 				throw e
-			assertEquals(exceptionClass, e.javaClass)
+			}
 		}
 
 	}
