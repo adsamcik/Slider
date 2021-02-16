@@ -1,6 +1,6 @@
 ![Build Status](https://github.com/adsamcik/Slider/workflows/Android%20CI/badge.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f706029f5a5f453e8f59844caf711ed8)](https://www.codacy.com/app/adsamcik/Slider?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=adsamcik/Slider&amp;utm_campaign=Badge_Grade)
-[ ![Download](https://api.bintray.com/packages/adsamcik/android-components/slider/images/download.svg) ](https://bintray.com/adsamcik/android-components/slider/_latestVersion)
+[![](https://jitpack.io/v/adsamcik/Slider.svg)](https://jitpack.io/#adsamcik/Slider)
 
 # Slider
 Slider built on top of Android's SeekBar with support for floating point, steps and min value. It was created to solve some issues that are present in SeekBar. Min value support is added because min value is only available since Nougat on SeekBar.
