@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.0] - 16-02-2021
+
+- Updated dependencies
+
 ## [2.0.0] - 21-08-2020 (beta)
 
 Jumped from 0.8 to 2.0, because 0.8 was supposed to be 1.0 and this is a major breaking change.
