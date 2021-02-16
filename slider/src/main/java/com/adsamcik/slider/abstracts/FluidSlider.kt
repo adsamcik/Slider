@@ -26,7 +26,7 @@ import com.adsamcik.slider.R
 import com.adsamcik.slider.SliderUtility
 import com.adsamcik.slider.abstracts.FluidSlider.Size.NORMAL
 import com.adsamcik.slider.abstracts.FluidSlider.Size.SMALL
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.acos
