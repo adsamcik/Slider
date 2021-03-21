@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0] - 21-03-2021
+
+- Slider no longer validates data and instead silently fixes it to valid state. 
+    - The validation is up to the application now. For example if min value is 0 and max value is 10 and value of -5 is entered, slider will adjust it to closest value in this case 0. 
+- Values will no longer get out of bounds if step does not divide range. Instead the value will snap to max value.
+- Updated dependencies
+
 ## [2.0.0] - 16-02-2021
 
 - Updated dependencies
