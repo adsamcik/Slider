@@ -52,11 +52,8 @@ open class FloatSlider : NumberSlider<Float> {
 
 	override var value: Float
 		get() = round(scale.invoke(fluidPosition, mMin, mMax), mDecimalPlaces)
-		set(progress) {
-			require(progress <= mMax) { "Value must be smaller than maximum." }
-			require(progress >= mMin) { "Value must be larger than minimum" }
-
-			updateSliderPosition(progress)
+		set(value) {
+			updateSliderPosition(value.coerceIn(mMin, mMax))
 		}
 
 	override var mScale: Scale<Float> = LinearScale.floatScale
