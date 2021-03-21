@@ -2,6 +2,7 @@ package com.adsamcik.slider.abstracts
 
 import android.content.Context
 import android.util.AttributeSet
+import kotlin.math.max
 import kotlin.math.round
 
 /**
@@ -21,7 +22,7 @@ abstract class ValueSlider<T> : Slider<T> {
 	var index: Int
 		get() {
 			val size = size
-			if(size == 0) return -1
+			if (size == 0) return -1
 
 			return round(fluidPosition / fluidStep).toInt()
 		}
@@ -36,7 +37,7 @@ abstract class ValueSlider<T> : Slider<T> {
 			return items[index]
 		}
 		set(item) {
-			val index = getValueIndex(item)
+			val index = max(0, getValueIndex(item))
 			fluidPosition = index * fluidStep
 			this.index = index
 		}
