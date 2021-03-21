@@ -18,14 +18,14 @@ class IntSlider : NumberSlider<Int> {
 		get() = mMin
 		set(min) {
 			mMin = min
-			invalidatePosition()
+			invalidateSliderPosition()
 		}
 
 	override var maxValue: Int
 		get() = mMax
 		set(max) {
 			mMax = max
-			invalidatePosition()
+			invalidateSliderPosition()
 		}
 
 	override var step: Int = 1
@@ -35,7 +35,7 @@ class IntSlider : NumberSlider<Int> {
 			fluidStep = step.toFloat() / (mMax - mMin).toFloat()
 			field = step
 
-			invalidatePosition()
+			invalidateSliderPosition()
 		}
 
 	override var value: Int
@@ -70,10 +70,10 @@ class IntSlider : NumberSlider<Int> {
 		step = ta.getInteger(R.styleable.IntSlider_stepInt, 1)
 		ta.recycle()
 
-		invalidatePosition()
+		invalidateSliderPosition()
 	}
 
-	override fun invalidatePosition() {
+	override fun invalidateSliderPosition() {
 		invalidatePosition(value)
 		invalidateText()
 	}

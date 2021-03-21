@@ -29,7 +29,7 @@ open class FloatSlider : NumberSlider<Float> {
 		set(min) {
 			mMin = min
 			updateDecimalPlaces()
-			invalidatePosition()
+			invalidateSliderPosition()
 		}
 
 	override var maxValue: Float
@@ -38,7 +38,7 @@ open class FloatSlider : NumberSlider<Float> {
 			mMax = max
 			fluidStep = mStep / mRange
 			updateDecimalPlaces()
-			invalidatePosition()
+			invalidateSliderPosition()
 		}
 
 	override var step: Float
@@ -47,7 +47,7 @@ open class FloatSlider : NumberSlider<Float> {
 			mStep = step
 			fluidStep = step / mRange
 			updateDecimalPlaces()
-			invalidatePosition()
+			invalidateSliderPosition()
 		}
 
 	override var value: Float
@@ -56,7 +56,7 @@ open class FloatSlider : NumberSlider<Float> {
 			require(progress <= mMax) { "Value must be smaller than maximum." }
 			require(progress >= mMin) { "Value must be larger than minimum" }
 
-			invalidatePosition(progress)
+			updateSliderPosition(progress)
 		}
 
 	override var mScale: Scale<Float> = LinearScale.floatScale
@@ -85,7 +85,7 @@ open class FloatSlider : NumberSlider<Float> {
 		mMax = ta.getFloat(R.styleable.FloatSlider_maxFloat, maxValue)
 		fluidStep = ta.getFloat(R.styleable.FloatSlider_stepFloat, 1f)
 		ta.recycle()
-		invalidatePosition()
+		invalidateSliderPosition()
 	}
 
 	private fun updateDecimalPlaces() {
@@ -100,12 +100,12 @@ open class FloatSlider : NumberSlider<Float> {
 
 	}
 
-	override fun invalidatePosition() {
-		invalidatePosition(value)
+	override fun invalidateSliderPosition() {
+		updateSliderPosition(value)
 		invalidateText()
 	}
 
-	protected fun invalidatePosition(value: Float) {
+	private fun updateSliderPosition(value: Float) {
 		fluidPosition = (value - mMin) / mRange
 	}
 

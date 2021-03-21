@@ -39,7 +39,7 @@ abstract class NumberSlider<N : Number> : Slider<N> {
 		get() = mScale
 		set(value) {
 			mScale = value
-			invalidatePosition()
+			invalidateSliderPosition()
 			invalidateText()
 		}
 
@@ -57,5 +57,5 @@ abstract class NumberSlider<N : Number> : Slider<N> {
 		bubbleText = labelFormatter(scale(fluidPosition, minValue, maxValue))
 	}
 
-	abstract fun invalidatePosition()
+	protected abstract fun invalidateSliderPosition()
 }
