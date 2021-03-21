@@ -41,7 +41,7 @@ class IntSlider : NumberSlider<Int> {
 	override var value: Int
 		get() = scale.invoke(fluidPosition, mMin, mMax)
 		set(value) {
-			invalidatePosition(value)
+			invalidatePosition(value.coerceIn(mMin, mMax))
 		}
 
 	override var mScale: Scale<Int> = LinearScale.integerScale
