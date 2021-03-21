@@ -68,7 +68,11 @@ internal object SliderUtility {
 	fun step(value: Float, step: Float): Float {
 		val left = value % step
 		val roundDown = value - left
-		return if (abs(left) >= abs(step) / 2f) roundDown + step else roundDown
+		return if (abs(left) >= abs(step) / 2f) {
+			roundDown + step
+		} else {
+			roundDown
+		}
 	}
 
 	private fun sign(value: Int): Int {
