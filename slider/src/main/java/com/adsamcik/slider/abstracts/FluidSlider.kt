@@ -73,7 +73,7 @@ abstract class FluidSlider @JvmOverloads constructor(
 		context: Context,
 		attrs: AttributeSet? = null,
 		defStyleAttr: Int = 0,
-		size: Size = NORMAL
+		size: Size = NORMAL,
 ) : View(context, attrs, defStyleAttr) {
 
 	/**
@@ -270,9 +270,10 @@ abstract class FluidSlider @JvmOverloads constructor(
 	}
 
 	var fluidPosition: Float
-		get() = SliderUtility.step(position, fluidStep)
+		get() = SliderUtility.step(position, fluidStep).coerceIn(0f, 1f)
 		set(value) {
-			setPosition(SliderUtility.step(value, fluidStep), false)
+			val steppedValue = SliderUtility.step(value, fluidStep)
+			setPosition(steppedValue, false)
 		}
 
 
@@ -356,7 +357,8 @@ abstract class FluidSlider @JvmOverloads constructor(
 						COLOR_LABEL_TEXT
 				)
 
-				textSize = a.getDimension(R.styleable.FluidSlider_text_size, TEXT_SIZE * scaledDensity)
+				textSize = a.getDimension(R.styleable.FluidSlider_text_size,
+				                          TEXT_SIZE * scaledDensity)
 				descriptionPaint.textSize = a.getDimension(
 						R.styleable.FluidSlider_description_text_size,
 						DESCRIPTION_TEXT_SIZE * scaledDensity
@@ -591,7 +593,8 @@ abstract class FluidSlider @JvmOverloads constructor(
 			} == true
 		}
 		MotionEvent.ACTION_UP,
-		MotionEvent.ACTION_CANCEL -> {
+		MotionEvent.ACTION_CANCEL,
+		-> {
 			touchX?.let {
 				touchX = null
 				endTrackingListener?.invoke()
@@ -635,7 +638,7 @@ abstract class FluidSlider @JvmOverloads constructor(
 			topSpreadFactor: Float = TOP_SPREAD_FACTOR,
 			bottomStartSpreadFactor: Float = BOTTOM_START_SPREAD_FACTOR,
 			bottomEndSpreadFactor: Float = BOTTOM_END_SPREAD_FACTOR,
-			handleRate: Float = METABALL_HANDLER_FACTOR
+			handleRate: Float = METABALL_HANDLER_FACTOR,
 	) {
 		val radius1 = circle1.width() / 2.0f
 		val radius2 = circle2.width() / 2.0f
@@ -755,7 +758,7 @@ abstract class FluidSlider @JvmOverloads constructor(
 	private fun drawText(
 			canvas: Canvas, paint: Paint,
 			text: String, align: Paint.Align, color: Int, offset: Float,
-			holderRect: RectF, textRect: Rect
+			holderRect: RectF, textRect: Rect,
 	) {
 		paint.color = color
 		paint.textAlign = align
